@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Prehistoria Autocorrectivo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #0056b3;
+            text-align: center;
+            border-bottom: 2px solid #b3e0ff;
+            padding-bottom: 10px;
+        }
+        .question-block {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 5px solid #007bff;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .question-block p {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .options label:hover {
+            background-color: #e6f7ff;
+        }
+        input[type="text"], select {
+            width: 50%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #28a745, #218838);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+        .submit-btn:hover {
+            transform: scale(1.02);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .result.success {
+            background-color: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.fail {
+            background-color: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result h2 {
+            color: inherit;
+        }
+        .correct {
+            background-color: #c8e6c9 !important; /* Verde para correcta */
+            border-left: 5px solid #4caf50;
+        }
+        .incorrect {
+            background-color: #ffcdd2 !important; /* Rojo para incorrecta */
+            border-left: 5px solid #f44336;
+        }
+        .correct-answer-text {
+            color: #388e3c;
+            font-weight: bold;
+            font-style: italic;
+        }
+        .match-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .match-item span {
+            width: 35%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🏛️ Examen de Prehistoria en la Península Ibérica 🏛️</h1>
+        <form id="quizForm">
+            
+            <h2>🧪 Parte 1: Preguntas Tipo Test (20 Preguntas)</h2>
+            
+            <div class="question-block" id="q1">
+                <p>1. ¿Qué evento marca el final de la Prehistoria y el comienzo de la Historia? 📖</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="a"> a) La aparición de la agricultura.</label>
+                    <label><input type="radio" name="q1" value="b"> b) El descubrimiento del fuego.</label>
+                    <label><input type="radio" name="q1" value="c"> c) La invención de la escritura.</label>
+                    <label><input type="radio" name="q1" value="d"> d) La construcción de las primeras aldeas.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q2">
+                <p>2. ¿En qué período de la Prehistoria eran nómadas los seres humanos? 🚶‍♂️</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="a"> a) Paleolítico.</label>
+                    <label><input type="radio" name="q2" value="b"> b) Neolítico.</label>
+                    <label><input type="radio" name="q2" value="c"> c) Edad de los Metales.</label>
+                    <label><input type="radio" name="q2" value="d"> d) Edad Antigua.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q3">
+                <p>3. ¿Cuál de estas actividades fue fundamental para la supervivencia en el Paleolítico? 🏹</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="a"> a) La metalurgia.</label>
+                    <label><input type="radio" name="q3" value="b"> b) La agricultura y la ganadería.</label>
+                    <label><input type="radio" name="q3" value="c"> c) El comercio.</label>
+                    <label><input type="radio" name="q3" value="d"> d) La caza y la recolección.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q4">
+                <p>4. El descubrimiento del fuego fue un hito del... 🔥</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="a"> a) Neolítico.</label>
+                    <label><input type="radio" name="q4" value="b"> b) Paleolítico.</label>
+                    <label><input type="radio" name="q4" value="c"> c) Edad del Cobre.</label>
+                    <label><input type="radio" name="q4" value="d"> d) Edad del Hierro.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q5">
+                <p>5. ¿Qué importante avance marca el inicio del Neolítico? 🌾</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="a"> a) El arte rupestre.</label>
+                    <label><input type="radio" name="q5" value="b"> b) La invención de la rueda.</label>
+                    <label><input type="radio" name="q5" value="c"> c) La aparición de la agricultura y la ganadería.</label>
+                    <label><input type="radio" name="q5" value="d"> d) El uso de metales.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q6">
+                <p>6. Durante el Neolítico, los humanos se volvieron sedentarios. ¿Qué significa esto? 🏠</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="a"> a) Que se desplazaban constantemente.</label>
+                    <label><input type="radio" name="q6" value="b"> b) Que vivían en un lugar fijo, en aldeas o poblados.</label>
+                    <label><input type="radio" name="q6" value="c"> c) Que vivían exclusivamente en cuevas.</label>
+                    <label><input type="radio" name="q6" value="d"> d) Que navegaban por los ríos.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q7">
+                <p>7. ¿Qué tipo de herramientas eran características del Neolítico? 🥣</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="a"> a) Herramientas de piedra tallada.</label>
+                    <label><input type="radio" name="q7" value="b"> b) Herramientas de piedra pulida y cerámica.</label>
+                    <label><input type="radio" name="q7" value="c"> c) Herramientas de bronce y hierro.</label>
+                    <label><input type="radio" name="q7" value="d"> d) Herramientas de sílex sin modificar.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q8">
+                <p>8. Los menhires, dólmenes y crómlechs son monumentos... 🗿</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="a"> a) Paleolíticos.</label>
+                    <label><input type="radio" name="q8" value="b"> b) Megalíticos.</label>
+                    <label><input type="radio" name="q8" value="c"> c) Romanos.</label>
+                    <label><input type="radio" name="q8" value="d"> d) Griegos.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q9">
+                <p>9. ¿Cuál fue el primer metal que se utilizó en la Edad de los Metales? 🥉</p>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="a"> a) Hierro.</label>
+                    <label><input type="radio" name="q9" value="b"> b) Bronce.</label>
+                    <label><input type="radio" name="q9" value="c"> c) Cobre.</label>
+                    <label><input type="radio" name="q9" value="d"> d) Acero.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q10">
+                <p>10. La invención de la rueda, la vela y el arado son de la... ⚙️</p>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="a"> a) Edad de los Metales.</label>
+                    <label><input type="radio" name="q10" value="b"> b) Edad de Piedra.</label>
+                    <label><input type="radio" name="q10" value="c"> c) Paleolítico.</label>
+                    <label><input type="radio" name="q10" value="d"> d) Neolítico.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q11">
+                <p>11. ¿Cómo se llama el arte pintado en las paredes de las cuevas? 🎨</p>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="a"> a) Arte mobiliar.</label>
+                    <label><input type="radio" name="q11" value="b"> b) Arte rupestre.</label>
+                    <label><input type="radio" name="q11" value="c"> c) Arte megalítico.</label>
+                    <label><input type="radio" name="q11" value="d"> d) Arte metálico.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q12">
+                <p>12. El yacimiento de Atapuerca (Burgos) es famoso por sus fósiles del período... 🦴</p>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="a"> a) Neolítico.</label>
+                    <label><input type="radio" name="q12" value="b"> b) Edad del Bronce.</label>
+                    <label><input type="radio" name="q12" value="c"> c) Paleolítico.</label>
+                    <label><input type="radio" name="q12" value="d"> d) Romano.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q13">
+                <p>13. ¿Qué es el arte mobiliar? 🏺</p>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="a"> a) Las grandes construcciones de piedra.</label>
+                    <label><input type="radio" name="q13" value="b"> b) Las pinturas en las cuevas.</label>
+                    <label><input type="radio" name="q13" value="c"> c) Pequeños objetos de arte que se pueden transportar.</label>
+                    <label><input type="radio" name="q13" value="d"> d) La decoración de las casas.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q14">
+                <p>14. Las pinturas rupestres del Paleolítico suelen representar...</p>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="a"> a) Escenas de agricultura.</label>
+                    <label><input type="radio" name="q14" value="b"> b) Animales y escenas de caza.</label>
+                    <label><input type="radio" name="q14" value="c"> c) Reyes y dioses.</label>
+                    <label><input type="radio" name="q14" value="d"> d) Mapas y escritura.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q15">
+                <p>15. La Edad de los Metales se divide en tres etapas. ¿Cuál es el orden correcto? ➡️</p>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="a"> a) Hierro, Cobre, Bronce.</label>
+                    <label><input type="radio" name="q15" value="b"> b) Bronce, Cobre, Hierro.</label>
+                    <label><input type="radio" name="q15" value="c"> c) Cobre, Bronce, Hierro.</label>
+                    <label><input type="radio" name="q15" value="d"> d) Cobre, Hierro, Bronce.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q16">
+                <p>16. ¿Qué es un dolmen?</p>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="a"> a) Una única piedra grande clavada verticalmente en el suelo.</label>
+                    <label><input type="radio" name="q16" value="b"> b) Una tumba colectiva formada por grandes piedras verticales y una losa horizontal.</label>
+                    <label><input type="radio" name="q16" value="c"> c) Un círculo formado por varias piedras grandes.</label>
+                    <label><input type="radio" name="q16" value="d"> d) Una herramienta para moler grano.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q17">
+                <p>17. El desarrollo del comercio fue posible en la Edad de los Metales gracias a...</p>
+                <div class="options">
+                    <label><input type="radio" name="q17" value="a"> a) La falta de alimentos.</label>
+                    <label><input type="radio" name="q17" value="b"> b) El aislamiento de las aldeas.</label>
+                    <label><input type="radio" name="q17" value="c"> c) La producción de excedentes y nuevos inventos como la rueda.</label>
+                    <label><input type="radio" name="q17" value="d"> d) La prohibición de viajar.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q18">
+                <p>18. ¿De qué material vestían los humanos del Paleolítico? 👕</p>
+                <div class="options">
+                    <label><input type="radio" name="q18" value="a"> a) De tejidos de lana y lino.</label>
+                    <label><input type="radio" name="q18" value="b"> b) De pieles de los animales que cazaban.</label>
+                    <label><input type="radio" name="q18" value="c"> c) De algodón.</label>
+                    <label><input type="radio" name="q18" value="d"> d) No usaban ropa.</label>
+                </div>
+            </div>
+
+            <div class="question-block" id="q19">
+                <p>19. Las pinturas del Neolítico eran más esquemáticas y representaban escenas de grupo. ¿Dónde se suelen encontrar?</p>
+                <div class="options">
+                    <label><input type="radio" name="q19" value="a"> a) En el interior profundo de las cuevas.</label>
+                    <label><input type="radio" name="q19" value="b"> b) En abrigos rocosos poco profundos.</label>
+                    <label><input type="radio" name="q19" value="c"> c) Grabadas en el metal.</label>
+                    <label><input type="radio" name="q19" value="d"> d) Dentro de los dólmenes.</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q20">
+                <p>20. ¿Qué nueva organización social aparece en la Edad de los Metales? 👑</p>
+                <div class="options">
+                    <label><input type="radio" name="q20" value="a"> a) Clanes y tribus igualitarias.</label>
+                    <label><input type="radio" name="q20" value="b"> b) Pequeños grupos familiares.</label>
+                    <label><input type="radio" name="q20" value="c"> c) Una sociedad más compleja con jefes o reyes.</label>
+                    <label><input type="radio" name="q20" value="d"> d) No había organización social.</label>
+                </div>
+            </div>
+
+            <h2>🔄 Parte 2: Unir Conceptos (5 Preguntas)</h2>
+            <div class="question-block" id="q21-25">
+                 <p>Une cada concepto de la izquierda con la definición o período correcto de la derecha.</p>
+                 <div class="match-item"><span>21. Paleolítico </span><select name="q21"><option value="">Elige...</option><option value="a">Sedentarismo y agricultura</option><option value="b">Uso de la rueda y el arado</option><option value="c">Vida nómada en cuevas</option><option value="d">Piedra vertical</option><option value="e">Círculo de piedras</option></select></div>
+                 <div class="match-item"><span>22. Neolítico </span><select name="q22"><option value="">Elige...</option><option value="a">Sedentarismo y agricultura</option><option value="b">Uso de la rueda y el arado</option><option value="c">Vida nómada en cuevas</option><option value="d">Piedra vertical</option><option value="e">Círculo de piedras</option></select></div>
+                 <div class="match-item"><span>23. Edad de los Metales </span><select name="q23"><option value="">Elige...</option><option value="a">Sedentarismo y agricultura</option><option value="b">Uso de la rueda y el arado</option><option value="c">Vida nómada en cuevas</option><option value="d">Piedra vertical</option><option value="e">Círculo de piedras</option></select></div>
+                 <div class="match-item"><span>24. Menhir </span><select name="q24"><option value="">Elige...</option><option value="a">Sedentarismo y agricultura</option><option value="b">Uso de la rueda y el arado</option><option value="c">Vida nómada en cuevas</option><option value="d">Piedra vertical</option><option value="e">Círculo de piedras</option></select></div>
+                 <div class="match-item"><span>25. Crómlech </span><select name="q25"><option value="">Elige...</option><option value="a">Sedentarismo y agricultura</option><option value="b">Uso de la rueda y el arado</option><option value="c">Vida nómada en cuevas</option><option value="d">Piedra vertical</option><option value="e">Círculo de piedras</option></select></div>
+            </div>
+
+            <h2>🧩 Parte 3: Preguntas Diversas (5 Preguntas)</h2>
+            
+            <div class="question-block" id="q26">
+                <p>26. ❓ (Verdadero/Falso) Los humanos del Paleolítico criaban animales y cultivaban plantas.</p>
+                <div class="options">
+                    <label><input type="radio" name="q26" value="a"> a) Verdadero</label>
+                    <label><input type="radio" name="q26" value="b"> b) Falso</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q27">
+                <p>27. ✍️ (Rellenar hueco) El período que va desde la aparición de los homínidos hasta la invención de la escritura se llama ___________.</p>
+                <input type="text" name="q27">
+            </div>
+
+            <div class="question-block" id="q28">
+                <p>28. ❓ (Verdadero/Falso) Las herramientas de la Edad de los Metales eran menos resistentes que las de piedra.</p>
+                <div class="options">
+                    <label><input type="radio" name="q28" value="a"> a) Verdadero</label>
+                    <label><input type="radio" name="q28" value="b"> b) Falso</label>
+                </div>
+            </div>
+            
+            <div class="question-block" id="q29">
+                <p>29. ✍️ (Rellenar hueco) La mezcla de cobre y estaño produce un nuevo metal más duro llamado ___________.</p>
+                <input type="text" name="q29">
+            </div>
+            
+            <div class="question-block" id="q30">
+                <p>30. ❓ (Verdadero/Falso) El arte rupestre y el arte mobiliar son característicos del Paleolítico.</p>
+                <div class="options">
+                    <label><input type="radio" name="q30" value="a"> a) Verdadero</label>
+                    <label><input type="radio" name="q30" value="b"> b) Falso</label>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="checkAnswers()">✔️ ¡Corregir mi examen! ✔️</button>
+        </form>
+        <div id="result-container"></div>
+    </div>
+
+    <script>
+        function checkAnswers() {
+            const correctAnswers = {
+                q1: 'c', q2: 'a', q3: 'd', q4: 'b', q5: 'c',
+                q6: 'b', q7: 'b', q8: 'b', q9: 'c', q10: 'a',
+                q11: 'b', q12: 'c', q13: 'c', q14: 'b', q15: 'c',
+                q16: 'b', q17: 'c', q18: 'b', q19: 'b', q20: 'c',
+                q21: 'c', q22: 'a', q23: 'b', q24: 'd', q25: 'e',
+                q26: 'b', q27: 'prehistoria', q28: 'b', q29: 'bronce', q30: 'a'
+            };
+
+            let score = 0;
+            const form = document.getElementById('quizForm');
+
+            // Itera sobre todas las preguntas
+            for (let i = 1; i <= 30; i++) {
+                const questionId = 'q' + i;
+                const questionBlock = document.getElementById(questionId);
+                const question = form.elements[questionId];
+                
+                let userAnswer;
+                let isCorrect = false;
+
+                if (question.type === 'text') {
+                    userAnswer = question.value.trim().toLowerCase();
+                    if (userAnswer === correctAnswers[questionId]) {
+                        isCorrect = true;
+                    }
+                } else if (question.type === 'select-one') {
+                    userAnswer = question.value;
+                    if (userAnswer === correctAnswers[questionId]) {
+                        isCorrect = true;
+                    }
+                } else { // Radio buttons
+                    if (question && question.value) {
+                         userAnswer = question.value;
+                         if (userAnswer === correctAnswers[questionId]) {
+                             isCorrect = true;
+                         }
+                    } else { // For grouped questions like matching
+                        const selectElement = form.elements[questionId];
+                        userAnswer = selectElement.value;
+                        if(userAnswer === correctAnswers[questionId]){
+                           isCorrect = true;
+                        }
+                    }
+                }
+                
+                let blockToStyle = questionBlock;
+                if(i >= 21 && i <= 25) { // Style the parent block for matching questions
+                   blockToStyle = document.getElementById('q21-25');
+                }
+
+                if (isCorrect) {
+                    score++;
+                    blockToStyle.classList.add('correct');
+                    blockToStyle.classList.remove('incorrect');
+                } else {
+                    blockToStyle.classList.add('incorrect');
+                    blockToStyle.classList.remove('correct');
+                    // Mostrar respuesta correcta
+                    const correctAnswerText = document.createElement('p');
+                    let correctValue = correctAnswers[questionId];
+                    if (question.type === 'radio' || question.type === 'select-one') {
+                        // For radio/select, find the text of the correct option
+                        if(i <= 20) {
+                           correctValue = form.querySelector(`input[name="${questionId}"][value="${correctAnswers[questionId]}"]`).parentElement.textContent;
+                        } else if (i >= 21 && i <= 25) {
+                            const options = document.querySelector(`select[name="q${i}"]`).options;
+                            for(let opt of options) {
+                                if(opt.value === correctAnswers[questionId]) {
+                                    correctValue = `${document.querySelector(`.match-item span`).textContent.trim()} -> ${opt.textContent}`;
+                                    break;
+                                }
+                            }
+                        } else {
+                           correctValue = form.querySelector(`input[name="${questionId}"][value="${correctAnswers[questionId]}"]`).parentElement.textContent;
+                        }
+                    }
+                    correctAnswerText.innerHTML = `Respuesta correcta: <span class="correct-answer-text">${correctValue}</span>`;
+                    if (blockToStyle.querySelectorAll('.correct-answer-text').length === 0) {
+                       blockToStyle.appendChild(correctAnswerText);
+                    }
+                }
+            }
+            
+            // Calcular nota final y mostrar resultados
+            const finalScore = (score / 30 * 10).toFixed(2);
+            const resultContainer = document.getElementById('result-container');
+            let resultHTML = '';
+
+            if (finalScore >= 5) {
+                resultHTML = `
+                    <div class="result success">
+                        <h2>¡Enhorabuena! 🎉 Has aprobado.</h2>
+                        <p>Aciertos: ${score} de 30</p>
+                        <p>Errores: ${30 - score}</p>
+                        <p><strong>Tu nota es: ${finalScore} / 10</strong></p>
+                    </div>
+                `;
+            } else {
+                resultHTML = `
+                    <div class="result fail">
+                        <h2>¡Oh, no! 😢 Sigue estudiando.</h2>
+                        <p>Aciertos: ${score} de 30</p>
+                        <p>Errores: ${30 - score}</p>
+                        <p><strong>Tu nota es: ${finalScore} / 10</strong></p>
+                    </div>
+                `;
+            }
+
+            resultContainer.innerHTML = resultHTML;
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+            
+            // Deshabilitar el botón para evitar reenviar
+            document.querySelector('.submit-btn').disabled = true;
+            document.querySelector('.submit-btn').textContent = 'Examen Corregido';
+            document.querySelector('.submit-btn').style.background = '#6c757d';
+
+        }
+    </script>
+
+</body>
+</html>
