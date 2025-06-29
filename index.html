@@ -3,20 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exámenes de Sociales para mis Hijos</title>
+    <title>Repaso de Verano - ¡A Estudiar Jugando!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        ul { list-style: none; padding: 0; }
-        li { margin-bottom: 10px; }
-        a { text-decoration: none; color: #007bff; font-weight: bold; }
-        a:hover { text-decoration: underline; }
+        /* Estilos Generales */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f9ff; /* Un azul cielo muy clarito */
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        /* Título Principal */
+        h1 {
+            color: #ff6347; /* Color Tomate */
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Contenedor principal de las tarjetas de materias */
+        .materias-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Diseño responsive */
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        /* Estilo de cada tarjeta de materia */
+        .materia-card {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 10px solid; /* Borde superior de color temático */
+        }
+
+        .materia-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Colores temáticos para cada materia */
+        #sociales { border-color: #4a90e2; } /* Azul */
+        #naturales { border-color: #50e3c2; } /* Verde menta */
+        #matematicas { border-color: #f5a623; } /* Naranja */
+        #ingles { border-color: #9013fe; } /* Morado */
+        #lengua { border-color: #d0021b; } /* Rojo */
+        
+        /* Títulos de las materias dentro de las tarjetas */
+        .materia-card h2 {
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        #sociales h2 { color: #4a90e2; }
+        #naturales h2 { color: #50e3c2; }
+        #matematicas h2 { color: #f5a623; }
+        #ingles h2 { color: #9013fe; }
+        #lengua h2 { color: #d0021b; }
+
+        /* Estilos de las listas de apuntes y exámenes */
+        .materia-card ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .materia-card li {
+            margin-bottom: 10px;
+        }
+
+        .materia-card a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            display: block;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+            border-left: 5px solid #ccc;
+        }
+
+        .materia-card a:hover {
+            background-color: #e9ecef;
+            color: #000;
+            padding-left: 20px;
+        }
+        
+        /* Mensaje final de ánimo */
+        footer {
+            margin-top: 40px;
+            font-size: 1.2em;
+            color: #555;
+        }
     </style>
 </head>
 <body>
-    <h1>📚 ¡Hola! Elige un examen de Sociales:</h1>
-    <ul>
-        <li><a href="Examen clima.html">📝 Examen de la Unidad 1: El tiempo y el clima</a></li>
+
+    <h1>☀️ ¡A Repasar Jugando este Verano! ☀️</h1>
+
+    <div class="materias-container">
+
+        <div class="materia-card" id="sociales">
+            <h2>🌍 Sociales</h2>
+            <ul>
+                <li><a href="sociales_apuntes_clima.html">📖 Apuntes: El tiempo y el clima</a></li>
+                <li><a href="sociales_examen_clima.html">📝 Examen: El tiempo y el clima</a></li>
+                <li><a href="sociales_apuntes_relieve.html">📖 Apuntes: El relieve de España</a></li>
+                <li><a href="sociales_examen_relieve.html">📝 Examen: El relieve de España</a></li>
+            </ul>
+        </div>
+
+        <div class="materia-card" id="naturales">
+            <h2>🌿 Naturales</h2>
+            <ul>
+                <li><a href="naturales_apuntes_ecosistemas.html">📖 Apuntes: Los ecosistemas</a></li>
+                <li><a href="naturales_examen_ecosistemas.html">📝 Examen: Los ecosistemas</a></li>
+                <li><a href="naturales_apuntes_cuerpo.html">📖 Apuntes: El cuerpo humano</a></li>
+            </ul>
+        </div>
+
+        <div class="materia-card" id="matematicas">
+            <h2>🔢 Matemáticas</h2>
+            <ul>
+                <li><a href="mates_repaso_multiplicar.html">➕ Repaso: Tablas de multiplicar</a></li>
+                <li><a href="mates_examen_divisiones.html">📝 Examen: Divisiones de dos cifras</a></li>
+                <li><a href="mates_repaso_problemas.html">🧠 Repaso: Problemas</a></li>
+            </ul>
+        </div>
+
+        <div class="materia-card" id="lengua">
+            <h2>📖 Lengua</h2>
+            <ul>
+                <li><a href="lengua_apuntes_sujeto_predicado.html">📖 Apuntes: Sujeto y predicado</a></li>
+                <li><a href="lengua_examen_comprension.html">📝 Examen: Comprensión Lectora</a></li>
+                <li><a href="lengua_apuntes_acentuacion.html">📖 Apuntes: Reglas de acentuación</a></li>
+            </ul>
+        </div>
+
+        <div class="materia-card" id="ingles">
+            <h2>🇬🇧 Inglés</h2>
+            <ul>
+                <li><a href="ingles_apuntes_vocabulario.html">📖 Apuntes: Vocabulary (The house)</a></li>
+                <li><a href="ingles_examen_listening.html">🎧 Examen: Listening Test</a></li>
+                <li><a href="ingles_examen_verb_to_be.html">📝 Examen: Verb "To Be"</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>¡Tú puedes con todo! 💪✨</p>
+    </footer>
+
+</body>
+</html>📝 Examen de la Unidad 1: El tiempo y el clima</a></li>
         <li><a href="examen-unidad-2.html">📝 Examen de la Unidad 2: Comprensión Lectora</a></li>
         <li><a href="listening-test.html">🎧 Examen de Listening</a></li>
         </ul>
