@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura Matemática - Tablas de Multiplicar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos Generales (Inspirados en tu página principal) */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f9ff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1, h2 {
+            color: #f5a623; /* Naranja de Matemáticas */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* --- Pantalla del Mapa --- */
+        #map-screen h2 {
+            margin-top: 0;
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+        }
+
+        .level-btn {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #f5a623;
+            background-color: #fff;
+            color: #f5a623;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .level-btn:hover:not(:disabled) {
+            background-color: #f5a623;
+            color: #fff;
+            transform: translateY(-5px);
+        }
+
+        .level-btn:disabled {
+            border-color: #ccc;
+            background-color: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .level-btn.completed {
+             border-color: #28a745; /* Verde éxito */
+             background-color: #28a745;
+             color: #fff;
+        }
+        
+        /* --- Pantalla de Juego --- */
+        #game-screen .question {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        #game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        #lives {
+            color: #d0021b; /* Rojo */
+            font-size: 1.5em;
+        }
+
+        #answer-input {
+            width: 150px;
+            font-size: 2em;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+        }
+
+        #check-btn, .action-btn {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.2em;
+            font-weight: 700;
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            background-color: #4a90e2; /* Azul */
+            color: #fff;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        #check-btn:hover, .action-btn:hover {
+            background-color: #357abd;
+        }
+
+        #feedback {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: 700;
+            height: 25px;
+        }
+
+        /* --- Pantalla de Resultados --- */
+        #results-screen h2 {
+            font-size: 2em;
+        }
+        #results-screen p {
+            font-size: 1.2em;
+        }
+         footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        
+        <div id="map-screen">
+            <h1>⚔️ Aventura Matemática ⚔️</h1>
+            <h2>Elige una tabla para empezar tu desafío:</h2>
+            <div class="levels-grid">
+                </div>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <h2 id="level-title"></h2>
+            <div id="game-info">
+                <div id="lives"></div>
+                <div id="progress"></div>
+            </div>
+            <p class="question" id="question"></p>
+            <input type="number" id="answer-input" autofocus>
+            <p id="feedback"></p>
+            <button id="check-btn">Revisar</button>
+        </div>
+
+        <div id="results-screen" class="hidden">
+            <h2 id="results-title"></h2>
+            <p id="results-message"></p>
+            <button class="action-btn" id="back-to-map-btn">Volver al Mapa</button>
+        </div>
+
+    </div>
+    
+    <footer>
+        <p><a href="index.html">⬅️ Volver al menú de materias</a></p>
+    </footer>
+
+    <script>
+        // --- SECCIÓN DE JAVASCRIPT: EL CEREBRO DEL JUEGO ---
+
+        // 1. REFERENCIAS A ELEMENTOS DEL HTML
+        const mapScreen = document.getElementById('map-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultsScreen = document.getElementById('results-screen');
+
+        const levelsGrid = document.querySelector('.levels-grid');
+        const levelTitle = document.getElementById('level-title');
+        const livesDisplay = document.getElementById('lives');
+        const progressDisplay = document.getElementById('progress');
+        const questionDisplay = document.getElementById('question');
+        const answerInput = document.getElementById('answer-input');
+        const checkBtn = document.getElementById('check-btn');
+        const feedbackDisplay = document.getElementById('feedback');
+
+        const resultsTitle = document.getElementById('results-title');
+        const resultsMessage = document.getElementById('results-message');
+        const backToMapBtn = document.getElementById('back-to-map-btn');
+
+        // 2. ESTADO DEL JUEGO
+        let currentLevel;
+        let lives;
+        let correctAnswers;
+        let currentQuestion;
+        const totalQuestionsPerLevel = 10; // 10 aciertos para pasar de nivel
+        const totalLevels = 10;
+        let completedLevels = []; // Aquí podríamos guardar el progreso
+
+        // 3. FUNCIONES PRINCIPALES
+
+        function init() {
+            levelsGrid.innerHTML = ''; // Limpiar el grid
+            for (let i = 2; i <= totalLevels; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'level-btn';
+                btn.textContent = i;
+                btn.dataset.level = i;
+                
+                if (completedLevels.includes(i)) {
+                    btn.classList.add('completed');
+                }
+
+                // El nivel 2 siempre está disponible. El resto se desbloquea.
+                if (i > 2 && !completedLevels.includes(i-1)) {
+                    btn.disabled = true;
+                }
+                
+                btn.addEventListener('click', () => startGame(i));
+                levelsGrid.appendChild(btn);
+            }
+            mapScreen.classList.remove('hidden');
+            gameScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+        }
+
+        function startGame(level) {
+            currentLevel = level;
+            lives = 3; // Empezamos con 3 vidas
+            correctAnswers = 0;
+            
+            mapScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            levelTitle.textContent = `Desafío de la Tabla del ${currentLevel}`;
+            updateUI();
+            generateQuestion();
+        }
+
+        function generateQuestion() {
+            const factor2 = Math.floor(Math.random() * 9) + 2; // Números del 2 al 10
+            currentQuestion = { factor1: currentLevel, factor2: factor2, answer: currentLevel * factor2 };
+            questionDisplay.textContent = `${currentQuestion.factor1} x ${currentQuestion.factor2} = ?`;
+            answerInput.value = '';
+            answerInput.focus();
+            feedbackDisplay.textContent = '';
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(answerInput.value);
+            
+            if (isNaN(userAnswer)) return; // No hacer nada si está vacío
+
+            if (userAnswer === currentQuestion.answer) {
+                feedbackDisplay.textContent = "✅ ¡Correcto!";
+                feedbackDisplay.style.color = "#28a745";
+                correctAnswers++;
+                updateUI();
+                
+                if (correctAnswers >= totalQuestionsPerLevel) {
+                    endLevel(true); // Nivel ganado
+                } else {
+                    setTimeout(generateQuestion, 1000); // Espera 1 segundo y nueva pregunta
+                }
+            } else {
+                feedbackDisplay.textContent = `❌ ¡Casi! La respuesta era ${currentQuestion.answer}`;
+                feedbackDisplay.style.color = "#d0021b";
+                lives--;
+                updateUI();
+                
+                if (lives <= 0) {
+                    endLevel(false); // Nivel perdido
+                } else {
+                     setTimeout(generateQuestion, 1500); // Más tiempo para ver el error
+                }
+            }
+        }
+
+        function updateUI() {
+            livesDisplay.textContent = '❤️'.repeat(lives);
+            progressDisplay.textContent = `Aciertos: ${correctAnswers} / ${totalQuestionsPerLevel}`;
+        }
+        
+        function endLevel(isWin) {
+            gameScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+
+            if (isWin) {
+                resultsTitle.textContent = `¡Nivel ${currentLevel} Superado! 🎉`;
+                resultsMessage.textContent = "¡Has desbloqueado el siguiente desafío!";
+                if (!completedLevels.includes(currentLevel)) {
+                    completedLevels.push(currentLevel);
+                }
+            } else {
+                resultsTitle.textContent = `¡Oh, no! 💔`;
+                resultsMessage.textContent = `Se te acabaron las vidas. ¡Pero puedes volver a intentarlo!`;
+            }
+        }
+        
+        // 4. EVENT LISTENERS (ESCUCHADORES DE EVENTOS)
+        checkBtn.addEventListener('click', checkAnswer);
+        answerInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        backToMapBtn.addEventListener('click', init);
+
+        // Iniciar el juego por primera vez
+        init();
+    </script>
+</body>
+</html>
