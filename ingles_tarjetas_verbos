@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards de Verbos Irregulares</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-text: #2c3e50;
+            --secondary-text: #34495e;
+            --accent-color: #3498db;
+            --accent-hover: #2980b9;
+            --known-color: #2ecc71;
+            --known-hover: #27ae60;
+            --unknown-color: #e74c3c;
+            --unknown-hover: #c0392b;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--primary-text);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            height: 250px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card-front {
+            background-color: var(--card-bg);
+        }
+
+        .card-back {
+            background-color: var(--accent-color);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .verb-emoji {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .verb-meaning {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .verb-infinitive {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .verb-past {
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        .controls button, .session-controls button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin: 5px;
+        }
+        
+        .controls button:active, .session-controls button:active {
+            transform: scale(0.95);
+        }
+
+        #flip-btn {
+            background-color: var(--accent-color);
+            color: white;
+            width: calc(100% - 20px);
+        }
+
+        #flip-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        #known-btn {
+            background-color: var(--known-color);
+            color: white;
+        }
+        #known-btn:hover {
+            background-color: var(--known-hover);
+        }
+
+        #unknown-btn {
+            background-color: var(--unknown-color);
+            color: white;
+        }
+        #unknown-btn:hover {
+            background-color: var(--unknown-hover);
+        }
+        
+        .answer-controls {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+        
+        .answer-controls button {
+            width: 48%;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--secondary-text);
+        }
+        
+        .session-controls {
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <h1 id="main-title">Flashcards de Verbos</h1>
+
+        <div id="card-view" class="hidden">
+            <div class="card-container">
+                <div id="card" class="card">
+                    <div class="card-face card-front">
+                        <div id="card-front-emoji" class="verb-emoji"></div>
+                        <div id="card-front-meaning" class="verb-meaning"></div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div id="card-back-infinitive" class="verb-infinitive"></div>
+                        <div id="card-back-past" class="verb-past"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="controls">
+                <button id="flip-btn">Girar Tarjeta 🔄</button>
+                <div id="answer-controls" class="answer-controls hidden">
+                    <button id="unknown-btn">❌ No me la sé</button>
+                    <button id="known-btn">✅ ¡Me la sé!</button>
+                </div>
+            </div>
+            
+            <p id="status"></p>
+        </div>
+
+        <div id="session-view">
+            <h2 id="session-title">¡A estudiar!</h2>
+            <p id="session-message">Pulsa el botón para empezar a repasar todos los verbos.</p>
+            <div class="session-controls">
+                <button id="start-btn">🚀 Empezar Sesión</button>
+                <button id="review-btn" class="hidden">🤓 Repasar las que no sabía</button>
+                <button id="restart-btn" class="hidden">🔄 Volver a empezar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. DATOS DE LOS VERBOS (Extraídos de tus imágenes) ---
+        const verbs = [
+            // Imagen 1
+            { infinitive: "To see", past: "saw", meaning: "ver", emoji: "👀" },
+            { infinitive: "To send", past: "sent", meaning: "mandar", emoji: "✉️" },
+            { infinitive: "To sing", past: "sang", meaning: "cantar", emoji: "🎤" },
+            { infinitive: "To sleep", past: "slept", meaning: "dormir", emoji: "😴" },
+            { infinitive: "To spend", past: "spent", meaning: "gastar", emoji: "💸" },
+            { infinitive: "To swim", past: "swam", meaning: "nadar", emoji: "🏊" },
+            { infinitive: "To swing", past: "swung", meaning: "balancearse", emoji: "🤸" },
+            { infinitive: "To take", past: "took", meaning: "llevar", emoji: "🤲" },
+            { infinitive: "To tell", past: "told", meaning: "decir, contar", emoji: "🗣️" },
+            { infinitive: "To think", past: "thought", meaning: "pensar", emoji: "🤔" },
+            { infinitive: "To wear", past: "wore", meaning: "llevar puesto", emoji: "👕" },
+            { infinitive: "To win", past: "won", meaning: "ganar", emoji: "🏆" },
+            { infinitive: "To write", past: "wrote", meaning: "escribir", emoji: "✍️" },
+            // Imagen 2
+            { infinitive: "To break", past: "broke", meaning: "romper", emoji: "💔" },
+            { infinitive: "To build", past: "built", meaning: "construir", emoji: "🏗️" },
+            { infinitive: "To catch", past: "caught", meaning: "coger", emoji: "⚾" },
+            { infinitive: "To choose", past: "chose", meaning: "elegir", emoji: "✅" },
+            { infinitive: "To come", past: "came", meaning: "venir", emoji: "🚶" },
+            { infinitive: "To cost", past: "cost", meaning: "costar", emoji: "💲" },
+            { infinitive: "To cut", past: "cut", meaning: "cortar", emoji: "✂️" },
+            { infinitive: "To do", past: "did", meaning: "hacer", emoji: "🛠️" },
+            { infinitive: "To drink", past: "drank", meaning: "beber", emoji: "🥤" },
+            { infinitive: "To eat", past: "ate", meaning: "comer", emoji: "🍔" },
+            { infinitive: "To fall", past: "fell", meaning: "caer", emoji: "🍂" },
+            { infinitive: "To feel", past: "felt", meaning: "sentir", emoji: "❤️" },
+            { infinitive: "To find", past: "found", meaning: "encontrar", emoji: "🔍" },
+            { infinitive: "To fly", past: "flew", meaning: "volar", emoji: "✈️" },
+            { infinitive: "To forget", past: "forgot", meaning: "olvidar", emoji: "❓" },
+            { infinitive: "To get", past: "got", meaning: "coger", emoji: "🤝" },
+            { infinitive: "To give", past: "gave", meaning: "dar", emoji: "🎁" },
+            { infinitive: "To go", past: "went", meaning: "ir", emoji: "➡️" },
+            { infinitive: "To grow", past: "grew", meaning: "crecer", emoji: "🌱" },
+            { infinitive: "To have", past: "had", meaning: "tener", emoji: "🙌" },
+            { infinitive: "To hear", past: "heard", meaning: "oír", emoji: "👂" },
+            { infinitive: "To hurt", past: "hurt", meaning: "hacer daño", emoji: "🤕" },
+            { infinitive: "To know", past: "knew", meaning: "saber, conocer", emoji: "🧠" },
+            { infinitive: "To lose", past: "lost", meaning: "perder", emoji: "📉" },
+            { infinitive: "To make", past: "made", meaning: "hacer", emoji: "👨‍🍳" },
+            { infinitive: "To put", past: "put", meaning: "poner", emoji: "📥" },
+            { infinitive: "To read", past: "read", meaning: "leer", emoji: "📖" },
+            { infinitive: "To ride", past: "rode", meaning: "montar", emoji: "🚲" },
+            { infinitive: "To run", past: "ran", meaning: "correr", emoji: "🏃" },
+            { infinitive: "To say", past: "said", meaning: "decir", emoji: "💬" }
+        ];
+
+        // --- 2. REFERENCIAS A ELEMENTOS DEL DOM ---
+        const cardView = document.getElementById('card-view');
+        const sessionView = document.getElementById('session-view');
+        
+        const card = document.getElementById('card');
+        const cardFrontEmoji = document.getElementById('card-front-emoji');
+        const cardFrontMeaning = document.getElementById('card-front-meaning');
+        const cardBackInfinitive = document.getElementById('card-back-infinitive');
+        const cardBackPast = document.getElementById('card-back-past');
+        
+        const flipBtn = document.getElementById('flip-btn');
+        const answerControls = document.getElementById('answer-controls');
+        const knownBtn = document.getElementById('known-btn');
+        const unknownBtn = document.getElementById('unknown-btn');
+        
+        const statusEl = document.getElementById('status');
+        
+        const mainTitle = document.getElementById('main-title');
+        const sessionTitle = document.getElementById('session-title');
+        const sessionMessage = document.getElementById('session-message');
+        const startBtn = document.getElementById('start-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // --- 3. ESTADO DE LA APLICACIÓN ---
+        let currentDeck = [];
+        let unknownVerbs = [];
+        let currentIndex = 0;
+        let isReviewSession = false;
+
+        // --- 4. FUNCIONES ---
+
+        // Función para barajar las tarjetas
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Función para mostrar la tarjeta actual
+        function showCard() {
+            if (currentIndex >= currentDeck.length) {
+                endSession();
+                return;
+            }
+            
+            const verb = currentDeck[currentIndex];
+            
+            // Restablecer la tarjeta
+            card.classList.remove('is-flipped');
+            answerControls.classList.add('hidden');
+            flipBtn.classList.remove('hidden');
+
+            // Actualizar contenido
+            cardFrontEmoji.textContent = verb.emoji;
+            cardFrontMeaning.textContent = verb.meaning;
+            cardBackInfinitive.textContent = verb.infinitive;
+            cardBackPast.textContent = `Past: ${verb.past}`;
+            
+            statusEl.textContent = `Tarjeta ${currentIndex + 1} de ${currentDeck.length}`;
+        }
+        
+        // Función para girar la tarjeta
+        function flipCard() {
+            card.classList.add('is-flipped');
+            flipBtn.classList.add('hidden');
+            answerControls.classList.remove('hidden');
+        }
+        
+        // Función para manejar la respuesta del usuario
+        function handleAnswer(isKnown) {
+            if (!isKnown) {
+                unknownVerbs.push(currentDeck[currentIndex]);
+            }
+            currentIndex++;
+            showCard();
+        }
+
+        // Función para iniciar una sesión (principal o de repaso)
+        function startSession(isReview = false) {
+            isReviewSession = isReview;
+            currentIndex = 0;
+            
+            if (isReview) {
+                currentDeck = shuffle([...unknownVerbs]);
+                unknownVerbs = []; // Limpiar para el siguiente ciclo de repaso
+                mainTitle.textContent = "Ronda de Repaso";
+            } else {
+                currentDeck = shuffle([...verbs]);
+                unknownVerbs = [];
+                mainTitle.textContent = "Flashcards de Verbos";
+            }
+            
+            if (currentDeck.length === 0) {
+                 // Esto pasa si se intenta repasar sin verbos desconocidos
+                 sessionTitle.textContent = "🎉 ¡Felicidades! 🎉";
+                 sessionMessage.textContent = "¡Te sabes todos los verbos! No necesitas repasar. ¿Quieres empezar de nuevo?";
+                 startBtn.classList.add('hidden');
+                 reviewBtn.classList.add('hidden');
+                 restartBtn.classList.remove('hidden');
+                 return;
+            }
+
+            sessionView.classList.add('hidden');
+            cardView.classList.remove('hidden');
+            showCard();
+        }
+
+        // Función para terminar una sesión
+        function endSession() {
+            cardView.classList.add('hidden');
+            sessionView.classList.remove('hidden');
+            
+            if (unknownVerbs.length > 0) {
+                sessionTitle.textContent = "¡Ronda terminada!";
+                sessionMessage.textContent = `Has terminado. Tienes ${unknownVerbs.length} verbo(s) para repasar.`;
+                startBtn.classList.add('hidden');
+                reviewBtn.classList.remove('hidden');
+                restartBtn.classList.remove('hidden');
+            } else {
+                sessionTitle.textContent = "🥳 ¡Excelente! 🥳";
+                sessionMessage.textContent = "¡Te sabes todos los verbos de esta ronda! ¡Muy bien hecho!";
+                startBtn.classList.add('hidden');
+                reviewBtn.classList.add('hidden');
+                restartBtn.classList.remove('hidden');
+            }
+        }
+
+        // --- 5. EVENT LISTENERS ---
+        flipBtn.addEventListener('click', flipCard);
+        knownBtn.addEventListener('click', () => handleAnswer(true));
+        unknownBtn.addEventListener('click', () => handleAnswer(false));
+        
+        startBtn.addEventListener('click', () => startSession(false));
+        reviewBtn.addEventListener('click', () => startSession(true));
+        restartBtn.addEventListener('click', () => {
+             // Oculta los botones de sesión y muestra el de empezar
+             startBtn.classList.remove('hidden');
+             reviewBtn.classList.add('hidden');
+             restartBtn.classList.add('hidden');
+             // Resetea los textos
+             sessionTitle.textContent = "¡A estudiar!";
+             sessionMessage.textContent = "Pulsa el botón para empezar a repasar todos los verbos.";
+             startSession(false);
+        });
+
+    </script>
+</body>
+</html>
