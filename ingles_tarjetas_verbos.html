@@ -173,6 +173,26 @@
         .hidden {
             display: none;
         }
+
+        /* ----- ESTILOS PARA EL PIE DE PÁGINA AÑADIDOS ----- */
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e6ed;
+        }
+
+        footer a {
+            color: var(--secondary-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -214,6 +234,11 @@
                 <button id="restart-btn" class="hidden">🔄 Volver a empezar</button>
             </div>
         </div>
+
+        <footer>
+            <p><a href="index.html">🔙 Volver al menú de materias</a></p>
+        </footer>
+
     </div>
 
     <script>
