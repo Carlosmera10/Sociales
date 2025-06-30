@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcards de Verbos Irregulares</title>
+    <title>Flashcards de Verbos Irregulares con Audio</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
@@ -173,8 +173,25 @@
         .hidden {
             display: none;
         }
+        
+        /* AÑADIDO: Estilos para el botón de audio */
+        .audio-control {
+            margin-top: 15px;
+        }
+        #play-audio-btn {
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+        #play-audio-btn:hover {
+            background-color: rgba(255,255,255,0.4);
+        }
 
-        /* ----- ESTILOS PARA EL PIE DE PÁGINA AÑADIDOS ----- */
         footer {
             margin-top: 40px;
             padding-top: 20px;
@@ -210,6 +227,9 @@
                     <div class="card-face card-back">
                         <div id="card-back-infinitive" class="verb-infinitive"></div>
                         <div id="card-back-past" class="verb-past"></div>
+                        <div class="audio-control">
+                            <button id="play-audio-btn">🔊 Escuchar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -315,6 +335,9 @@
         const reviewBtn = document.getElementById('review-btn');
         const restartBtn = document.getElementById('restart-btn');
 
+        // AÑADIDO: Referencia al botón de audio
+        const playAudioBtn = document.getElementById('play-audio-btn');
+
         // --- 3. ESTADO DE LA APLICACIÓN ---
         let currentDeck = [];
         let unknownVerbs = [];
@@ -322,6 +345,20 @@
         let isReviewSession = false;
 
         // --- 4. FUNCIONES ---
+
+        // AÑADIDO: Función para pronunciar un texto
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                // Detiene cualquier locución anterior para evitar solapamientos
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US'; // Asegura que se use la pronunciación en inglés
+                utterance.rate = 0.9; // Puedes ajustar la velocidad (1 es normal)
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Lo siento, tu navegador no soporta la síntesis de voz.");
+            }
+        }
 
         // Función para barajar las tarjetas
         function shuffle(array) {
@@ -339,14 +376,17 @@
                 return;
             }
             
+            // Detener cualquier audio que se estuviera reproduciendo de la tarjeta anterior
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+
             const verb = currentDeck[currentIndex];
             
-            // Restablecer la tarjeta
             card.classList.remove('is-flipped');
             answerControls.classList.add('hidden');
             flipBtn.classList.remove('hidden');
 
-            // Actualizar contenido
             cardFrontEmoji.textContent = verb.emoji;
             cardFrontMeaning.textContent = verb.meaning;
             cardBackInfinitive.textContent = verb.infinitive;
@@ -355,14 +395,12 @@
             statusEl.textContent = `Tarjeta ${currentIndex + 1} de ${currentDeck.length}`;
         }
         
-        // Función para girar la tarjeta
         function flipCard() {
             card.classList.add('is-flipped');
             flipBtn.classList.add('hidden');
             answerControls.classList.remove('hidden');
         }
         
-        // Función para manejar la respuesta del usuario
         function handleAnswer(isKnown) {
             if (!isKnown) {
                 unknownVerbs.push(currentDeck[currentIndex]);
@@ -371,14 +409,13 @@
             showCard();
         }
 
-        // Función para iniciar una sesión (principal o de repaso)
         function startSession(isReview = false) {
             isReviewSession = isReview;
             currentIndex = 0;
             
             if (isReview) {
                 currentDeck = shuffle([...unknownVerbs]);
-                unknownVerbs = []; // Limpiar para el siguiente ciclo de repaso
+                unknownVerbs = [];
                 mainTitle.textContent = "Ronda de Repaso";
             } else {
                 currentDeck = shuffle([...verbs]);
@@ -387,7 +424,6 @@
             }
             
             if (currentDeck.length === 0) {
-                 // Esto pasa si se intenta repasar sin verbos desconocidos
                  sessionTitle.textContent = "🎉 ¡Felicidades! 🎉";
                  sessionMessage.textContent = "¡Te sabes todos los verbos! No necesitas repasar. ¿Quieres empezar de nuevo?";
                  startBtn.classList.add('hidden');
@@ -401,7 +437,6 @@
             showCard();
         }
 
-        // Función para terminar una sesión
         function endSession() {
             cardView.classList.add('hidden');
             sessionView.classList.remove('hidden');
@@ -429,14 +464,20 @@
         startBtn.addEventListener('click', () => startSession(false));
         reviewBtn.addEventListener('click', () => startSession(true));
         restartBtn.addEventListener('click', () => {
-             // Oculta los botones de sesión y muestra el de empezar
              startBtn.classList.remove('hidden');
              reviewBtn.classList.add('hidden');
              restartBtn.classList.add('hidden');
-             // Resetea los textos
              sessionTitle.textContent = "¡A estudiar!";
              sessionMessage.textContent = "Pulsa el botón para empezar a repasar todos los verbos.";
              startSession(false);
+        });
+
+        // AÑADIDO: Event listener para el botón de audio
+        playAudioBtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // Evita que la tarjeta se voltee al pulsar este botón
+            const verbToSpeak = currentDeck[currentIndex].infinitive.replace('To ', '');
+            const pastToSpeak = currentDeck[currentIndex].past;
+            speak(`${verbToSpeak}. Past tense: ${pastToSpeak}.`);
         });
 
     </script>
