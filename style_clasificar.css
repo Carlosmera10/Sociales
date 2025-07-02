@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f4f4f4;
+    background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 1000px;
+    background-color: #fff;
+    border: 10px solid #8d6e63; /* Borde de madera */
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+header h1 {
+    font-family: 'Bangers', cursive;
+    color: #d9534f;
+    font-size: 3em;
+    letter-spacing: 2px;
+    margin-bottom: 0;
+}
+
+#score-counter {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #555;
+    margin-top: 10px;
+}
+
+.toolbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.toolbox {
+    background-color: #e0e0e0;
+    border: 3px dashed #aaa;
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 150px;
+    transition: all 0.3s ease;
+}
+
+.toolbox h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+    pointer-events: none; /* Para que no interfiera con el drag and drop */
+}
+
+/* Colores de las cajas */
+#agudas { border-color: #00bcd4; }
+#llanas { border-color: #4caf50; }
+#esdrujulas { border-color: #ffeb3b; }
+#sobresdrujulas { border-color: #e91e63; }
+
+/* Efecto al arrastrar sobre la caja */
+.toolbox.drag-over {
+    background-color: #d0d0d0;
+    transform: scale(1.05);
+}
+
+/* Palabras para arrastrar */
+#words-container {
+    background-color: #f5f5f5;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    min-height: 100px;
+}
+
+.word-piece {
+    background-color: #ffcc00;
+    color: #333;
+    padding: 15px 25px;
+    font-size: 1.3em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: grab;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.word-piece.dragging {
+    opacity: 0.5;
+    transform: scale(1.1);
+    cursor: grabbing;
+}
+
+.word-piece.classified {
+    background-color: #bdbdbd;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Feedback de acierto/error */
+.toolbox.correct {
+    animation: pulse-green 0.5s;
+}
+.toolbox.incorrect {
+    animation: shake-red 0.5s;
+}
+
+@keyframes pulse-green {
+    0% { background-color: #c8e6c9; }
+    50% { background-color: #81c784; }
+    100% { background-color: #e0e0e0; }
+}
+@keyframes shake-red {
+    0%, 100% { transform: translateX(0); background-color: #e0e0e0; }
+    25% { transform: translateX(-8px); }
+    50% { background-color: #ef9a9a; }
+    75% { transform: translateX(8px); }
+}
+
+/* Emoji de feedback */
+#feedback-emoji {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 15em;
+    opacity: 0;
+    transition: all 0.5s ease;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+#feedback-emoji.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: fade-out 2s forwards 0.5s;
+}
+
+@keyframes fade-out {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+}
+
+/* Pantalla final y botón */
+#end-screen { padding: 40px; }
+#restart-button { font-size: 1.2em; padding: 10px 20px; cursor: pointer; }
+.hidden { display: none; }
+
+footer a {
+    color: #333;
+    margin-top: 20px;
+    display: inline-block;
+    font-weight: bold;
+}
