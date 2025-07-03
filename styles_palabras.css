@@ -1,0 +1,133 @@
+/* Importar las fuentes molonas de Google */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;700&display=swap');
+
+/* Estilos generales para que todo se vea genial */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0faff; /* Un azul cielo muy clarito */
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    text-align: center;
+    padding: 2rem 1rem;
+    background-color: #ffde59; /* Amarillo sol para el título */
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 3rem;
+    color: #d92e2e; /* Rojo de superhéroe */
+    text-shadow: 2px 2px #fff;
+}
+
+.intro {
+    max-width: 600px;
+    margin: 1rem auto 0;
+    font-size: 1.1rem;
+}
+
+/* El contenedor de nuestros superhéroes */
+.superhero-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que se adapte a todas las pantallas */
+    justify-content: center;
+    gap: 2rem; /* Espacio entre las tarjetas */
+    padding: 3rem 1rem;
+}
+
+/* El estilo de cada tarjeta de superhéroe */
+.superhero-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    flex: 1 1 320px; /* Magia para que se ajusten solas */
+    max-width: 400px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border-bottom: 10px solid;
+}
+
+.superhero-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+}
+
+.superhero-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.superhero-card ul {
+    list-style-type: none; /* Quitamos los puntitos de la lista */
+    padding-left: 0;
+}
+
+.superhero-card li {
+    background-color: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+
+.superhero-card strong {
+    font-weight: 700;
+}
+
+/* El truco final para identificar a los héroes */
+.ojo-al-dato {
+    background-color: #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border-left: 5px solid;
+}
+
+/* Colores para cada superhéroe */
+.sustantivo { border-color: #007bff; }
+.sustantivo h2 { color: #007bff; }
+.sustantivo .ojo-al-dato { border-left-color: #007bff; }
+.sustantivo strong { color: #007bff; }
+
+.adjetivo { border-color: #9d4edd; }
+.adjetivo h2 { color: #9d4edd; }
+.adjetivo .ojo-al-dato { border-left-color: #9d4edd; }
+.adjetivo strong { color: #9d4edd; }
+
+.verbo { border-color: #d92e2e; }
+.verbo h2 { color: #d92e2e; }
+.verbo .ojo-al-dato { border-left-color: #d92e2e; }
+.verbo strong { color: #d92e2e; }
+
+.pronombre { border-color: #28a745; }
+.pronombre h2 { color: #28a745; }
+.pronombre .ojo-al-dato { border-left-color: #28a745; }
+.pronombre strong { color: #28a745; }
+
+.determinante { border-color: #fd7e14; }
+.determinante h2 { color: #fd7e14; }
+.determinante .ojo-al-dato { border-left-color: #fd7e14; }
+.determinante strong { color: #fd7e14; }
+
+
+/* Para que se vea genial en móviles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    header {
+        clip-path: none;
+    }
+    .superhero-container {
+        padding: 2rem 1rem;
+    }
+}
