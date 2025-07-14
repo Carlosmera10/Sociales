@@ -638,6 +638,22 @@
 
             const TOTAL_QUESTIONS = 39; // 20 + 10 + 1 (vale por 8 palabras) + 8
 
+            // --- Lógica para barajar opciones de la Sección 4 al cargar ---
+            const section4Questions = document.querySelectorAll('.section:nth-of-type(4) .question');
+            section4Questions.forEach(question => {
+                const optionsContainer = question.querySelector('.options');
+                const options = Array.from(optionsContainer.querySelectorAll('.option'));
+                
+                // Algoritmo de Fisher-Yates para barajar
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+                
+                // Volver a añadir las opciones barajadas
+                options.forEach(option => optionsContainer.appendChild(option));
+            });
+
             // --- Lógica para selección de opciones (Sección 1 y 4) ---
             const optionContainers = form.querySelectorAll('.options');
             optionContainers.forEach(container => {
