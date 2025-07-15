@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen: Los seres vivos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #ecf0f1;
+            --text-color: #34495e;
+            --correct-color: #27ae60;
+            --incorrect-color: #c0392b;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px 40px;
+        }
+
+        .question {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option {
+            background-color: var(--card-bg);
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .option.correct {
+            background-color: var(--correct-color);
+            color: white;
+            border-color: var(--correct-color);
+        }
+
+        .option.incorrect {
+            background-color: var(--incorrect-color);
+            color: white;
+            border-color: var(--incorrect-color);
+        }
+        
+        .option.feedback-correct {
+            border: 2px solid var(--correct-color);
+            box-shadow: 0 0 5px var(--correct-color);
+        }
+
+        /* Drag and Drop Styles */
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 40px;
+        }
+
+        .word {
+            padding: 8px 12px;
+            background-color: white;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .word.dragging {
+            opacity: 0.5;
+        }
+
+        .drop-zone {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 50px;
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .drop-zone.over {
+            background-color: #d5e8f5;
+        }
+
+        .drop-zone.correct {
+            border-color: var(--correct-color);
+            background-color: #e8f8e8;
+        }
+        
+        .drop-zone.incorrect {
+            border-color: var(--incorrect-color);
+            background-color: #f8e8e8;
+        }
+
+        /* Category Drop */
+        .category-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: space-around;
+        }
+        .category-box {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            background-color: #fdfdfd;
+        }
+        .category-box h4 {
+            text-align: center;
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        /* Matching Styles */
+        .matching-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .match-item {
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .match-item:hover {
+            border-color: var(--primary-color);
+        }
+        .match-item.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .match-item.paired {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .match-item.paired.correct-match {
+            background-color: var(--correct-color);
+            border-color: var(--correct-color);
+            color: white;
+        }
+        .match-item.paired.incorrect-match {
+            background-color: var(--incorrect-color);
+            border-color: var(--incorrect-color);
+            color: white;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Submit and Results */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, var(--secondary-color), #27ae60);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            text-align: center;
+            display: none; /* Hidden by default */
+        }
+        .results h2 {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        .results p {
+            font-size: 1.2em;
+        }
+        .score {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+        .feedback-message {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .main-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .main-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌿🐘🐠🍄 Examen: Los Seres Vivos 🦋</h1>
+            <p>¡Demuestra lo que has aprendido!</p>
+        </div>
+        <div class="content">
+            <form id="quiz-form">
+                
+                <!-- SECCIÓN 1: RELLENAR HUECOS -->
+                <div class="question-title">✍️ 1. Completa la frase con la palabra correcta</div>
+                <div class="question" data-question-id="1.1">
+                    <div class="question-text">1.1. Todos los seres vivos están formados por unas estructuras diminutas denominadas _____.</div>
+                    <div class="options" data-correct="células">
+                        <div class="option" data-value="moléculas">moléculas</div><div class="option" data-value="células">células 🔬</div><div class="option" data-value="tejidos">tejidos 🧱</div><div class="option" data-value="átomos">átomos</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.2">
+                    <div class="question-text">1.2. La función de _____ permite a los seres vivos tomar sustancias del entorno para obtener energía.</div>
+                    <div class="options" data-correct="nutrición">
+                        <div class="option" data-value="relación">relación 👀</div><div class="option" data-value="nutrición">nutrición 🍎</div><div class="option" data-value="reproducción">reproducción 🐣</div><div class="option" data-value="respiración">respiración 😮‍💨</div>
+                    </div>
+                </div>
+                 <div class="question" data-question-id="1.3">
+                    <div class="question-text">1.3. Los seres vivos que fabrican su propio alimento, como las plantas, se llaman _____.</div>
+                    <div class="options" data-correct="autótrofos">
+                        <div class="option" data-value="heterótrofos">heterótrofos 🍖</div><div class="option" data-value="consumidores">consumidores</div><div class="option" data-value="autótrofos">autótrofos ☀️</div><div class="option" data-value="descomponedores">descomponedores</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.4">
+                    <div class="question-text">1.4. Los seres vivos que se alimentan de otros seres vivos, como los animales, son _____.</div>
+                    <div class="options" data-correct="heterótrofos">
+                        <div class="option" data-value="productores">productores</div><div class="option" data-value="autótrofos">autótrofos ☀️</div><div class="option" data-value="heterótrofos">heterótrofos 🍖</div><div class="option" data-value="vegetales">vegetales</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.5">
+                    <div class="question-text">1.5. La función de _____ permite a los seres vivos captar información de su entorno y reaccionar.</div>
+                    <div class="options" data-correct="relación">
+                        <div class="option" data-value="nutrición">nutrición 🍎</div><div class="option" data-value="relación">relación 👀</div><div class="option" data-value="reproducción">reproducción 🐣</div><div class="option" data-value="crecimiento">crecimiento</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.6">
+                    <div class="question-text">1.6. En la reproducción _____, un solo individuo produce descendientes idénticos a él.</div>
+                    <div class="options" data-correct="asexual">
+                        <div class="option" data-value="sexual">sexual 👨‍👩‍👧</div><div class="option" data-value="asexual">asexual 🦠</div><div class="option" data-value="vivípara">vivípara</div><div class="option" data-value="ovípara">ovípara</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.7">
+                    <div class="question-text">1.7. En los seres vivos más complejos, las células del mismo tipo se agrupan formando _____.</div>
+                    <div class="options" data-correct="tejidos">
+                        <div class="option" data-value="órganos">órganos ❤️</div><div class="option" data-value="sistemas">sistemas 🫁</div><div class="option" data-value="organismos">organismos 🧍</div><div class="option" data-value="tejidos">tejidos 🧱</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.8">
+                    <div class="question-text">1.8. Los animales que no tienen un esqueleto interno con columna vertebral se llaman _____.</div>
+                    <div class="options" data-correct="invertebrados">
+                        <div class="option" data-value="vertebrados">vertebrados 🦴</div><div class="option" data-value="invertebrados">invertebrados 🦋</div><div class="option" data-value="mamíferos">mamíferos</div><div class="option" data-value="reptiles">reptiles</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.9">
+                    <div class="question-text">1.9. Los animales que tienen un esqueleto interno con columna vertebral se llaman _____.</div>
+                    <div class="options" data-correct="vertebrados">
+                        <div class="option" data-value="invertebrados">invertebrados 🦋</div><div class="option" data-value="artrópodos">artrópodos 🕷️</div><div class="option" data-value="vertebrados">vertebrados 🦴</div><div class="option" data-value="moluscos">moluscos 🐌</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="1.10">
+                    <div class="question-text">1.10. El proceso por el que se unen un óvulo y un espermatozoide se llama _____.</div>
+                    <div class="options" data-correct="fecundación">
+                        <div class="option" data-value="gestación">gestación 🤰</div><div class="option" data-value="eclosión">eclosión 🐣</div><div class="option" data-value="fecundación">fecundación 🥚</div><div class="option" data-value="embrión">embrión 👶</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: ORDENAR PASOS -->
+                <div class="question-title">🔢 2. Ordena los pasos de cada proceso</div>
+                <div class="question" data-question-id="3.1">
+                    <div class="question-text">2.1. Ordena los niveles de organización de un ser vivo, de lo más simple a lo más complejo.</div>
+                    <div class="drop-zone" data-answer="Célula Tejido Órgano Aparato/Sistema Organismo"></div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-value="Organismo">Organismo 🧍</div><div class="word" draggable="true" data-value="Tejido">Tejido 🧱</div><div class="word" draggable="true" data-value="Célula">Célula 🔬</div><div class="word" draggable="true" data-value="Órgano">Órgano ❤️</div><div class="word" draggable="true" data-value="Aparato/Sistema">Aparato/Sistema 🫁</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="3.2">
+                    <div class="question-text">2.2. Ordena las fases del proceso de nutrición de un animal.</div>
+                    <div class="drop-zone" data-answer="Tomar alimentos Distribuir y utilizar nutrientes Expulsar desechos"></div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-value="Expulsar desechos">Expulsar desechos 🚽</div><div class="word" draggable="true" data-value="Tomar alimentos">Tomar alimentos 🍔</div><div class="word" draggable="true" data-value="Distribuir y utilizar nutrientes">Distribuir y utilizar nutrientes 💪</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="3.3">
+                    <div class="question-text">2.3. Ordena las etapas de la reproducción sexual.</div>
+                    <div class="drop-zone" data-answer="Fecundación Desarrollo del embrión Nacimiento de las crías"></div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-value="Nacimiento de las crías">Nacimiento de las crías 🐣</div><div class="word" draggable="true" data-value="Fecundación">Fecundación 🥚</div><div class="word" draggable="true" data-value="Desarrollo del embrión">Desarrollo del embrión 👶</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: ARRASTRAR A CATEGORÍA -->
+                <div class="question-title">🥗➡️🍖 3. Arrastra cada ser vivo a su tipo de nutrición</div>
+                <div class="question" data-question-id="4.1">
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-type="heterotrofo" data-value="Perro">Perro 🐶</div>
+                        <div class="word" draggable="true" data-type="autotrofo" data-value="Planta">Planta 🌳</div>
+                        <div class="word" draggable="true" data-type="autotrofo" data-value="Alga">Alga 🌱</div>
+                        <div class="word" draggable="true" data-type="heterotrofo" data-value="Hongo">Hongo 🍄</div>
+                    </div>
+                    <div class="category-container">
+                        <div class="category-box"><h4>AUTÓTROFO (fabrica su comida) ☀️</h4><div class="drop-zone" data-accept="autotrofo"></div></div>
+                        <div class="category-box"><h4>HETERÓTROFO (come a otros) 🍖</h4><div class="drop-zone" data-accept="heterotrofo"></div></div>
+                    </div>
+                </div>
+                <div class="question-title">🦴🆚🐙 4. Arrastra cada animal a su grupo</div>
+                <div class="question" data-question-id="4.2">
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-type="vertebrado" data-value="Pez">Pez 🐠</div>
+                        <div class="word" draggable="true" data-type="invertebrado" data-value="Caracol">Caracol 🐌</div>
+                        <div class="word" draggable="true" data-type="vertebrado" data-value="Serpiente">Serpiente 🐍</div>
+                        <div class="word" draggable="true" data-type="invertebrado" data-value="Medusa">Medusa 🪼</div>
+                    </div>
+                    <div class="category-container">
+                        <div class="category-box"><h4>VERTEBRADO (con esqueleto) 🦴</h4><div class="drop-zone" data-accept="vertebrado"></div></div>
+                        <div class="category-box"><h4>INVERTEBRADO (sin esqueleto) 🐙</h4><div class="drop-zone" data-accept="invertebrado"></div></div>
+                    </div>
+                </div>
+                <div class="question-title">🥚🆚🤰 5. Arrastra cada animal a su tipo de nacimiento</div>
+                <div class="question" data-question-id="4.3">
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-type="oviparo" data-value="Gallina">Gallina 🐔</div>
+                        <div class="word" draggable="true" data-type="viviparo" data-value="Vaca">Vaca 🐄</div>
+                        <div class="word" draggable="true" data-type="oviparo" data-value="Tortuga">Tortuga 🐢</div>
+                        <div class="word" draggable="true" data-type="viviparo" data-value="Delfín">Delfín 🐬</div>
+                    </div>
+                    <div class="category-container">
+                        <div class="category-box"><h4>OVÍPARO (de huevos) 🥚</h4><div class="drop-zone" data-accept="oviparo"></div></div>
+                        <div class="category-box"><h4>VIVÍPARO (del vientre materno) 🤰</h4><div class="drop-zone" data-accept="viviparo"></div></div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 5: VERDADERO O FALSO -->
+                <div class="question-title">✅/❌ 6. Indica si es verdadero o falso</div>
+                <div class="question" data-question-id="5.1">
+                    <div class="question-text">6.1. Todos los seres vivos están formados por una sola célula.</div>
+                    <div class="options" data-correct="Falso"><div class="option" data-value="Verdadero">Verdadero</div><div class="option" data-value="Falso">Falso</div></div>
+                </div>
+                <div class="question" data-question-id="5.2">
+                    <div class="question-text">6.2. Las plantas 🌿 son seres heterótrofos.</div>
+                    <div class="options" data-correct="Falso"><div class="option" data-value="Verdadero">Verdadero</div><div class="option" data-value="Falso">Falso</div></div>
+                </div>
+                <div class="question" data-question-id="5.3">
+                    <div class="question-text">6.3. La reproducción sexual necesita dos progenitores.</div>
+                    <div class="options" data-correct="Verdadero"><div class="option" data-value="Verdadero">Verdadero</div><div class="option" data-value="Falso">Falso</div></div>
+                </div>
+                <div class="question" data-question-id="5.4">
+                    <div class="question-text">6.4. Los anfibios, como las ranas 🐸, tienen el cuerpo cubierto de escamas.</div>
+                    <div class="options" data-correct="Falso"><div class="option" data-value="Verdadero">Verdadero</div><div class="option" data-value="Falso">Falso</div></div>
+                </div>
+                <div class="question" data-question-id="5.5">
+                    <div class="question-text">6.5. El aparato locomotor, formado por huesos 🦴 y músculos 💪, nos permite movernos.</div>
+                    <div class="options" data-correct="Verdadero"><div class="option" data-value="Verdadero">Verdadero</div><div class="option" data-value="Falso">Falso</div></div>
+                </div>
+
+                <!-- SECCIÓN 6: TEST (UNA RESPUESTA) -->
+                <div class="question-title">🎯 7. Elige la respuesta correcta</div>
+                <div class="question" data-question-id="6.1">
+                    <div class="question-text">7.1. ¿Cuál de estas NO es una de las tres funciones vitales?</div>
+                    <div class="options" data-correct="Pensamiento">
+                        <div class="option" data-value="Nutrición">Nutrición 🍎</div><div class="option" data-value="Pensamiento">Pensamiento 🤔</div><div class="option" data-value="Relación">Relación 👀</div><div class="option" data-value="Reproducción">Reproducción 🐣</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.2">
+                    <div class="question-text">7.2. ¿A qué reino pertenecen las bacterias 🦠?</div>
+                    <div class="options" data-correct="Reino de las moneras">
+                        <div class="option" data-value="Reino animal">Reino animal</div><div class="option" data-value="Reino de las moneras">Reino de las moneras</div><div class="option" data-value="Reino de los hongos">Reino de los hongos</div><div class="option" data-value="Reino de las plantas">Reino de las plantas</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.3">
+                    <div class="question-text">7.3. La unión de varios tejidos que trabajan juntos forma un...</div>
+                    <div class="options" data-correct="Órgano">
+                        <div class="option" data-value="Órgano">Órgano ❤️</div><div class="option" data-value="Célula">Célula 🔬</div><div class="option" data-value="Sistema">Sistema 🫁</div><div class="option" data-value="Organismo">Organismo 🧍</div>
+                    </div>
+                </div>
+                 <div class="question" data-question-id="6.4">
+                    <div class="question-text">7.4. ¿Qué tipo de nutrición tienen los animales 🦁?</div>
+                    <div class="options" data-correct="Heterótrofa">
+                        <div class="option" data-value="Autótrofa">Autótrofa ☀️</div><div class="option" data-value="Heterótrofa">Heterótrofa 🍖</div><div class="option" data-value="Fotosintética">Fotosintética</div><div class="option" data-value="Celular">Celular</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.5">
+                    <div class="question-text">7.5. Los reptiles, como las serpientes 🐍, tienen el cuerpo cubierto de...</div>
+                    <div class="options" data-correct="Escamas">
+                        <div class="option" data-value="Pelo">Pelo</div><div class="option" data-value="Escamas">Escamas</div><div class="option" data-value="Plumas">Plumas</div><div class="option" data-value="Piel desnuda">Piel desnuda</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.6">
+                    <div class="question-text">7.6. ¿Cómo nacen la mayoría de los mamíferos 🐻?</div>
+                    <div class="options" data-correct="Son vivíparos">
+                        <div class="option" data-value="De huevos">De huevos 🥚</div><div class="option" data-value="Asexualmente">Asexualmente</div><div class="option" data-value="Son vivíparos">Son vivíparos 🤰</div><div class="option" data-value="Por esporas">Por esporas</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.7">
+                    <div class="question-text">7.7. ¿Qué aparato se encarga de transportar el oxígeno y los nutrientes por el cuerpo?</div>
+                    <div class="options" data-correct="Aparato circulatorio">
+                        <div class="option" data-value="Aparato digestivo">Aparato digestivo 👄</div><div class="option" data-value="Aparato circulatorio">Aparato circulatorio ❤️</div><div class="option" data-value="Aparato respiratorio">Aparato respiratorio 🫁</div><div class="option" data-value="Aparato excretor">Aparato excretor 🚽</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.8">
+                    <div class="question-text">7.8. Los insectos 🐜 son un ejemplo de animales...</div>
+                    <div class="options" data-correct="Invertebrados">
+                        <div class="option" data-value="Vertebrados">Vertebrados</div><div class="option" data-value="Invertebrados">Invertebrados</div><div class="option" data-value="Mamíferos">Mamíferos</div><div class="option" data-value="Anfibios">Anfibios</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.9">
+                    <div class="question-text">7.9. ¿Cuál de estos animales es un anfibio?</div>
+                    <div class="options" data-correct="Rana">
+                        <div class="option" data-value="Lagartija">Lagartija 🦎</div><div class="option" data-value="Rana">Rana 🐸</div><div class="option" data-value="Pez payaso">Pez payaso 🤡🐠</div><div class="option" data-value="Delfín">Delfín 🐬</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="6.10">
+                    <div class="question-text">7.10. El órgano que interpreta la información y envía órdenes al resto del cuerpo es el...</div>
+                    <div class="options" data-correct="Cerebro">
+                        <div class="option" data-value="Corazón">Corazón ❤️</div><div class="option" data-value="Estómago">Estómago</div><div class="option" data-value="Pulmón">Pulmón 🫁</div><div class="option" data-value="Cerebro">Cerebro 🧠</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 8: ELEGIR FRASE CORRECTA/INCORRECTA -->
+                <div class="question-title">🧐 8. Elige la frase correcta o incorrecta</div>
+                <div class="question" data-question-id="8.1">
+                    <div class="question-text">8.1. Elige la frase <strong>correcta</strong>:</div>
+                    <div class="options" data-correct="Los hongos tienen nutrición heterótrofa.">
+                        <div class="option" data-value="Los hongos son plantas.">Los hongos 🍄 son plantas 🌿.</div><div class="option" data-value="Los hongos tienen nutrición heterótrofa.">Los hongos 🍄 tienen nutrición heterótrofa.</div><div class="option" data-value="Los hongos son animales pequeños.">Los hongos 🍄 son animales pequeños.</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="8.2">
+                    <div class="question-text">8.2. Elige la frase <strong>incorrecta</strong>:</div>
+                    <div class="options" data-correct="Los peces tienen el cuerpo cubierto de pelo.">
+                        <div class="option" data-value="Los peces respiran por branquias.">Los peces 🐟 respiran por branquias.</div><div class="option" data-value="Casi todos los peces son ovíparos.">Casi todos los peces 🐟 son ovíparos.</div><div class="option" data-value="Los peces tienen el cuerpo cubierto de pelo.">Los peces 🐟 tienen el cuerpo cubierto de pelo.</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="8.3">
+                    <div class="question-text">8.3. Elige la frase <strong>correcta</strong>:</div>
+                    <div class="options" data-correct="Las aves tienen el cuerpo cubierto de plumas.">
+                        <div class="option" data-value="Las aves son vivíparas.">Las aves 🐦 son vivíparas.</div><div class="option" data-value="Las aves tienen dientes.">Las aves 🐦 tienen dientes.</div><div class="option" data-value="Las aves tienen el cuerpo cubierto de plumas.">Las aves 🐦 tienen el cuerpo cubierto de plumas.</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="8.4">
+                    <div class="question-text">8.4. Elige la frase <strong>incorrecta</strong>:</div>
+                    <div class="options" data-correct="El corazón forma parte del aparato locomotor.">
+                        <div class="option" data-value="El sistema nervioso detecta cambios en el entorno.">El sistema nervioso detecta cambios en el entorno.</div><div class="option" data-value="El corazón forma parte del aparato locomotor.">El corazón ❤️ forma parte del aparato locomotor.</div><div class="option" data-value="Los pulmones sirven para respirar.">Los pulmones 🫁 sirven para respirar.</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="8.5">
+                    <div class="question-text">8.5. Elige la frase <strong>correcta</strong>:</div>
+                    <div class="options" data-correct="Los protozoos son seres vivos unicelulares.">
+                        <div class="option" data-value="Los protozoos son plantas microscópicas.">Los protozoos son plantas microscópicas.</div><div class="option" data-value="Todos los protozoos son autótrofos.">Todos los protozoos son autótrofos.</div><div class="option" data-value="Los protozoos son seres vivos unicelulares.">Los protozoos son seres vivos unicelulares.</div>
+                    </div>
+                </div>
+                
+                <!-- SECCIÓN 9: EMPAREJAR COLUMNAS -->
+                <div class="question-title">🤝 9. Empareja los elementos</div>
+                <div class="question matching-question" data-question-id="9.1">
+                    <div class="question-text">9.1. Empareja cada función vital con su descripción.</div>
+                    <div class="matching-container">
+                        <div class="column" id="column-a-9.1">
+                            <div class="match-item" data-match-id="1">Nutrición 🍎</div>
+                            <div class="match-item" data-match-id="2">Relación 👀</div>
+                            <div class="match-item" data-match-id="3">Reproducción 🐣</div>
+                        </div>
+                        <div class="column" id="column-b-9.1">
+                            <div class="match-item" data-match-id="2">Captar información y reaccionar.</div>
+                            <div class="match-item" data-match-id="3">Producir nuevos seres vivos.</div>
+                            <div class="match-item" data-match-id="1">Obtener energía y materiales.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="question matching-question" data-question-id="9.2">
+                    <div class="question-text">9.2. Empareja cada animal con su grupo de vertebrados.</div>
+                    <div class="matching-container">
+                        <div class="column" id="column-a-9.2">
+                            <div class="match-item" data-match-id="1">Delfín 🐬</div>
+                            <div class="match-item" data-match-id="2">Rana 🐸</div>
+                            <div class="match-item" data-match-id="3">Tiburón 🦈</div>
+                            <div class="match-item" data-match-id="4">Loro 🦜</div>
+                            <div class="match-item" data-match-id="5">Tortuga 🐢</div>
+                        </div>
+                        <div class="column" id="column-b-9.2">
+                            <div class="match-item" data-match-id="4">Ave 🐦</div>
+                            <div class="match-item" data-match-id="2">Anfibio 🐸</div>
+                            <div class="match-item" data-match-id="5">Reptil 🦎</div>
+                            <div class="match-item" data-match-id="1">Mamífero 🐻</div>
+                            <div class="match-item" data-match-id="3">Pez 🐟</div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <button type="button" class="submit-btn" id="submit-button">¡Terminar y Corregir!</button>
+            <div class="results" id="results-container">
+                <h2>Resultados del Examen</h2>
+                <p>Has obtenido una puntuación de:</p>
+                <div id="score-display" class="score"></div>
+                <p id="feedback-message" class="feedback-message"></p>
+            </div>
+        </div>
+    </div>
+    <footer class="main-footer">
+        <a href="index.html">🔙 Volver al menú de materias</a>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- CONSTANTES Y VARIABLES ---
+        const form = document.getElementById('quiz-form');
+        const submitButton = document.getElementById('submit-button');
+        const resultsContainer = document.getElementById('results-container');
+        const scoreDisplay = document.getElementById('score-display');
+        const feedbackMessage = document.getElementById('feedback-message');
+        
+        let draggedItem = null;
+
+        // --- LÓGICA DE BARAJAR OPCIONES ---
+        function shuffleChildren(parent) {
+            let children = Array.from(parent.children);
+            parent.innerHTML = '';
+            while (children.length > 0) {
+                parent.appendChild(children.splice(Math.floor(Math.random() * children.length), 1)[0]);
+            }
+        }
+
+        document.querySelectorAll('.options, .word-bank, .column[id^="column-b"]').forEach(container => {
+            shuffleChildren(container);
+        });
+
+        // --- LÓGICA DE SELECCIÓN DE OPCIONES (TIPOS 1, 5, 6, 8) ---
+        form.addEventListener('click', function(e) {
+            if (e.target.classList.contains('option')) {
+                const parentOptions = e.target.parentElement;
+                
+                if (parentOptions.classList.contains('multiple-choice')) {
+                    e.target.classList.toggle('selected');
+                } else {
+                    const siblings = parentOptions.querySelectorAll('.option');
+                    siblings.forEach(sibling => sibling.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            }
+        });
+
+        // --- LÓGICA DE ARRASTRAR Y SOLTAR (TIPOS 3, 4) ---
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('word')) {
+                draggedItem = e.target;
+                setTimeout(() => e.target.classList.add('dragging'), 0);
+            }
+        });
+
+        document.addEventListener('dragend', (e) => {
+            if (draggedItem) {
+                draggedItem.classList.remove('dragging');
+                draggedItem = null;
+            }
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('over');
+            });
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('over');
+            });
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('over');
+                if (draggedItem) {
+                    // Permitir soltar en cualquier zona, la validación es al final
+                    zone.appendChild(draggedItem);
+                }
+            });
+        });
+
+        // --- LÓGICA DE EMPAREJAR COLUMNAS (TIPO 9) ---
+        document.querySelectorAll('.matching-question').forEach(question => {
+            const columnA = question.querySelector('.column[id^="column-a"]');
+            const columnB = question.querySelector('.column[id^="column-b"]');
+            let selectedA = null;
+            let selectedB = null;
+
+            question.addEventListener('click', (e) => {
+                const target = e.target.closest('.match-item');
+                if (!target || target.classList.contains('paired')) {
+                    return;
+                }
+                
+                if (columnA.contains(target)) {
+                    if (selectedA) selectedA.classList.remove('selected');
+                    selectedA = target;
+                    selectedA.classList.add('selected');
+                } else if (columnB.contains(target)) {
+                    if (selectedB) selectedB.classList.remove('selected');
+                    selectedB = target;
+                    selectedB.classList.add('selected');
+                }
+
+                if (selectedA && selectedB) {
+                    selectedA.classList.add('paired');
+                    selectedB.classList.add('paired');
+                    
+                    selectedA.dataset.pairedWith = selectedB.dataset.matchId;
+                    
+                    selectedA.classList.remove('selected');
+                    selectedB.classList.remove('selected');
+                    selectedA = null;
+                    selectedB = null;
+                }
+            });
+        });
+
+
+        // --- LÓGICA DE CORRECCIÓN ---
+        submitButton.addEventListener('click', function() {
+            let score = 0;
+            let totalPoints = 0;
+
+            // Deshabilitar interacciones
+            form.style.pointerEvents = 'none';
+
+            // 1, 5, 6, 8. Preguntas de opción única
+            document.querySelectorAll('.question[data-question-id^="1."], .question[data-question-id^="5."], .question[data-question-id^="6."], .question[data-question-id^="8."]').forEach(q => {
+                totalPoints++;
+                const options = q.querySelector('.options');
+                const selected = options.querySelector('.option.selected');
+                const correctAnswer = options.dataset.correct;
+                if (selected) {
+                    if (selected.dataset.value === correctAnswer) {
+                        score++;
+                        selected.classList.add('correct');
+                    } else {
+                        selected.classList.add('incorrect');
+                        const correctOption = Array.from(options.children).find(opt => opt.dataset.value === correctAnswer);
+                        if(correctOption) correctOption.classList.add('feedback-correct');
+                    }
+                } else {
+                    const correctOption = Array.from(options.children).find(opt => opt.dataset.value === correctAnswer);
+                    if(correctOption) correctOption.classList.add('feedback-correct');
+                }
+            });
+
+            // 3. Ordenar pasos
+            document.querySelectorAll('.question[data-question-id^="3."]').forEach(q => {
+                totalPoints++;
+                const dropZone = q.querySelector('.drop-zone');
+                const correctAnswer = dropZone.dataset.answer;
+                const userAnswer = Array.from(dropZone.children).map(word => word.dataset.value).join(' ');
+                if(userAnswer === correctAnswer) {
+                    score++;
+                    dropZone.classList.add('correct');
+                } else {
+                    dropZone.classList.add('incorrect');
+                }
+            });
+
+            // 4. Arrastrar a categoría
+            document.querySelectorAll('.question[data-question-id^="4."]').forEach(q => {
+                totalPoints++;
+                let allCorrect = true;
+                q.querySelectorAll('.drop-zone').forEach(zone => {
+                    const requiredType = zone.dataset.accept;
+                    Array.from(zone.children).forEach(word => {
+                        if (word.dataset.type !== requiredType) {
+                            allCorrect = false;
+                        }
+                    });
+                });
+                if (q.querySelector('.word-bank').children.length > 0) {
+                    allCorrect = false;
+                }
+                if(allCorrect) {
+                    score++;
+                    q.querySelectorAll('.drop-zone').forEach(z => z.classList.add('correct'));
+                } else {
+                    q.querySelectorAll('.drop-zone').forEach(z => z.classList.add('incorrect'));
+                }
+            });
+
+            // 9. Emparejar columnas
+            document.querySelectorAll('.question[data-question-id^="9."]').forEach(q => {
+                const itemsA = q.querySelectorAll('.column[id^="column-a"] .match-item');
+                totalPoints += itemsA.length;
+                
+                itemsA.forEach(itemA => {
+                    if (itemA.classList.contains('paired')) {
+                        const itemBpaired = q.querySelector(`.column[id^="column-b"] .match-item[data-match-id="${itemA.dataset.pairedWith}"]`);
+                        if (itemA.dataset.matchId === itemA.dataset.pairedWith) {
+                            score++;
+                            itemA.classList.add('correct-match');
+                            if (itemBpaired) itemBpaired.classList.add('correct-match');
+                        } else {
+                            itemA.classList.add('incorrect-match');
+                            if (itemBpaired) itemBpaired.classList.add('incorrect-match');
+                        }
+                    }
+                });
+            });
+
+
+            // --- MOSTRAR RESULTADOS ---
+            const finalGrade = totalPoints > 0 ? ((score / totalPoints) * 10).toFixed(2) : 0;
+            scoreDisplay.textContent = `${finalGrade} / 10`;
+
+            let message = '';
+            if (finalGrade >= 9) {
+                message = '¡Excelente! ¡Eres un auténtico experto en seres vivos! 🥳';
+            } else if (finalGrade >= 7) {
+                message = '¡Muy buen trabajo! Has demostrado que sabes mucho. 👍';
+            } else if (finalGrade >= 5) {
+                message = '¡Aprobado! No está mal, pero puedes mejorar. 😉';
+            } else if (finalGrade >= 3) {
+                message = '💩 ¡Uy! Necesitas repasar un poco más este tema.';
+            } else {
+                message = '💩 ¡Vaya! Parece que este tema se te ha atragantado. ¡Ánimo y a estudiar!';
+            }
+            feedbackMessage.textContent = message;
+
+            resultsContainer.style.display = 'block';
+            submitButton.style.display = 'none';
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    });
+    </script>
+</body>
+</html>
