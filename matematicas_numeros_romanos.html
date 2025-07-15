@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código Secreto: Números Romanos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES DE ESTILO --- */
+        :root {
+            --color-fondo: #FFF8E1; /* Un ocre muy claro, como papiro */
+            --color-acento1: #D9A443; /* Dorado viejo */
+            --color-acento2: #C65B3B; /* Terracota/Rojo imperial */
+            --color-texto: #422D20; /* Marrón oscuro, casi negro */
+            --fuente-principal: 'Nunito', sans-serif;
+        }
+
+        /* --- ESTILOS GENERALES --- */
+        body {
+            font-family: var(--fuente-principal);
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .infografia-container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            margin: 20px;
+            overflow: hidden;
+        }
+
+        /* --- ESTILOS DE SECCIONES --- */
+        section {
+            padding: 30px 40px;
+            border-bottom: 5px solid var(--color-fondo);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h1, h2, h3 {
+            font-weight: 900; /* Extra bold for titles */
+            color: var(--color-acento2);
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            border-bottom: 3px dashed var(--color-acento1);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        p, li {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: var(--color-texto);
+        }
+
+        /* --- SECCIÓN 1: TÍTULO Y GANCHO --- */
+        .header-section {
+            background-color: var(--color-acento1);
+            color: white;
+            text-align: center;
+        }
+        .header-section h1, .header-section p {
+            color: white;
+        }
+        .header-section p {
+            font-size: 1.3em;
+            font-weight: 700;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- SECCIÓN 2: SÍMBOLOS MÁGICOS --- */
+        .simbolos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        .simbolo-card {
+            background-color: #fffaf0;
+            border: 2px solid var(--color-acento1);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .simbolo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        .simbolo-letra {
+            font-size: 3.5em;
+            font-weight: 900;
+            color: var(--color-acento2);
+            margin: 0;
+        }
+        .simbolo-valor {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--color-texto);
+            margin: 5px 0;
+        }
+        .simbolo-truco {
+            font-size: 1em;
+            font-style: italic;
+            min-height: 1.2em; /* Para mantener la alineación */
+        }
+
+        /* --- SECCIONES 3 & 4: REGLAS --- */
+        .reglas-section {
+            background-color: #FEFBF6;
+        }
+        .ejemplos-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .ejemplo {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            min-width: 180px;
+            border: 2px solid;
+        }
+        .ejemplo-suma {
+            border-color: #5A9C4E; /* Verde para sumar */
+        }
+        .ejemplo-resta {
+            border-color: #D9453B; /* Rojo para restar */
+        }
+        .ejemplo .formula {
+            font-size: 0.8em;
+            font-weight: 400;
+            color: #555;
+            display: block;
+            margin-top: 10px;
+        }
+
+        /* --- SECCIÓN 5: RETOS --- */
+        .retos-section {
+            background-color: #E3F2FD; /* Un azul cielo para pensar */
+        }
+        .reto {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--color-acento2);
+        }
+
+        /* --- SECCIÓN 6: LEGADO EN MADRID --- */
+        .legado-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: center;
+        }
+        .legado-item {
+            text-align: center;
+        }
+        .legado-item .emoji {
+            font-size: 4em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* --- SECCIÓN 7: CHULETA --- */
+        .chuleta-section {
+            background-color: var(--color-acento2);
+            color: white;
+        }
+        .chuleta-section h2 {
+            color: white;
+            border-color: rgba(255,255,255,0.5);
+        }
+        .chuleta-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .chuleta-section li {
+            background-color: rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        /* --- FOOTER --- */
+        .main-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .main-footer a {
+            text-decoration: none;
+            color: var(--color-acento2);
+            font-weight: 700;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .main-footer a:hover {
+            background-color: var(--color-acento1);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2em; }
+            h2 { font-size: 1.8em; }
+            section { padding: 20px; }
+            .simbolos-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infografia-container">
+
+        <!-- Sección 1: Título y Gancho 🚀 -->
+        <section class="header-section">
+            <h1>¡Viaje en el Tiempo! 🚀</h1>
+            <h2>Descubre el Código Secreto de los Números Romanos</h2>
+            <p>¡Hola, explorador/a! ¿Sabías que los antiguos romanos usaban letras como números? ¡Parece un código secreto! Hoy vamos a descifrarlo juntos. ¿Te atreves?</p>
+        </section>
+
+        <!-- Sección 2: Los 7 Símbolos Mágicos ✨ -->
+        <section>
+            <h2>✨ Los 7 Símbolos Mágicos</h2>
+            <div class="simbolos-grid">
+                <div class="simbolo-card">
+                    <p class="simbolo-letra">I</p>
+                    <p class="simbolo-valor">= 1</p>
+                    <p class="simbolo-truco">Es como un dedo ☝️</p>
+                </div>
+                <div class="simbolo-card">
+                    <p class="simbolo-letra">V</p>
+                    <p class="simbolo-valor">= 5</p>
+                    <p class="simbolo-truco">Parece una mano abierta 👍</p>
+                </div>
+                <div class="simbolo-card">
+                    <p class="simbolo-letra">X</p>
+                    <p class="simbolo-valor">= 10</p>
+                    <p class="simbolo-truco">Dos 'V' juntas</p>
+                </div>
+                <div class="simbolo-card">
+                    <p class="simbolo-letra">L</p>
+                    <p class="simbolo-valor">= 50</p>
+                    <p class="simbolo-truco">&nbsp;</p>
+                </div>
+                <div class="simbolo-card">
+                    <p class="simbolo-letra">C</p>
+                    <p class="simbolo-valor">= 100</p>
+                    <p class="simbolo-truco">Recuerda a "Cien"</p>
+                </div>
+                <div class="simbolo-card">
+                    <p class="simbolo-letra">D</p>
+                    <p class="simbolo-valor">= 500</p>
+                    <p class="simbolo-truco">&nbsp;</p>
+                </div>
+                <div class="simbolo-card">
+                    <p class="simbolo-letra">M</p>
+                    <p class="simbolo-valor">= 1000</p>
+                    <p class="simbolo-truco">Recuerda a "Mil"</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: Regla 1: ¡Sumando Fuerzas! ✔️ -->
+        <section class="reglas-section">
+            <h2>✔️ Regla 1: ¡Sumando Fuerzas!</h2>
+            <p>Si pones un número a la derecha de uno más grande, ¡sus valores se suman! Fácil, ¿verdad?</p>
+            <div class="ejemplos-container">
+                <div class="ejemplo ejemplo-suma">VI <span class="formula">5 + 1 = 6</span></div>
+                <div class="ejemplo ejemplo-suma">XII <span class="formula">10 + 1 + 1 = 12</span></div>
+                <div class="ejemplo ejemplo-suma">LV <span class="formula">50 + 5 = 55</span></div>
+            </div>
+        </section>
+
+        <!-- Sección 4: Regla 2: ¡El Truco del Pequeño Valiente! ❌ -->
+        <section>
+            <h2>❌ Regla 2: ¡El Truco del Pequeño Valiente!</h2>
+            <p>¡Cuidado! Si un número pequeño (<b>solo I, X o C</b>) se pone a la izquierda de uno más grande, ¡lo está restando!</p>
+            <div class="ejemplos-container">
+                <div class="ejemplo ejemplo-resta">IV <span class="formula">5 - 1 = 4</span></div>
+                <div class="ejemplo ejemplo-resta">IX <span class="formula">10 - 1 = 9</span></div>
+                <div class="ejemplo ejemplo-resta">XL <span class="formula">50 - 10 = 40</span></div>
+                <div class="ejemplo ejemplo-resta">XC <span class="formula">100 - 10 = 90</span></div>
+            </div>
+        </section>
+
+        <!-- Sección 5: ¡Ahora te toca a ti! 🧠 -->
+        <section class="retos-section">
+            <h2>🧠 ¡Ahora te toca a ti!</h2>
+            <div class="reto">
+                <p><strong>Reto 1:</strong> ¿Qué año es este? <strong>MMXXV</strong><br><em>(Pista: 1000+1000+10+10+5)</em></p>
+            </div>
+            <div class="reto">
+                <p><strong>Reto 2:</strong> ¿Cómo escribirías tu edad en números romanos? Si tienes 9 años sería... ¡IX!</p>
+            </div>
+            <div class="reto">
+                <p><strong>Reto 3:</strong> El rey se llamaba Alfonso XIII. ¿Qué número es? <em>(Pista: X es 10 y III es 3)</em></p>
+            </div>
+        </section>
+        
+        <!-- Sección 6: El Legado Romano en Madrid 🏛️ -->
+        <section>
+            <h2>🏛️ El Legado Romano en Madrid</h2>
+            <p>¡Los números romanos no están solo en los libros! La próxima vez que pasees por Madrid, fíjate bien...</p>
+            <div class="legado-grid">
+                <div class="legado-item">
+                    <span class="emoji">🕰️</span>
+                    <p>Busca en los <strong>relojes</strong> de las plazas antiguas.</p>
+                </div>
+                <div class="legado-item">
+                    <span class="emoji">📜</span>
+                    <p>Mira el número de los <strong>capítulos</strong> de tus libros de aventuras.</p>
+                </div>
+                <div class="legado-item">
+                    <span class="emoji">👑</span>
+                    <p>Los <strong>reyes y reinas</strong> de España, como Felipe VI, usan estos números.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 7: Tu Chuleta de Explorador 📜 -->
+        <section class="chuleta-section">
+            <h2>📜 Tu Chuleta de Explorador</h2>
+            <ul>
+                <li>💡 <strong>SUMA:</strong> Número pequeño a la DERECHA de uno grande, se suma. (Ej: VI = 6)</li>
+                <li>💡 <strong>RESTA:</strong> I, X o C a la IZQUIERDA de uno grande, se resta. (Ej: IV = 4)</li>
+                <li>💡 <strong>REPETIR:</strong> Las letras I, X, C y M se pueden repetir hasta 3 veces seguidas. (Ej: III = 3)</li>
+            </ul>
+        </section>
+
+    </div>
+
+    <footer class="main-footer">
+        <a href="index.html">🔙 Volver al menú de materias</a>
+    </footer>
+
+</body>
+</html>
