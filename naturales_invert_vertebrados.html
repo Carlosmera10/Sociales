@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: Vertebrados e Invertebrados</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales y de cuerpo */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f7f4; /* Un verde muy pálido */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Contenedor principal de la infografía */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: linear-gradient(135deg, #ffffff, #e6f2ea);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border: 2px solid #a3d2b2;
+        }
+
+        /* Título principal */
+        .main-title {
+            text-align: center;
+            font-size: 2.5em;
+            color: #2c6e49; /* Verde oscuro */
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        /* Contenedor para las dos columnas comparativas */
+        .comparison-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        /* Sección para cada tipo de animal (Vertebrado/Invertebrado) */
+        .concept-section {
+            flex: 1;
+            min-width: 300px;
+            max-width: 550px; /* Limita el ancho máximo para mejor lectura */
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .vertebrates {
+            background-color: #e8f5e9; /* Verde claro */
+            border: 2px solid #66bb6a;
+        }
+
+        .invertebrates {
+            background-color: #e3f2fd; /* Azul claro */
+            border: 2px solid #42a5f5;
+        }
+        
+        /* Título de cada sección */
+        .concept-title {
+            font-size: 2em;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed;
+        }
+
+        .vertebrates .concept-title {
+            color: #388e3c; /* Verde medio */
+            border-color: #a5d6a7;
+        }
+
+        .invertebrates .concept-title {
+            color: #1e88e5; /* Azul medio */
+            border-color: #90caf9;
+        }
+
+        /* Lista de características generales */
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 25px;
+        }
+
+        .features-list li {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 1em;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+        }
+        
+        .features-list li::before {
+            content: '✅';
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        /* Subtítulo para los grupos */
+        .groups-title {
+            font-size: 1.5em;
+            color: #555;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Contenedor de las tarjetas de grupos */
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        /* Tarjetas para cada grupo de animal */
+        .group-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+            border-bottom: 4px solid;
+            position: relative; /* Para posicionar la descripción */
+            min-height: 100px; /* Altura mínima para consistencia */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .vertebrates .group-card { border-color: #c8e6c9; }
+        .invertebrates .group-card { border-color: #bbdefb; }
+
+        .group-card .icon {
+            font-size: 2.5em;
+            display: block;
+            margin-bottom: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .group-card .group-name {
+            transition: opacity 0.3s ease;
+        }
+
+        /* Descripción del subgrupo (oculta por defecto) */
+        .group-description {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.98);
+            color: #333;
+            padding: 10px;
+            font-size: 0.9em;
+            font-weight: 400;
+            line-height: 1.4;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            pointer-events: none;
+        }
+        
+        .group-description em {
+            font-size: 0.9em;
+            color: #1e88e5;
+            display: block;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        
+        .vertebrates .group-description em {
+            color: #388e3c;
+        }
+
+        .group-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .group-card:hover .group-description {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .group-card:hover .icon,
+        .group-card:hover .group-name {
+            opacity: 0; /* Oculta el icono y nombre al mostrar la descripción */
+        }
+        
+        /* Pie de página */
+        .main-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .main-footer a {
+            text-decoration: none;
+            color: #2c6e49;
+            font-weight: 600;
+            background-color: #e8f5e9;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .main-footer a:hover {
+            background-color: #2c6e49;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="main-title">El Gran Mundo de los Animales</h1>
+
+        <div class="comparison-wrapper">
+            <!-- Columna de Invertebrados -->
+            <div class="concept-section invertebrates">
+                <h2 class="concept-title">🦋 El Diverso Mundo de los Invertebrados</h2>
+                <ul class="features-list">
+                    <li>¡No tienen esqueleto interno ni columna vertebral!</li>
+                    <li>Son el grupo de animales más numeroso del planeta.</li>
+                    <li>Muchos tienen el cuerpo blando y otros una concha o caparazón.</li>
+                    <li>La mayoría nace de huevos (son ovíparos).</li>
+                </ul>
+                <h3 class="groups-title">Principales Grupos</h3>
+                <div class="groups-grid">
+                    <div class="group-card"><span class="icon">🧽</span><span class="group-name">Esponjas</span><p class="group-description">Son acuáticas y su cuerpo tiene poros para filtrar el agua.<em>Ej: Esponja de baño</em></p></div>
+                    <div class="group-card"><span class="icon">🦑</span><span class="group-name">Cnidarios</span><p class="group-description">Cuerpo gelatinoso y tentáculos, a veces venenosos.<em>Ej: Medusa, anémona</em></p></div>
+                    <div class="group-card"><span class="icon">🐌</span><span class="group-name">Moluscos</span><p class="group-description">Cuerpo blando y musculoso. ¡Muchos con concha!<em>Ej: Caracol, pulpo</em></p></div>
+                    <div class="group-card"><span class="icon">🐛</span><span class="group-name">Anélidos</span><p class="group-description">Cuerpo alargado y dividido en anillos, como las lombrices.<em>Ej: Lombriz de tierra</em></p></div>
+                    <div class="group-card"><span class="icon">🐜</span><span class="group-name">Artrópodos</span><p class="group-description">Con caparazón externo y patas articuladas.<em>Ej: Araña, mariposa</em></p></div>
+                    <div class="group-card"><span class="icon">⭐</span><span class="group-name">Equinodermos</span><p class="group-description">Cuerpo cubierto de placas duras, a veces con espinas.<em>Ej: Estrella de mar</em></p></div>
+                </div>
+            </div>
+            
+            <!-- Columna de Vertebrados -->
+            <div class="concept-section vertebrates">
+                <h2 class="concept-title">🦴 Los Asombrosos Vertebrados</h2>
+                <ul class="features-list">
+                    <li>Tienen un esqueleto interno con huesos.</li>
+                    <li>Su cuerpo se divide en cabeza, tronco y extremidades.</li>
+                    <li>El eje de su esqueleto es la columna vertebral.</li>
+                    <li>Pueden ser vivíparos (de la madre) u ovíparos (de huevos).</li>
+                </ul>
+                <h3 class="groups-title">Principales Grupos</h3>
+                <div class="groups-grid">
+                    <div class="group-card"><span class="icon">🐟</span><span class="group-name">Peces</span><p class="group-description">Viven en el agua, tienen aletas y respiran por branquias.<em>Ej: Sardina, tiburón</em></p></div>
+                    <div class="group-card"><span class="icon">🐸</span><span class="group-name">Anfibios</span><p class="group-description">De adultos viven en tierra, pero necesitan agua. Piel húmeda.<em>Ej: Rana, salamandra</em></p></div>
+                    <div class="group-card"><span class="icon">🐍</span><span class="group-name">Reptiles</span><p class="group-description">Cuerpo cubierto de escamas. La mayoría tiene cuatro patas.<em>Ej: Lagartija, tortuga</em></p></div>
+                    <div class="group-card"><span class="icon">🐦</span><span class="group-name">Aves</span><p class="group-description">Cuerpo cubierto de plumas, un pico y alas para volar.<em>Ej: Águila, pingüino</em></p></div>
+                    <div class="group-card"><span class="icon">🦓</span><span class="group-name">Mamíferos</span><p class="group-description">Tienen pelo y las crías toman leche de su madre.<em>Ej: León, delfín</em></p></div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="main-footer">
+            <a href="#">🔙 Volver al menú de materias</a>
+        </footer>
+    </div>
+
+</body>
+</html>
