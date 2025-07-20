@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía Animada: El Viaje del Agua</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        :root {
+            --color-cielo-claro: #87CEEB;
+            --color-tierra-verde: #98FB98;
+            --color-agua-profunda: #4A90E2;
+            --color-texto-principal: #34495e;
+            --color-blanco-nube: #fdfdfd;
+            --color-sol: #FFD700;
+            --color-tierra-marron: #A0522D;
+            --color-cambios-fondo: #FFE4E1;
+            --color-cambios-borde: #FF69B4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--color-cielo-claro) 0%, var(--color-tierra-verde) 100%);
+            min-height: 100vh;
+            color: var(--color-texto-principal);
+            line-height: 1.6;
+            padding-bottom: 100px; /* Space for the floating button */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, var(--color-agua-profunda), #7B68EE);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid var(--color-agua-profunda);
+        }
+
+        .section h2 {
+            color: var(--color-agua-profunda);
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 3px solid var(--color-cielo-claro);
+            padding-bottom: 10px;
+        }
+
+        /* --- Planeta Azul Animado --- */
+        .planeta-azul {
+            text-align: center;
+        }
+
+        .planet {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, var(--color-agua-profunda), #1E40AF);
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+            animation: rotate-planet 15s linear infinite;
+            box-shadow: inset 0 0 20px #000033, 0 0 30px rgba(74, 144, 226, 0.5);
+        }
+
+        .planet::before {
+            content: '';
+            position: absolute;
+            top: 25%; left: 20%;
+            width: 40px; height: 20px;
+            background: #10B981;
+            border-radius: 40%;
+            box-shadow: 40px 30px 0 -5px #10B981, 20px 50px 0 -2px #0f9b6d;
+        }
+
+        @keyframes rotate-planet {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Estados del Agua --- */
+        .estados-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .estado-card {
+            background: linear-gradient(135deg, #F0F8FF, #E6F3FF);
+            border: 3px solid;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .estado-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .estado-card.solido { border-color: #87CEEB; }
+        .estado-card.liquido { border-color: #4A90E2; }
+        .estado-card.gaseoso { border-color: #b0c4de; }
+        .estado-card .icon { font-size: 3.5em; margin-bottom: 10px; display: block; }
+
+        /* --- Cambios de Estado --- */
+        .cambios-estado-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .cambio-card {
+            background: linear-gradient(135deg, var(--color-cambios-fondo), #FFF0F5);
+            border: 2px solid var(--color-cambios-borde);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .cambio-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .cambio-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
+
+        /* --- Ciclo del Agua Animado --- */
+        .ciclo-agua-animado {
+            position: relative;
+            background: linear-gradient(180deg, var(--color-cielo-claro) 0%, var(--color-tierra-verde) 60%, var(--color-tierra-marron) 100%);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 450px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sol {
+            position: absolute; top: 20px; left: 30px;
+            width: 60px; height: 60px;
+            background: radial-gradient(circle, var(--color-sol), #FFA500);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 25px var(--color-sol);
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .nube {
+            position: absolute; background: var(--color-blanco-nube);
+            border-radius: 50px; opacity: 0.95;
+            animation: float 8s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .nube1 { top: 60px; left: 40%; width: 120px; height: 60px; }
+        .nube2 { top: 80px; right: 15%; width: 100px; height: 50px; animation-delay: -3s; }
+        .nube::before, .nube::after {
+            content: ''; position: absolute; background: var(--color-blanco-nube);
+            border-radius: 50%;
+        }
+        .nube::before { top: -25px; left: 15px; width: 60px; height: 60px; }
+        .nube::after { top: -20px; right: 20px; width: 50px; height: 50px; }
+        @keyframes float {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(-20px); }
+        }
+
+        .lluvia {
+            position: absolute; top: 150px; left: 50%;
+            width: 2px; height: 15px;
+            background: var(--color-agua-profunda); border-radius: 2px;
+            animation: rain 1s linear infinite;
+        }
+        .lluvia::before, .lluvia::after {
+            content: ''; position: absolute; width: 2px; height: 15px;
+            background: var(--color-agua-profunda); border-radius: 2px;
+        }
+        .lluvia::before { left: 20px; animation: rain 1s linear infinite 0.3s; }
+        .lluvia::after { right: 20px; animation: rain 1s linear infinite 0.6s; }
+        @keyframes rain {
+            0% { transform: translateY(0px); opacity: 1; }
+            100% { transform: translateY(150px); opacity: 0; }
+        }
+        
+        .mar {
+            position: absolute; bottom: 30px; left: 0; right: 0;
+            height: 80px; background: var(--color-agua-profunda);
+            overflow: hidden;
+        }
+        .vapor {
+            position: absolute; bottom: 0; left: 25%;
+            width: 5px; height: 5px;
+            background: rgba(255, 255, 255, 0.7); border-radius: 50%;
+            animation: steam 3s ease-out infinite;
+        }
+        .vapor.v2 { left: 30%; animation-delay: 1.5s; }
+        @keyframes steam {
+            0% { transform: translateY(0px) scale(1); opacity: 1; }
+            100% { transform: translateY(-150px) scale(0.5); opacity: 0; }
+        }
+
+        .ciclo-texto {
+            position: absolute;
+            background: rgba(255,255,255,0.85);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 2px solid var(--color-texto-principal);
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #texto-evaporacion { bottom: 120px; left: 20px; }
+        #texto-condensacion { top: 20px; right: 20px; }
+        #texto-precipitacion { bottom: 180px; right: 40px; }
+        #texto-acumulacion { bottom: 20px; left: 50%; transform: translateX(-50%); }
+
+        /* --- Datos Curiosos y Ríos --- */
+        .datos-curiosos {
+            background: linear-gradient(135deg, #FFF8DC, #FFFACD);
+            border-color: #DAA520;
+        }
+        .datos-curiosos h2 { color: #DAA520; border-color: #F0E68C; }
+        .dato {
+            background: white; border-radius: 10px; padding: 15px;
+            margin-bottom: 15px; border-left: 5px solid #DAA520;
+        }
+        .rios-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .rio-card {
+            background: linear-gradient(135deg, #E6F3FF, #F0F8FF);
+            border: 3px solid #4A90E2; border-radius: 15px; padding: 20px;
+        }
+        .rio-card h3 { color: #4A90E2; margin-bottom: 10px; }
+
+        /* --- Botón Volver --- */
+        .back-button {
+            position: fixed; bottom: 20px; left: 20px;
+            background: var(--color-agua-profunda); color: white;
+            border: none; padding: 15px 25px; border-radius: 50px;
+            font-size: 1em; font-weight: bold; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .back-button:hover {
+            background: #357ABD; transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌊 El Agua: Nuestro Tesoro Azul 🌊</h1>
+            <p>¡Descubre todos los secretos del agua en una aventura increíble!</p>
+        </div>
+
+        <div class="section">
+            <h2>🌍 El Planeta Azul</h2>
+            <div class="planeta-azul">
+                <div class="planet"></div>
+                <p><strong>¿Sabías que...?</strong> Nuestro planeta se llama así porque, visto desde el espacio, ¡es de ese color! Esto es porque las <strong>tres cuartas partes</strong> de la Tierra están cubiertas de agua.</p>
+                <p>La <strong>Hidrosfera</strong> es todo el conjunto de agua del planeta. ¡Sin ella, no habría vida!</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💧 Los Estados del Agua</h2>
+            <div class="estados-container">
+                <div class="estado-card solido">
+                    <span class="icon">🧊</span><h3>Sólido</h3>
+                    <p>En forma de hielo, nieve o granizo cuando hace mucho frío (0°C).</p>
+                </div>
+                <div class="estado-card liquido">
+                    <span class="icon">💧</span><h3>Líquido</h3>
+                    <p>Como la vemos en ríos, lagos y mares. ¡Es la más común!</p>
+                </div>
+                <div class="estado-card gaseoso">
+                    <span class="icon">💨</span><h3>Gaseoso</h3>
+                    <p>Es el vapor de agua. Se forma al calentar el agua y es invisible.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✨ Los Cambios de Estado Mágicos</h2>
+            <div class="cambios-estado-container">
+                <div class="cambio-card">
+                    <h4>🔥 Fusión</h4>
+                    <p>Sólido → Líquido<br>El hielo se derrite con el calor.</p>
+                </div>
+                <div class="cambio-card">
+                    <h4>❄️ Solidificación</h4>
+                    <p>Líquido → Sólido<br>El agua se congela con el frío.</p>
+                </div>
+                <div class="cambio-card">
+                    <h4>☀️ Evaporación</h4>
+                    <p>Líquido → Gaseoso<br>El agua se calienta y se vuelve vapor.</p>
+                </div>
+                <div class="cambio-card">
+                    <h4>🥶 Condensación</h4>
+                    <p>Gaseoso → Líquido<br>El vapor se enfría y forma gotitas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔄 El Ciclo del Agua en Acción</h2>
+            <div class="ciclo-agua-animado">
+                <div class="sol"></div>
+                <div class="nube nube1"></div>
+                <div class="nube nube2"></div>
+                <div class="lluvia"></div>
+                <div class="mar">
+                    <div class="vapor"></div>
+                    <div class="vapor v2"></div>
+                </div>
+                
+                <div class="ciclo-texto" id="texto-evaporacion">1. Evaporación</div>
+                <div class="ciclo-texto" id="texto-condensacion">2. Condensación</div>
+                <div class="ciclo-texto" id="texto-precipitacion">3. Precipitación</div>
+                <div class="ciclo-texto" id="texto-acumulacion">4. Acumulación</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🇪🇸 Los Ríos de España</h2>
+            <div class="rios-container">
+                <div class="rio-card">
+                    <h3>Vertiente Cantábrica</h3>
+                    <p>Ríos cortos pero con mucha agua. <strong>Principales:</strong> Bidasoa, Nervión, Nalón, Navia.</p>
+                </div>
+                <div class="rio-card">
+                    <h3>Vertiente Atlántica</h3>
+                    <p>Son los ríos más largos de España. <strong>Principales:</strong> Miño, Duero, Tajo, Guadiana, Guadalquivir.</p>
+                </div>
+                <div class="rio-card">
+                    <h3>Vertiente Mediterránea</h3>
+                    <p>Suelen llevar poca agua, excepto el Ebro. <strong>Principales:</strong> Ebro, Júcar, Segura, Ter.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🏞️ Los Ríos de Madrid</h2>
+            <div class="rios-container">
+                <div class="rio-card">
+                    <h3>Río Tajo</h3>
+                    <p>¡El más importante! Todos los demás ríos de Madrid acaban en él.</p>
+                </div>
+                <div class="rio-card">
+                    <h3>Río Manzanares</h3>
+                    <p>Es el río que pasa por la ciudad de Madrid. ¡Seguro que lo has visto!</p>
+                </div>
+                <div class="rio-card">
+                    <h3>Embalse de El Atazar</h3>
+                    <p>Es el más grande y guarda muchísima agua para que podamos beber.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section datos-curiosos">
+            <h2>🤔 ¿Sabías que...?</h2>
+            <div class="dato">
+                <strong>💧 El Tajo es el río más largo de España,</strong> ¡pero el Ebro es el que más agua lleva (el más caudaloso)!
+            </div>
+            <div class="dato">
+                <strong>🌍 ¡Solo el 0,007% de toda el agua del planeta se puede beber!</strong> Por eso es un tesoro que debemos cuidar.
+            </div>
+        </div>
+
+    </div>
+
+    <a href="index.html" class="back-button">
+        <span>⬅️</span> Volver al menú
+    </a>
+</body>
+</html>
