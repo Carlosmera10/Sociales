@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen: El agua</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #f0f8ff;
+            --correct-color: #28a745;
+            --incorrect-color: #dc3545;
+            --background-color: #f4f4f9;
+            --text-color: #333;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+        .question-section {
+            margin-bottom: 35px;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-color);
+        }
+        .question-section h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .question {
+            margin-bottom: 25px;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .option {
+            background-color: white;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        .option.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .option.correct {
+            background-color: var(--correct-color);
+            color: white;
+            border-color: var(--correct-color);
+        }
+        .option.incorrect {
+            background-color: var(--incorrect-color);
+            color: white;
+            border-color: var(--incorrect-color);
+        }
+        /* Drag and Drop Styles */
+        .word-bank, .drop-zone {
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: var(--border-radius);
+            min-height: 50px;
+        }
+        .word-bank {
+            background-color: #e9ecef;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .word {
+            background-color: white;
+            padding: 8px 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+        }
+        .word:active {
+            cursor: grabbing;
+        }
+        .drop-zone {
+            background-color: #f8f9fa;
+            border: 2px dashed var(--primary-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .drop-zone.over {
+            background-color: #d1e7ff;
+        }
+        .drop-zone .word {
+            cursor: default;
+        }
+        .drop-zone.correct { border: 2px solid var(--correct-color); }
+        .drop-zone.incorrect { border: 2px solid var(--incorrect-color); }
+
+        /* Matching Styles */
+        .matching-container { display: flex; justify-content: space-between; gap: 20px; }
+        .column { width: 48%; }
+        .match-item {
+            background: white;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .match-item.selected { border-color: var(--primary-color); background-color: #d1e7ff; }
+        .match-item.paired-correct { background-color: var(--correct-color); color: white; border-color: var(--correct-color); }
+        .match-item.paired-incorrect { background-color: var(--incorrect-color); color: white; border-color: var(--incorrect-color); }
+        .match-item.paired { cursor: default; opacity: 0.7; }
+
+        /* Category Drag Styles */
+        .category-container { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 15px; margin-top: 15px; }
+        .category-box { flex: 1; min-width: 200px; text-align: center; }
+        .category-box h4 { margin-bottom: 10px; }
+        .category-box .drop-zone { min-height: 100px; }
+
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            background-color: var(--correct-color);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-size: 1.5em;
+            display: none;
+        }
+        .results.show {
+            display: block;
+            background-color: var(--secondary-color);
+        }
+        .results p { margin: 5px 0; }
+        .final-score { font-weight: bold; color: var(--primary-color); }
+        .feedback-message { font-style: italic; margin-top: 10px; }
+        .main-footer { text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px solid #ccc; }
+        .main-footer a { text-decoration: none; color: var(--primary-color); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Examen: El agua</h1>
+            <p>¡Demuestra lo que has aprendido sobre nuestro recurso más valioso!</p>
+        </div>
+        <div class="content">
+            <form id="quiz-form">
+                
+                <div class="question-section">
+                    <h2>✏️ Rellena los huecos</h2>
+                    <!-- Preguntas 1-7 -->
+                    <div class="question" data-question-type="type-1"><div class="question-text">1. El conjunto de toda el agua de la Tierra (mares, ríos, lagos, hielo...) se llama _____.</div><div class="options" data-correct="Hidrosfera 💧"><div class="option">Atmósfera 🌍</div><div class="option">Hidrosfera 💧</div><div class="option">Geosfera 🏞️</div><div class="option">Biosfera 🌱</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">2. El paso del estado sólido (hielo) a líquido se llama _____.</div><div class="options" data-correct="Fusión 🔥"><div class="option">Fusión 🔥</div><div class="option">Evaporación 💨</div><div class="option">Condensación ☁️</div><div class="option">Solidificación 🧊</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">3. Cuando el agua se calienta y pasa de líquido a gaseoso, ocurre la _____.</div><div class="options" data-correct="Evaporación 💨"><div class="option">Precipitación 🌧️</div><div class="option">Fusión 🔥</div><div class="option">Evaporación 💨</div><div class="option">Condensación ☁️</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">4. El agua en estado _____ la encontramos en forma de hielo, nieve o granizo.</div><div class="options" data-correct="Sólido 🧊"><div class="option">Líquido 💧</div><div class="option">Sólido 🧊</div><div class="option">Gaseoso 💨</div><div class="option">Vaporoso ♨️</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">5. Las acumulaciones de agua bajo tierra que forman ríos subterráneos se llaman _____.</div><div class="options" data-correct="Acuíferos  подземный"><div class="option">Embalses 🏞️</div><div class="option">Lagos 🛶</div><div class="option">Manantiales ⛲</div><div class="option">Acuíferos  подземный</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">6. Las curvas muy pronunciadas que forma un río en su curso bajo se llaman _____.</div><div class="options" data-correct="Meandros"><div class="option">Meandros 굽이</div><div class="option">Afluentes 🏞️</div><div class="option">Cauces 🌊</div><div class="option">Barrancos ⛰️</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">7. En las Islas Canarias, los cauces por donde discurre el agua después de lluvias torrenciales se llaman _____.</div><div class="options" data-correct="Barrancos"><div class="option">Rías 🏞️</div><div class="option">Torrentes 🌊</div><div class="option">Barrancos ⛰️</div><div class="option">Acuíferos 💧</div></div></div>
+                </div>
+
+                <div class="question-section">
+                    <h2>🔄 Ordena los procesos</h2>
+                    <!-- Preguntas 8-9 -->
+                    <div class="question" data-question-type="drag-sort"><div class="question-text">8. Ordena las 4 fases principales del ciclo del agua.</div><div class="drop-zone" data-answer="Evaporación ☀️ Condensación ☁️ Precipitación 🌧️ Acumulación 🏞️"></div><div class="word-bank"><div class="word" draggable="true">Precipitación 🌧️</div><div class="word" draggable="true">Evaporación ☀️</div><div class="word" draggable="true">Acumulación 🏞️</div><div class="word" draggable="true">Condensación ☁️</div></div></div>
+                    <div class="question" data-question-type="drag-sort"><div class="question-text">9. Ordena los tramos del recorrido de un río desde que nace hasta que llega al mar.</div><div class="drop-zone" data-answer="Curso alto ⛰️ Curso medio ↔️ Curso bajo 🌊"></div><div class="word-bank"><div class="word" draggable="true">Curso medio ↔️</div><div class="word" draggable="true">Curso bajo 🌊</div><div class="word" draggable="true">Curso alto ⛰️</div></div></div>
+                </div>
+                
+                <div class="question-section">
+                    <h2>✅ Verdadero o Falso ❌</h2>
+                    <!-- Preguntas 10-15 -->
+                    <div class="question" data-question-type="type-1"><div class="question-text">10. La hidrosfera es el conjunto de toda el agua que hay en el planeta Tierra.</div><div class="options" data-correct="Verdadero ✅"><div class="option">Verdadero ✅</div><div class="option">Falso ❌</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">11. El agua en estado sólido, como el hielo, se llama vapor de agua.</div><div class="options" data-correct="Falso ❌"><div class="option">Verdadero ✅</div><div class="option">Falso ❌</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">12. El río Tajo es el más largo de España.</div><div class="options" data-correct="Verdadero ✅"><div class="option">Verdadero ✅</div><div class="option">Falso ❌</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">13. Toda el agua que existe en el planeta Tierra es potable (se puede beber).</div><div class="options" data-correct="Falso ❌"><div class="option">Verdadero ✅</div><div class="option">Falso ❌</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">14. Los ríos de la vertiente cantábrica son, por lo general, largos y de caudal irregular.</div><div class="options" data-correct="Falso ❌"><div class="option">Verdadero ✅</div><div class="option">Falso ❌</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">15. Las mareas son producidas por la atracción gravitatoria que ejercen la Luna y el Sol.</div><div class="options" data-correct="Verdadero ✅"><div class="option">Verdadero ✅</div><div class="option">Falso ❌</div></div></div>
+                </div>
+
+                <div class="question-section">
+                    <h2>🎯 Test: Elige la correcta</h2>
+                    <!-- Preguntas 16-20 -->
+                    <div class="question" data-question-type="type-1"><div class="question-text">16. ¿Cuál es el estado más abundante del agua en la Tierra?</div><div class="options" data-correct="Líquido 💧"><div class="option">Líquido 💧</div><div class="option">Gaseoso 💨</div><div class="option">Sólido 🧊</div><div class="option">Plasma ⚡</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">17. ¿Cuál es el río más caudaloso de España (el que más agua lleva)?</div><div class="options" data-correct="Ebro 🌊"><div class="option">Tajo 🏞️</div><div class="option">Duero 🍇</div><div class="option">Ebro 🌊</div><div class="option">Guadalquivir 🍊</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">18. ¿Cómo se llama el cambio del estado líquido al estado sólido?</div><div class="options" data-correct="Solidificación 🧊"><div class="option">Fusión 🔥</div><div class="option">Solidificación 🧊</div><div class="option">Evaporación 💨</div><div class="option">Condensación ☁️</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">19. ¿Qué es un afluente?</div><div class="options" data-correct="Un río que desemboca en otro río más grande."><div class="option">Un río que desemboca en el mar. 🌊</div><div class="option">Un río que se seca en verano. ☀️</div><div class="option">Un río que desemboca en otro río más grande. 🏞️</div><div class="option">La curva de un río. 굽이</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">20. El embalse más grande de la Comunidad de Madrid es...</div><div class="options" data-correct="El Atazar"><div class="option">El de Santillana 🏰</div><div class="option">El de Valmayor 🏞️</div><div class="option">El Atazar 💧</div><div class="option">El Pardo 🦌</div></div></div>
+                </div>
+                
+                <div class="question-section">
+                     <h2>☑️ Test: Múltiples respuestas</h2>
+                     <!-- Preguntas 21-24 -->
+                     <div class="question" data-question-type="multiple-choice"><div class="question-text">21. Selecciona los TRES estados en los que podemos encontrar el agua.</div><div class="options multiple-choice" data-correct='["Sólido 🧊","Líquido 💧","Gaseoso 💨"]'><div class="option">Sólido 🧊</div><div class="option">Plasmático ⚡</div><div class="option">Líquido 💧</div><div class="option">Gaseoso 💨</div></div></div>
+                     <div class="question" data-question-type="multiple-choice"><div class="question-text">22. Selecciona dos ríos que pasen por la Comunidad de Madrid.</div><div class="options multiple-choice" data-correct='["Río Jarama 🏞️","Río Manzanares 🏙️"]'><div class="option">Río Ebro 🌊</div><div class="option">Río Jarama 🏞️</div><div class="option">Río Guadalquivir 🍊</div><div class="option">Río Manzanares 🏙️</div></div></div>
+                     <div class="question" data-question-type="multiple-choice"><div class="question-text">23. ¿Cuáles de estos ríos pertenecen a la vertiente atlántica?</div><div class="options multiple-choice" data-correct='["Tajo 🏞️","Guadiana 🦆"]'><div class="option">Tajo 🏞️</div><div class="option">Ebro 🌊</div><div class="option">Júcar 🍊</div><div class="option">Guadiana 🦆</div></div></div>
+                     <div class="question" data-question-type="multiple-choice"><div class="question-text">24. ¿Qué dos fenómenos principales se producen en las aguas marinas?</div><div class="options multiple-choice" data-correct='["Las corrientes 🌊","Las mareas 🌕"]'><div class="option">Las corrientes 🌊</div><div class="option">Los afluentes 🏞️</div><div class="option">Las mareas 🌕</div><div class="option">Los meandros 굽이</div></div></div>
+                </div>
+
+                <div class="question-section">
+                    <h2>🧐 Elige la frase correcta o incorrecta</h2>
+                    <!-- Preguntas 25-28 -->
+                    <div class="question" data-question-type="type-1"><div class="question-text">25. Elige la afirmación CORRECTA sobre los ríos.</div><div class="options" data-correct="El recorrido que hace un río se llama curso. 🏞️"><div class="option">Todos los ríos son de agua salada. 🧂</div><div class="option">La cantidad de agua que lleva un río se llama longitud. 📏</div><div class="option">El recorrido que hace un río se llama curso. 🏞️</div><div class="option">Los ríos siempre nacen en el mar. 🌊</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">26. Elige la afirmación INCORRECTA sobre el ciclo del agua.</div><div class="options" data-correct="La lluvia se forma por la evaporación directa del mar. 🌊"><div class="option">La nieve es una forma de precipitación. 🌨️</div><div class="option">El sol calienta el agua y provoca la evaporación. ☀️</div><div class="option">La lluvia se forma por la evaporación directa del mar. 🌊</div><div class="option">Las nubes se forman por condensación. ☁️</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">27. Elige la afirmación CORRECTA.</div><div class="options" data-correct="El caudal es la cantidad de agua y el régimen es cómo varía esa cantidad. 📊"><div class="option">Un río con régimen irregular siempre lleva la misma agua. ↔️</div><div class="option">El caudal es el lugar por donde pasa el río. 🏞️</div><div class="option">El caudal es la cantidad de agua y el régimen es cómo varía esa cantidad. 📊</div><div class="option">Un afluente es un río que desemboca en el mar. 🌊</div></div></div>
+                    <div class="question" data-question-type="type-1"><div class="question-text">28. Elige la afirmación INCORRECTA.</div><div class="options" data-correct="Las aguas superficiales son las que están bajo tierra, como los acuíferos.  подземный"><div class="option">Los ríos y lagos son aguas superficiales. 🏞️</div><div class="option">Los mares y océanos son masas de agua salada. 🧂</div><div class="option">Las aguas superficiales son las que están bajo tierra, como los acuíferos.  подземный</div><div class="option">Las aguas subterráneas se pueden extraer con pozos. 🕳️</div></div></div>
+                </div>
+
+                <!-- NUEVA SECCIÓN: Emparejar -->
+                <div class="question-section">
+                    <h2>🤝 Empareja las columnas</h2>
+                    <div class="question" data-question-type="matching">
+                        <div class="question-text">29. Empareja cada río con su vertiente hidrográfica (el mar donde desemboca).</div>
+                        <div class="matching-container">
+                            <div class="column" id="column-a-1">
+                                <div class="match-item" data-match-id="1">Río Duero 🇵🇹</div>
+                                <div class="match-item" data-match-id="2">Río Nalón 🏞️</div>
+                                <div class="match-item" data-match-id="3">Río Segura 🍋</div>
+                            </div>
+                            <div class="column" id="column-b-1">
+                                <div class="match-item" data-match-id="2">Vertiente Cantábrica 🌊</div>
+                                <div class="match-item" data-match-id="3">Vertiente Mediterránea ☀️</div>
+                                <div class="match-item" data-match-id="1">Vertiente Atlántica ⛵</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NUEVA SECCIÓN: Arrastrar a categoría -->
+                <div class="question-section">
+                    <h2>🗂️ Arrastra cada río a su vertiente</h2>
+                    <div class="question" data-question-type="drag-category">
+                        <div class="question-text">30. Arrastra cada río a la vertiente correcta.</div>
+                        <div class="word-bank">
+                            <div class="word" draggable="true" data-type="atlantica">Miño 🏞️</div>
+                            <div class="word" draggable="true" data-type="mediterranea">Júcar 🍊</div>
+                            <div class="word" draggable="true" data-type="cantabrica">Nervión 🌉</div>
+                            <div class="word" draggable="true" data-type="atlantica">Tajo 🏞️</div>
+                            <div class="word" draggable="true" data-type="mediterranea">Ebro 🌊</div>
+                            <div class="word" draggable="true" data-type="cantabrica">Bidasoa 🏞️</div>
+                            <div class="word" draggable="true" data-type="mediterranea">Llobregat 🌇</div>
+                            <div class="word" draggable="true" data-type="atlantica">Guadiana 🦆</div>
+                            <div class="word" draggable="true" data-type="cantabrica">Eo 🛶</div>
+                        </div>
+                        <div class="category-container">
+                            <div class="category-box">
+                                <h4>Vertiente Atlántica ⛵</h4>
+                                <div class="drop-zone" data-accept="atlantica"></div>
+                            </div>
+                            <div class="category-box">
+                                <h4>Vertiente Cantábrica 🌊</h4>
+                                <div class="drop-zone" data-accept="cantabrica"></div>
+                            </div>
+                            <div class="category-box">
+                                <h4>Vertiente Mediterránea ☀️</h4>
+                                <div class="drop-zone" data-accept="mediterranea"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <button type="submit" form="quiz-form" class="submit-btn">¡Terminar y Corregir!</button>
+            <div class="results" id="results-container"></div>
+        </div>
+    </div>
+    <footer class="main-footer">
+        <a href="index.html">🔙 Volver al menú de materias</a>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('quiz-form');
+        const resultsContainer = document.getElementById('results-container');
+        const TOTAL_QUESTIONS = 30;
+
+        // --- Event Listeners ---
+        form.addEventListener('click', handleOptionClick);
+        form.addEventListener('submit', handleSubmit);
+        setupDragAndDrop();
+        setupMatching();
+        
+        function handleOptionClick(e) {
+            if (e.target.classList.contains('option')) {
+                const optionsContainer = e.target.parentElement;
+                if (optionsContainer.classList.contains('multiple-choice')) {
+                    e.target.classList.toggle('selected');
+                } else {
+                    optionsContainer.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            }
+        }
+
+        function setupDragAndDrop() {
+            const words = document.querySelectorAll('.word');
+            const dropZones = document.querySelectorAll('.drop-zone');
+            let draggedWord = null;
+
+            words.forEach(word => {
+                word.addEventListener('dragstart', e => {
+                    draggedWord = e.target;
+                    setTimeout(() => e.target.style.display = 'none', 0);
+                });
+                word.addEventListener('dragend', e => {
+                    setTimeout(() => {
+                        if (draggedWord) draggedWord.style.display = 'inline-block';
+                        draggedWord = null;
+                    }, 0);
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    zone.classList.add('over');
+                });
+                zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    if (draggedWord && (zone.parentElement.classList.contains('category-box') || zone.closest('[data-question-type="drag-sort"]'))) {
+                       zone.appendChild(draggedWord);
+                    }
+                    zone.classList.remove('over');
+                });
+            });
+        }
+        
+        function setupMatching() {
+            const matchingContainers = document.querySelectorAll('.matching-container');
+            matchingContainers.forEach(container => {
+                let selectedItem = null;
+                container.addEventListener('click', e => {
+                    if (!e.target.classList.contains('match-item') || e.target.classList.contains('paired')) return;
+
+                    const currentColumn = e.target.parentElement;
+                    
+                    if (!selectedItem) {
+                        // First selection
+                        container.querySelectorAll('.match-item').forEach(item => item.classList.remove('selected'));
+                        e.target.classList.add('selected');
+                        selectedItem = e.target;
+                    } else {
+                        // Second selection (must be in a different column)
+                        if (selectedItem.parentElement !== currentColumn) {
+                            const id1 = selectedItem.dataset.matchId;
+                            const id2 = e.target.dataset.matchId;
+                            
+                            // Mark as paired
+                            selectedItem.classList.add('paired');
+                            e.target.classList.add('paired');
+                            
+                            // Add pairing info for correction
+                            selectedItem.dataset.pairedWith = id2;
+                            e.target.dataset.pairedWith = id1;
+
+                            selectedItem.classList.remove('selected');
+                            selectedItem = null;
+                        }
+                    }
+                });
+            });
+        }
+
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            calculateAndShowResults();
+            highlightAnswers();
+            const submitButton = document.querySelector('button[type="submit"][form="quiz-form"]');
+            if(submitButton) submitButton.style.display = 'none';
+        }
+
+        function calculateAndShowResults() {
+            let score = 0;
+
+            // Single Choice
+            document.querySelectorAll('[data-question-type="type-1"]').forEach(q => {
+                const selected = q.querySelector('.option.selected');
+                if (selected && selected.textContent.trim() === q.querySelector('.options').dataset.correct.trim()) score++;
+            });
+            
+            // Drag and Sort
+            document.querySelectorAll('[data-question-type="drag-sort"]').forEach(q => {
+                 const dropZone = q.querySelector('.drop-zone');
+                 const userAnswer = Array.from(dropZone.querySelectorAll('.word')).map(w => w.textContent.trim()).join(' ');
+                 if(userAnswer === dropZone.dataset.answer.trim()) score++;
+            });
+
+            // Multiple Choice
+            document.querySelectorAll('[data-question-type="multiple-choice"]').forEach(q => {
+                const correctAnswers = JSON.parse(q.querySelector('.options').dataset.correct);
+                const selectedAnswers = Array.from(q.querySelectorAll('.option.selected')).map(opt => opt.textContent.trim());
+                if (selectedAnswers.length === correctAnswers.length && selectedAnswers.every(a => correctAnswers.includes(a))) score++;
+            });
+            
+            // Matching
+            document.querySelectorAll('[data-question-type="matching"]').forEach(q => {
+                let correctPairs = 0;
+                const items = q.querySelectorAll('.match-item[data-paired-with]');
+                const totalPairs = items.length / 2;
+                items.forEach(item => {
+                    if (item.dataset.matchId === item.dataset.pairedWith) {
+                        correctPairs++;
+                    }
+                });
+                // Only full score if all pairs are correct
+                if (totalPairs > 0 && correctPairs / 2 === totalPairs) {
+                    score++;
+                }
+            });
+            
+            // Drag to Category
+            document.querySelectorAll('[data-question-type="drag-category"]').forEach(q => {
+                let allCorrect = true;
+                q.querySelectorAll('.drop-zone').forEach(zone => {
+                    const acceptedType = zone.dataset.accept;
+                    zone.querySelectorAll('.word').forEach(word => {
+                        if (word.dataset.type !== acceptedType) allCorrect = false;
+                    });
+                });
+                // Check if all words from the bank are placed
+                const bank = q.querySelector('.word-bank');
+                if (bank.children.length > 0) allCorrect = false;
+
+                if (allCorrect) score++;
+            });
+
+            const finalScore = (score / TOTAL_QUESTIONS) * 10;
+            let feedbackMessage = '';
+            
+            if (finalScore >= 9) feedbackMessage = "¡Excelente! 🥳 ¡Eres un verdadero experto/a en el ciclo del agua!";
+            else if (finalScore >= 7) feedbackMessage = "¡Muy bien! 👍 Sigue así, vas por un camino genial.";
+            else if (finalScore >= 5) feedbackMessage = "¡Aprobado! 😊 Has hecho un buen trabajo, pero puedes mejorar un poco.";
+            else feedbackMessage = "💩 ¡Oh, no! Necesitas repasar un poco más. ¡No te rindas, tú puedes!";
+
+            resultsContainer.innerHTML = `<p>Tu puntuación final es:</p><p class="final-score">${finalScore.toFixed(2)} / 10</p><p class="feedback-message">${feedbackMessage}</p>`;
+            resultsContainer.classList.add('show');
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function highlightAnswers() {
+            // Disable all interactions
+            form.style.pointerEvents = 'none';
+
+            // Single Choice
+            document.querySelectorAll('[data-question-type="type-1"]').forEach(q => {
+                const correctAnsw = q.querySelector('.options').dataset.correct.trim();
+                q.querySelectorAll('.option').forEach(opt => {
+                    if (opt.textContent.trim() === correctAnsw) opt.classList.add('correct');
+                    else if (opt.classList.contains('selected')) opt.classList.add('incorrect');
+                });
+            });
+            
+            // Drag and Sort
+            document.querySelectorAll('[data-question-type="drag-sort"]').forEach(q => {
+                 const dropZone = q.querySelector('.drop-zone');
+                 const userAnswer = Array.from(dropZone.querySelectorAll('.word')).map(w => w.textContent.trim()).join(' ');
+                 dropZone.classList.add(userAnswer === dropZone.dataset.answer.trim() ? 'correct' : 'incorrect');
+            });
+
+            // Multiple Choice
+            document.querySelectorAll('[data-question-type="multiple-choice"]').forEach(q => {
+                const correctAnswers = JSON.parse(q.querySelector('.options').dataset.correct);
+                q.querySelectorAll('.option').forEach(opt => {
+                    if (correctAnswers.includes(opt.textContent.trim())) opt.classList.add('correct');
+                    else if (opt.classList.contains('selected')) opt.classList.add('incorrect');
+                });
+            });
+            
+            // Matching
+            document.querySelectorAll('[data-question-type="matching"] .match-item[data-paired-with]').forEach(item => {
+                item.classList.add(item.dataset.matchId === item.dataset.pairedWith ? 'paired-correct' : 'paired-incorrect');
+            });
+
+            // Drag to Category
+            document.querySelectorAll('[data-question-type="drag-category"] .drop-zone').forEach(zone => {
+                const acceptedType = zone.dataset.accept;
+                zone.querySelectorAll('.word').forEach(word => {
+                    word.classList.add(word.dataset.type === acceptedType ? 'correct' : 'incorrect');
+                });
+            });
+        }
+    });
+    </script>
+</body>
+</html>
