@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Asombroso Mundo de la Célula</title>
+    <title>Infografía: El Asombroso Mundo de la Célula</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
+        /* --- ESTILOS GENERALES Y RESET --- */
         * {
             margin: 0;
             padding: 0;
@@ -12,157 +16,176 @@
         }
 
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(180deg, #e0f7fa 0%, #c8e6c9 100%);
             color: #333;
-            line-height: 1.6;
+            line-height: 1.7;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 20px auto;
             padding: 20px;
         }
 
-        .header {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        /* --- CABECERA --- */
+        .main-header {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
             color: white;
             text-align: center;
-            padding: 30px;
+            padding: 25px 30px;
             border-radius: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: bounce 2s infinite;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+            border: 3px solid #fff;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .header h1 {
-            font-size: 2.5em;
+        .main-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .section {
-            background: white;
-            margin: 20px 0;
-            padding: 25px;
+        .main-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* --- SECCIONES DE CONCEPTO --- */
+        .concept-section {
+            background: #ffffff;
+            margin-bottom: 30px;
+            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 8px solid #81c784; /* Acento de color natural */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .section:hover {
+        .concept-section:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
         }
 
-        .section h2 {
-            color: #ff6b6b;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            border-bottom: 3px solid #4ecdc4;
+        .concept-section h2 {
+            color: #388e3c; /* Verde oscuro para títulos */
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-bottom: 3px dashed #a5d6a7;
             padding-bottom: 10px;
         }
 
+        /* --- CAJA DE DEFINICIÓN --- */
         .definition-box {
-            background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+            background-color: #e8f5e9; /* Verde muy claro */
             padding: 20px;
             border-radius: 10px;
-            border-left: 5px solid #4ecdc4;
-            margin: 15px 0;
-            font-size: 1.1em;
-        }
-
-        .components-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            border-left: 5px solid #4caf50;
             margin: 20px 0;
+            font-size: 1.1rem;
         }
 
-        .component-card {
-            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .component-card:hover {
-            transform: scale(1.05);
-        }
-
-        .component-card .emoji {
-            font-size: 3em;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .cell-types {
+        /* --- GRID DE COMPONENTES (MEMBRANA, CITOPLASMA, ADN) --- */
+        .components-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            margin: 20px 0;
+            margin-top: 25px;
         }
 
-        .cell-type {
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
-            color: white;
-            padding: 20px;
+        .component-card {
+            background: #f1f8e9;
+            padding: 25px;
             border-radius: 15px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            border: 2px solid #c5e1a5;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .component-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            border-color: #9ccc65;
         }
 
-        .cell-type::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 10s linear infinite;
+        .component-card .emoji {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+            filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.1));
+        }
+        
+        .component-card h3 {
+            color: #558b2f;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
         }
 
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* --- COMPARATIVA DE TIPOS DE CÉLULAS --- */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 25px;
         }
 
-        .cell-type h3 {
-            font-size: 1.4em;
+        .cell-type-card {
+            background: linear-gradient(145deg, #f0f4c3, #e6ee9c);
+            color: #558b2f;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border-bottom: 6px solid #afb42b;
+        }
+        
+        .cell-type-card.animal {
+            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+            color: #1565c0;
+            border-bottom-color: #0d47a1;
+        }
+
+        .cell-type-card h3 {
+            font-size: 1.5rem;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+        }
+        
+        /* --- NUEVO: Sub-sección para detalles de Eucariotas --- */
+        .eukaryote-details {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            border: 2px dashed #a5d6a7;
         }
 
-        .cell-type p {
-            position: relative;
-            z-index: 1;
+        .eukaryote-details h4 {
+            text-align: center;
+            color: #388e3c;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        /* Ajuste para que el grid dentro de la subsección no tenga margen superior */
+        .eukaryote-details .comparison-grid {
+            margin-top: 0;
         }
 
-        .levels-container {
-            background: linear-gradient(135deg, #fd79a8, #e84393);
+
+        /* --- NIVELES DE ORGANIZACIÓN --- */
+        .levels-section {
+            background: #4db6ac; /* Un tono turquesa natural */
             padding: 30px;
-            border-radius: 20px;
+            border-radius: 15px;
             color: white;
             text-align: center;
+        }
+        
+        .levels-section h2 {
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.5);
         }
 
         .levels-flow {
@@ -170,45 +193,42 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin: 20px 0;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .level-item {
-            background: rgba(255,255,255,0.2);
-            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 20px;
             border-radius: 10px;
             font-weight: bold;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
-
+        
         .level-item:hover {
+            background: rgba(255, 255, 255, 0.4);
             transform: scale(1.1);
         }
 
         .arrow {
-            font-size: 1.5em;
+            font-size: 2rem;
+            font-weight: bold;
             color: #fff;
-            animation: pulse 1.5s infinite;
+            opacity: 0.8;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
+        /* --- DATOS CURIOSOS --- */
         .fun-facts {
-            background: linear-gradient(135deg, #55efc4, #00b894);
+            background: #fffde7; /* Tono pergamino/crema */
+            border: 3px dashed #ffd54f;
             padding: 25px;
             border-radius: 15px;
-            color: white;
             margin: 20px 0;
         }
 
         .fun-facts h3 {
-            font-size: 1.5em;
+            color: #f57f17;
+            font-size: 1.6rem;
             margin-bottom: 15px;
             text-align: center;
         }
@@ -219,63 +239,72 @@
         }
 
         .fun-facts li {
-            background: rgba(255,255,255,0.1);
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            backdrop-filter: blur(5px);
+            margin-bottom: 10px;
+            padding-left: 35px;
+            position: relative;
         }
 
         .fun-facts li::before {
-            content: "🔬";
-            margin-right: 10px;
+            content: "💡"; /* Emoji más adecuado para "dato" */
+            position: absolute;
+            left: 0;
+            top: -2px;
+            font-size: 1.5rem;
         }
 
+        /* --- FOOTER --- */
         .main-footer {
-            background: linear-gradient(135deg, #636e72, #2d3436);
+            background: #455a64;
             color: white;
             text-align: center;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px 15px 0 0;
             margin-top: 30px;
         }
 
         .main-footer a {
-            color: #74b9ff;
+            color: #a7ffeb;
             text-decoration: none;
-            font-size: 1.2em;
+            font-size: 1.1rem;
             font-weight: bold;
             transition: color 0.3s ease;
         }
 
         .main-footer a:hover {
-            color: #0984e3;
+            color: #ffffff;
+            text-decoration: underline;
         }
 
+        /* --- ADAPTACIÓN A MÓVILES (Responsive) --- */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
+            .main-header h1 {
+                font-size: 2.2rem;
             }
-            
+            .concept-section h2 {
+                font-size: 1.6rem;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+            }
             .levels-flow {
                 flex-direction: column;
             }
-            
-            .component-card .emoji {
-                font-size: 2em;
+            .arrow {
+                transform: rotate(90deg); /* Flechas apuntan hacia abajo */
+                margin: 5px 0;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🔬 El Asombroso Mundo de la Célula 🔬</h1>
+        <header class="main-header">
+            <h1>🔬 El Asombroso Mundo de la Célula 🧬</h1>
             <p>¡Todo ser vivo está formado por células! Son como las piezas de LEGO® de la vida.</p>
-        </div>
+        </header>
 
-        <div class="section">
-            <h2>🤔 ¿Qué es y cómo es una célula?</h2>
+        <section class="concept-section">
+            <h2>🤔 ¿Qué es una célula?</h2>
             <div class="definition-box">
                 <strong>Es la parte más pequeña de un ser vivo</strong> que es capaz de realizar por sí misma las tres funciones vitales: <strong>nutrición, relación y reproducción</strong>.
             </div>
@@ -284,91 +313,77 @@
             <div class="components-grid">
                 <div class="component-card">
                     <span class="emoji">🛡️</span>
-                    <h3>Membrana celular</h3>
-                    <p>Es una capa que envuelve y protege la célula.</p>
+                    <h3>Membrana Celular</h3>
+                    <p>Es una capa que envuelve y protege la célula, ¡como la piel de una fruta!</p>
                 </div>
                 <div class="component-card">
                     <span class="emoji">💧</span>
                     <h3>Citoplasma</h3>
-                    <p>Es el interior de la célula, una especie de gelatina acuosa donde "flotan" todos los orgánulos.</p>
+                    <p>Es el interior, una especie de gelatina donde "flotan" todos los orgánulos.</p>
                 </div>
                 <div class="component-card">
-                    <span class="emoji">🧬</span>
+                    <span class="emoji">🧠</span>
                     <h3>ADN (Material Genético)</h3>
-                    <p>Contiene toda la información de la célula, ¡es su cerebro y libro de instrucciones!</p>
+                    <p>Contiene toda la información, ¡es su cerebro y libro de instrucciones!</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>🆚 Tipos Principales de Células</h2>
-            <p>Podemos clasificarlas según cómo guardan su ADN:</p>
+        <section class="concept-section">
+            <h2>🌿 ¿Todas las células son iguales? 🐶</h2>
+            <p>¡Para nada! La primera gran diferencia está en cómo guardan su ADN:</p>
             
-            <div class="cell-types">
-                <div class="cell-type">
+            <div class="comparison-grid">
+                <div class="cell-type-card">
                     <h3>🦠 Células Procariotas</h3>
-                    <p>Son las más sencillas. Su <strong>ADN está libre</strong> y disperso en el citoplasma. No tienen un núcleo definido. Un ejemplo clásico son las <strong>bacterias</strong>.</p>
+                    <p>Son las más sencillas. Su <strong>ADN está libre</strong> y disperso en el citoplasma. No tienen un núcleo definido. Por ejemplo, las <strong>bacterias</strong>.</p>
                 </div>
-                <div class="cell-type">
+                <div class="cell-type-card">
                     <h3>🧬 Células Eucariotas</h3>
-                    <p>Son más complejas. Su <strong>ADN está protegido</strong> dentro de un orgánulo especial llamado <strong>núcleo</strong>.</p>
+                    <p>Son más complejas. Su <strong>ADN está protegido</strong> dentro de un orgánulo especial llamado <strong>núcleo</strong>. ¡Las nuestras son de este tipo!</p>
                 </div>
             </div>
 
-            <div class="cell-types">
-                <div class="cell-type">
-                    <h3>🐶 Célula Animal</h3>
-                    <p>No tiene pared rígida ni cloroplastos. Contiene <strong>centriolos</strong>, que son importantes para su división.</p>
-                </div>
-                <div class="cell-type">
-                    <h3>🌳 Célula Vegetal</h3>
-                    <p>Se distingue por tener una <strong>pared celular</strong> rígida que le da forma y <strong>cloroplastos</strong>, que realizan la fotosíntesis y le dan el color verde a las plantas.</p>
+            <!-- Contenedor para la sub-clasificación -->
+            <div class="eukaryote-details">
+                <h4>Dentro de las Eucariotas, encontramos dos tipos principales:</h4>
+                <div class="comparison-grid">
+                     <div class="cell-type-card animal">
+                        <h3>🐶 Célula Animal</h3>
+                        <p>No tiene pared rígida ni cloroplastos. Es más flexible y obtiene energía comiendo.</p>
+                    </div>
+                    <div class="cell-type-card">
+                        <h3>🌳 Célula Vegetal</h3>
+                        <p>Tiene una <strong>pared celular</strong> rígida que le da forma y <strong>cloroplastos</strong> para hacer la fotosíntesis (su propia comida usando luz solar).</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="section">
-            <h2>🧱 Niveles de Organización: De Ladrillo a Edificio</h2>
-            <p>Los seres vivos pueden estar formados por una sola célula (<strong>unicelulares</strong>) o por muchas (<strong>pluricelulares</strong>). Los pluricelulares se organizan con una complejidad creciente, como en una construcción:</p>
+        <section class="concept-section levels-section">
+            <h2>🧱 De Ladrillo a Edificio</h2>
+            <p>Los seres vivos con muchas células (pluricelulares) se organizan con una complejidad creciente, ¡mira!</p>
             
-            <div class="levels-container">
-                <div class="levels-flow">
-                    <div class="level-item">
-                        <strong>Célula</strong><br>
-                        🧱 Ladrillo
-                    </div>
-                    <div class="arrow">➡️</div>
-                    <div class="level-item">
-                        <strong>Tejido</strong><br>
-                        🧱 Pared
-                    </div>
-                    <div class="arrow">➡️</div>
-                    <div class="level-item">
-                        <strong>Órgano</strong><br>
-                        🚪 Habitación
-                    </div>
-                    <div class="arrow">➡️</div>
-                    <div class="level-item">
-                        <strong>Aparato/Sistema</strong><br>
-                        🏠 Piso/Casa
-                    </div>
-                    <div class="arrow">➡️</div>
-                    <div class="level-item">
-                        <strong>Organismo</strong><br>
-                        🏢 Edificio
-                    </div>
-                </div>
+            <div class="levels-flow">
+                <div class="level-item"><strong>Célula</strong><br>🧱 Ladrillo</div>
+                <div class="arrow">➡️</div>
+                <div class="level-item"><strong>Tejido</strong><br>🧱 Pared</div>
+                <div class="arrow">➡️</div>
+                <div class="level-item"><strong>Órgano</strong><br>🚪 Habitación</div>
+                <div class="arrow">➡️</div>
+                <div class="level-item"><strong>Sistema</strong><br>🏠 Piso</div>
+                <div class="arrow">➡️</div>
+                <div class="level-item"><strong>Organismo</strong><br>🏢 Edificio</div>
             </div>
-        </div>
+        </section>
 
         <div class="fun-facts">
             <h3>🌟 ¡Datos Curiosos!</h3>
             <ul>
-                <li>Tu cuerpo tiene aproximadamente 37 billones de células</li>
-                <li>Las células más grandes son los huevos de avestruz</li>
-                <li>Algunas células viven solo unos días, mientras que otras pueden vivir toda tu vida</li>
-                <li>Los glóbulos rojos no tienen núcleo para poder transportar más oxígeno</li>
-                <li>Las células vegetales pueden ser 10 veces más grandes que las animales</li>
+                <li>Tu cuerpo tiene billones y billones de células. ¡Más que estrellas en nuestra galaxia!</li>
+                <li>La célula más grande que existe es el huevo de avestruz.</li>
+                <li>Algunas células, como las de la piel, viven solo unos días y se renuevan constantemente.</li>
+                <li>Los glóbulos rojos de tu sangre no tienen núcleo para dejar más espacio al oxígeno.</li>
             </ul>
         </div>
 
