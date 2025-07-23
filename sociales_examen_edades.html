@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen: Las Edades de la Historia</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5a623;
+            --correct-color: #7ed321;
+            --incorrect-color: #d0021b;
+            --background-color: #f4f7f9;
+            --text-color: #333;
+            --light-text-color: #fff;
+            --border-color: #d1d8de;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            width: 95%;
+            flex-grow: 1;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #3a7ac8);
+            color: var(--light-text-color);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .header h1 {
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+
+        .content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .question {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background-color: #fdfdfd;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option {
+            padding: 0.8rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background-color: #e9f2fe;
+        }
+
+        .option.selected {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            border-color: var(--primary-color);
+        }
+        
+        .options.multiple-choice .option.selected {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        /* Drag and Drop Styles */
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            background-color: #eef5ff;
+            border-radius: 8px;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .word {
+            padding: 8px 15px;
+            background-color: #fff;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: grab;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        .word:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+
+        .word.dragging {
+            opacity: 0.5;
+        }
+
+        .drop-zone {
+            min-height: 60px;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .drop-zone.drag-over {
+            background-color: #e8f0fe;
+            border-color: var(--primary-color);
+        }
+
+        .drop-zone .word {
+            cursor: default;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .category-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 1rem;
+        }
+
+        .category-box {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .category-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* Matching question styles */
+        .matching-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 1rem;
+        }
+        .column {
+            width: 48%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .match-item {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .match-item:hover {
+            border-color: var(--primary-color);
+            background-color: #e9f2fe;
+        }
+        .match-item.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        .match-item.paired {
+            background-color: #e0e0e0;
+            border-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .match-item.paired.correct-pair {
+            background-color: var(--correct-color);
+            color: white;
+            border-color: #68b31c;
+        }
+        .match-item.paired.incorrect-pair {
+            background-color: var(--incorrect-color);
+            color: white;
+            border-color: #a30215;
+        }
+
+
+        /* Submit and Results */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--light-text-color);
+            background: linear-gradient(135deg, var(--secondary-color), #f7b955);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(245, 166, 35, 0.5);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .results {
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            display: none; /* Hidden by default */
+        }
+        
+        .results.correct {
+            background-color: #e8f9e5;
+            border: 2px solid var(--correct-color);
+        }
+
+        .results.incorrect {
+            background-color: #fbe7e9;
+            border: 2px solid var(--incorrect-color);
+        }
+
+        .results h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .results p {
+            font-size: 1.2rem;
+        }
+
+        /* Feedback styles */
+        .feedback .correct {
+            background-color: #e8f9e5 !important;
+            border-color: var(--correct-color) !important;
+            color: #333 !important;
+        }
+        .feedback .incorrect {
+            background-color: #fbe7e9 !important;
+            border-color: var(--incorrect-color) !important;
+            color: #333 !important;
+        }
+        .feedback .correct-answer-text {
+            font-weight: bold;
+            color: var(--correct-color);
+            margin-left: 10px;
+        }
+
+        .main-footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #e1e6eb;
+            color: #555;
+            margin-top: 2rem;
+        }
+
+        .main-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .main-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .category-container, .matching-container {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+            }
+            .column {
+                width: 100%;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Examen: Las Edades de la Historia</h1>
+            <p>¡Demuestra lo que has aprendido sobre nuestro pasado!</p>
+        </div>
+        <div class="content">
+            <form id="quiz-form">
+                
+                <h2>📜 Rellena los huecos</h2>
+                <div class="question" data-question-id="1">
+                    <div class="question-text">1. La invención de la ✍️ escritura marca el final de la _____.</div>
+                    <div class="options" data-correct="Prehistoria">
+                        <div class="option">➡️ Edad Media</div>
+                        <div class="option">➡️ Prehistoria</div>
+                        <div class="option">➡️ Edad Antigua</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="2">
+                    <div class="question-text">2. La Edad Media 🏰 comienza con la caída del _____.</div>
+                    <div class="options" data-correct="Imperio Romano">
+                        <div class="option">🏛️ Imperio Romano</div>
+                        <div class="option">🧱 Muro de Berlín</div>
+                        <div class="option">🏺 Imperio Griego</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="3">
+                    <div class="question-text">3. La Revolución Francesa 🇫🇷 marca el inicio de la _____.</div>
+                    <div class="options" data-correct="Edad Contemporánea">
+                        <div class="option">🚀 Edad Moderna</div>
+                        <div class="option">⚔️ Edad de los Metales</div>
+                        <div class="option">💻 Edad Contemporánea</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="4">
+                    <div class="question-text">4. Los primeros seres humanos eran _____, es decir, se movían de un lugar a otro.</div>
+                    <div class="options" data-correct="Nómadas">
+                        <div class="option">🛖 Sedentarios</div>
+                        <div class="option">🚶 Nómadas</div>
+                        <div class="option">💰 Comerciantes</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="5">
+                    <div class="question-text">5. En el Neolítico, los humanos descubrieron la 🌱 agricultura y la _____.</div>
+                    <div class="options" data-correct="Ganadería">
+                        <div class="option">📜 Escritura</div>
+                        <div class="option">🐄 Ganadería</div>
+                        <div class="option">⛵ Navegación</div>
+                    </div>
+                </div>
+
+                <h2>🔢 Ordena el proceso</h2>
+                <div class="question" data-question-id="6">
+                    <div class="question-text">6. Ordena cronológicamente las Edades de la Historia, arrastrando las etapas a la caja.</div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true">🏰 Edad Media</div>
+                        <div class="word" draggable="true">💻 Edad Contemporánea</div>
+                        <div class="word" draggable="true">🗿 Prehistoria</div>
+                        <div class="word" draggable="true">🏛️ Edad Antigua</div>
+                        <div class="word" draggable="true">⛵ Edad Moderna</div>
+                    </div>
+                    <div class="drop-zone" data-answer="🗿 Prehistoria 🏛️ Edad Antigua 🏰 Edad Media ⛵ Edad Moderna 💻 Edad Contemporánea"></div>
+                </div>
+                
+                <h2>📦 Arrastra a la categoría correcta</h2>
+                <div class="question" data-question-id="7">
+                    <div class="question-text">7. Clasifica estas características en el periodo correcto de la Prehistoria.</div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-type="paleolitico">🚶 Nómadas</div>
+                        <div class="word" draggable="true" data-type="neolitico">🏡 Sedentarios</div>
+                        <div class="word" draggable="true" data-type="paleolitico">🏹 Caza y recolección</div>
+                        <div class="word" draggable="true" data-type="neolitico">🏺 Cerámica</div>
+                        <div class="word" draggable="true" data-type="paleolitico">🎨 Arte en cuevas</div>
+                        <div class="word" draggable="true" data-type="neolitico">🌾 Agricultura</div>
+                    </div>
+                    <div class="category-container">
+                        <div class="category-box">
+                            <h4>PALEOLÍTICO</h4>
+                            <div class="drop-zone" data-accept="paleolitico"></div>
+                        </div>
+                        <div class="category-box">
+                            <h4>NEOLÍTICO</h4>
+                            <div class="drop-zone" data-accept="neolitico"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="8">
+                    <div class="question-text">8. Arrastra cada evento histórico a su Edad correspondiente.</div>
+                     <div class="word-bank">
+                        <div class="word" draggable="true" data-type="antigua">🏛️ Imperio Romano</div>
+                        <div class="word" draggable="true" data-type="moderna">🌎 Descubrimiento de América</div>
+                        <div class="word" draggable="true" data-type="media">🏰 Feudalismo</div>
+                        <div class="word" draggable="true" data-type="contemporanea">💻 Internet</div>
+                    </div>
+                    <div class="category-container">
+                        <div class="category-box">
+                            <h4>EDAD ANTIGUA</h4>
+                            <div class="drop-zone" data-accept="antigua"></div>
+                        </div>
+                        <div class="category-box">
+                            <h4>EDAD MEDIA</h4>
+                            <div class="drop-zone" data-accept="media"></div>
+                        </div>
+                         <div class="category-box">
+                            <h4>EDAD MODERNA</h4>
+                            <div class="drop-zone" data-accept="moderna"></div>
+                        </div>
+                        <div class="category-box">
+                            <h4>EDAD CONTEMPORÁNEA</h4>
+                            <div class="drop-zone" data-accept="contemporanea"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>👍 Verdadero o Falso 👎</h2>
+                <div class="question" data-question-id="9">
+                    <div class="question-text">9. El Paleolítico también se conoce como la "Piedra Nueva" o "Piedra Pulimentada".</div>
+                    <div class="options" data-correct="Falso">
+                        <div class="option">✔️ Verdadero</div>
+                        <div class="option">❌ Falso</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="10">
+                    <div class="question-text">10. El descubrimiento de América 🌎 ocurrió en la Edad Moderna.</div>
+                    <div class="options" data-correct="Verdadero">
+                        <div class="option">✔️ Verdadero</div>
+                        <div class="option">❌ Falso</div>
+                    </div>
+                </div>
+                 <div class="question" data-question-id="11">
+                    <div class="question-text">11. La Historia 📜 comienza con la aparición de los primeros seres humanos.</div>
+                    <div class="options" data-correct="Falso">
+                        <div class="option">✔️ Verdadero</div>
+                        <div class="option">❌ Falso</div>
+                    </div>
+                </div>
+                 <div class="question" data-question-id="12">
+                    <div class="question-text">12. Durante el Neolítico, los seres humanos se hicieron sedentarios gracias a la ganadería y la agricultura.</div>
+                    <div class="options" data-correct="Verdadero">
+                        <div class="option">✔️ Verdadero</div>
+                        <div class="option">❌ Falso</div>
+                    </div>
+                </div>
+                 <div class="question" data-question-id="13">
+                    <div class="question-text">13. Las pirámides de Egipto 🔺 se construyeron en la Edad Contemporánea.</div>
+                    <div class="options" data-correct="Falso">
+                        <div class="option">✔️ Verdadero</div>
+                        <div class="option">❌ Falso</div>
+                    </div>
+                </div>
+
+                <h2>✅ Test: Elige la correcta</h2>
+                <div class="question" data-question-id="14">
+                    <div class="question-text">14. ¿Qué suceso marca el final de la Edad Antigua y el inicio de la Edad Media?</div>
+                    <div class="options" data-correct="La caída del Imperio Romano">
+                        <div class="option">📜 La invención de la imprenta</div>
+                        <div class="option">🏛️ La caída del Imperio Romano</div>
+                        <div class="option">🏭 La Revolución Industrial</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="15">
+                    <div class="question-text">15. ¿Cuál de estas es una característica clave del Paleolítico?</div>
+                    <div class="options" data-correct="Eran nómadas y vivían de la caza">
+                        <div class="option">🏘️ Vivían en grandes ciudades amuralladas</div>
+                        <div class="option">🛠️ Usaban herramientas de hierro y bronce</div>
+                        <div class="option">🏹 Eran nómadas y vivían de la caza</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="16">
+                    <div class="question-text">16. La Edad de los Metales (Cobre, Bronce, Hierro) es la última etapa de...</div>
+                    <div class="options" data-correct="La Prehistoria">
+                        <div class="option">🏛️ La Edad Antigua</div>
+                        <div class="option">🗿 La Prehistoria</div>
+                        <div class="option">🏰 La Edad Media</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="17">
+                    <div class="question-text">17. ¿En qué edad histórica vivimos actualmente?</div>
+                    <div class="options" data-correct="Edad Contemporánea">
+                        <div class="option">⛵ Edad Moderna</div>
+                        <div class="option">⚛️ Edad Atómica</div>
+                        <div class="option">💻 Edad Contemporánea</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="18">
+                    <div class="question-text">18. ¿Qué gran invento se considera el inicio de la Historia (y el fin de la Prehistoria)?</div>
+                    <div class="options" data-correct="La escritura">
+                        <div class="option">☸️ La rueda</div>
+                        <div class="option">🔥 El fuego</div>
+                        <div class="option">✍️ La escritura</div>
+                    </div>
+                </div>
+                
+                <h2>🧐 Elige la frase correcta</h2>
+                 <div class="question" data-question-id="19">
+                    <div class="question-text">19. Elige la oración <strong>correcta</strong> sobre la Edad Media.</div>
+                    <div class="options" data-correct="Durante la Edad Media se construyeron grandes castillos para la defensa.">
+                        <div class="option">⛪️ En la Edad Media, la vida giraba en torno a los monasterios.</div>
+                        <div class="option">🏰 Durante la Edad Media se construyeron grandes castillos para la defensa.</div>
+                        <div class="option">🗺️ En la Edad Media se descubrieron nuevas rutas marítimas a Asia.</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="20">
+                    <div class="question-text">20. Elige la oración <strong>incorrecta</strong> sobre la Prehistoria.</div>
+                    <div class="options" data-correct="En la Prehistoria se comerciaba usando monedas de oro.">
+                        <div class="option">🎨 En la Prehistoria, los humanos pintaban en las paredes de las cuevas.</div>
+                        <div class="option">💰 En la Prehistoria se comerciaba usando monedas de oro.</div>
+                        <div class="option">🦴 En la Prehistoria, los humanos fabricaban herramientas con piedra y hueso.</div>
+                    </div>
+                </div>
+                <div class="question" data-question-id="21">
+                    <div class="question-text">21. Elige la oración <strong>correcta</strong> sobre la Edad Moderna.</div>
+                    <div class="options" data-correct="Cristóbal Colón llegó a América durante la Edad Moderna.">
+                        <div class="option">💡 En la Edad Moderna se inventó la bombilla.</div>
+                        <div class="option">🌎 Cristóbal Colón llegó a América durante la Edad Moderna.</div>
+                        <div class="option">🦖 Los dinosaurios vivieron durante la Edad Moderna.</div>
+                    </div>
+                </div>
+
+                <h2>🤝 Empareja las columnas</h2>
+                <div class="question matching-question" data-question-id="22">
+                    <div class="question-text">22. Empareja cada concepto con su edad histórica correcta. Haz clic en un elemento de cada columna para unirlos.</div>
+                    <div class="matching-container">
+                        <div class="column" id="column-a-22">
+                            <div class="match-item" data-match-id="1">🏛️ Democracia en Atenas</div>
+                            <div class="match-item" data-match-id="2">🤖 Revolución Industrial</div>
+                            <div class="match-item" data-match-id="3">🗿 Menhires y dólmenes</div>
+                            <div class="match-item" data-match-id="4">🏰 Sistema feudal</div>
+                        </div>
+                        <div class="column" id="column-b-22">
+                            <div class="match-item" data-match-id="4">Edad Media</div>
+                            <div class="match-item" data-match-id="1">Edad Antigua</div>
+                            <div class="match-item" data-match-id="3">Prehistoria</div>
+                            <div class="match-item" data-match-id="2">Edad Contemporánea</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>☑️ Test: Múltiples respuestas correctas</h2>
+                 <div class="question" data-question-id="23">
+                    <div class="question-text">23. ¿Qué tipo de herramientas o materiales son característicos de la <strong>Prehistoria</strong>? (Selecciona todas las correctas)</div>
+                    <div class="options multiple-choice" data-correct='["⛏️ Piedra tallada (bifaz)","🏺 Vasijas de cerámica","🥉 Objetos de bronce"]'>
+                        <div class="option">⛏️ Piedra tallada (bifaz)</div>
+                        <div class="option">📖 Libros de papiro</div>
+                        <div class="option">🏺 Vasijas de cerámica</div>
+                        <div class="option">🥉 Objetos de bronce</div>
+                        <div class="option">⚙️ Máquinas de vapor</div>
+                    </div>
+                </div>
+
+            </form>
+            <button type="submit" form="quiz-form" class="submit-btn">¡Terminar y Corregir!</button>
+            <div class="results" id="results-container">
+            </div>
+        </div>
+    </div>
+    <footer class="main-footer">
+        <a href="index.html">🔙 Volver al menú de materias</a>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('quiz-form');
+            const resultsContainer = document.getElementById('results-container');
+            const submitButton = document.querySelector('.submit-btn');
+            
+            const TOTAL_QUESTIONS = 23;
+
+            // --- Lógica para preguntas de selección ---
+            const optionContainers = document.querySelectorAll('.options');
+            optionContainers.forEach(container => {
+                container.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('option')) {
+                        if (container.classList.contains('multiple-choice')) {
+                            e.target.classList.toggle('selected');
+                        } else {
+                            [...e.target.parentElement.children].forEach(child => {
+                                child.classList.remove('selected');
+                            });
+                            e.target.classList.add('selected');
+                        }
+                    }
+                });
+            });
+
+            // --- Lógica para arrastrar y soltar (Drag and Drop) ---
+            const words = document.querySelectorAll('.word');
+            const dropZones = document.querySelectorAll('.drop-zone');
+            let draggedWord = null;
+
+            words.forEach(word => {
+                word.addEventListener('dragstart', (e) => {
+                    draggedWord = e.target;
+                    setTimeout(() => e.target.classList.add('dragging'), 0);
+                });
+                word.addEventListener('dragend', (e) => {
+                    e.target.classList.remove('dragging');
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+                zone.addEventListener('dragleave', () => { zone.classList.remove('drag-over'); });
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    if (draggedWord) {
+                        if(draggedWord.parentElement.classList.contains('drop-zone')){
+                           draggedWord.parentElement.removeChild(draggedWord);
+                        }
+                        // Limpiar emojis del banco de palabras para la respuesta
+                        const bankWordText = draggedWord.textContent.split(' ').slice(1).join(' ');
+                        const newWord = draggedWord.cloneNode(true);
+                        newWord.textContent = ` ${draggedWord.textContent} `;
+                        zone.appendChild(newWord);
+                        draggedWord.parentElement.removeChild(draggedWord);
+                        draggedWord = null;
+                    }
+                });
+            });
+            
+            // --- Lógica para emparejar columnas ---
+            const matchingQuestions = document.querySelectorAll('.matching-question');
+            matchingQuestions.forEach(question => {
+                let selectedItem = null;
+                const columns = question.querySelectorAll('.column');
+                columns.forEach(column => {
+                    column.addEventListener('click', e => {
+                        const target = e.target.closest('.match-item');
+                        if (!target || target.classList.contains('paired')) return;
+
+                        if (!selectedItem) {
+                            // First selection
+                            if (target.parentElement.contains(selectedItem)) return;
+                            // Clear previous selections in the same column
+                            [...target.parentElement.children].forEach(child => child.classList.remove('selected'));
+                            target.classList.add('selected');
+                            selectedItem = target;
+                        } else {
+                            // Second selection (must be in a different column)
+                            if (selectedItem.parentElement === target.parentElement) {
+                                [...target.parentElement.children].forEach(child => child.classList.remove('selected'));
+                                target.classList.add('selected');
+                                selectedItem = target;
+                            } else {
+                                // Pair them
+                                selectedItem.classList.add('paired');
+                                target.classList.add('paired');
+                                selectedItem.classList.remove('selected');
+                                // Store the pair
+                                const pairId = `pair-${selectedItem.dataset.matchId}`;
+                                selectedItem.dataset.pair = target.dataset.matchId;
+                                target.dataset.pair = selectedItem.dataset.matchId;
+                                selectedItem = null;
+                            }
+                        }
+                    });
+                });
+            });
+
+
+            // --- Lógica de envío y corrección ---
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                calculateAndShowResults();
+            });
+
+            function calculateAndShowResults() {
+                let score = 0;
+                
+                // --- Corrección de rellenar huecos, V/F, Test (Tipos 1, 5, 6, 8) ---
+                document.querySelectorAll('.options:not(.multiple-choice)').forEach(container => {
+                    const selectedOption = container.querySelector('.option.selected');
+                    if (selectedOption) {
+                        const correctAnswer = container.dataset.correct;
+                        if (selectedOption.textContent.trim().includes(correctAnswer.trim())) {
+                            score++;
+                        }
+                    }
+                });
+
+                // --- Corrección de Test Múltiple (Tipo 7) ---
+                document.querySelectorAll('.options.multiple-choice').forEach(container => {
+                    const correctAnswers = JSON.parse(container.dataset.correct);
+                    const selectedOptions = [...container.querySelectorAll('.option.selected')].map(opt => opt.textContent.trim());
+                    
+                    let isCorrect = correctAnswers.length === selectedOptions.length && correctAnswers.every(ans => selectedOptions.includes(ans));
+                    if (isCorrect) {
+                        score++;
+                    }
+                });
+
+                // --- Corrección de ordenar proceso (Tipo 3) ---
+                const orderQuestion = document.querySelector('.question[data-question-id="6"]');
+                if(orderQuestion){
+                    const dropZone = orderQuestion.querySelector('.drop-zone');
+                    const correctAnswer = dropZone.dataset.answer;
+                    const userWords = [...dropZone.querySelectorAll('.word')];
+                    const userAnswer = userWords.map(word => word.textContent.trim()).join(' ');
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                    }
+                }
+
+                // --- Corrección de arrastrar a categoría (Tipo 4) ---
+                const categoryQuestions = document.querySelectorAll('.question[data-question-id="7"], .question[data-question-id="8"]');
+                categoryQuestions.forEach(question => {
+                    let allCorrect = true;
+                    const wordsInBank = question.querySelectorAll('.word-bank .word');
+                    const wordsInDropZones = question.querySelectorAll('.drop-zone .word');
+                    if (wordsInBank.length > 0 || wordsInDropZones.length === 0) {
+                        allCorrect = false;
+                    } else {
+                         wordsInDropZones.forEach(word => {
+                            const correctCategory = word.dataset.type;
+                            const parentDropZone = word.closest('.drop-zone');
+                            if (!parentDropZone || parentDropZone.dataset.accept !== correctCategory) {
+                                allCorrect = false;
+                            }
+                        });
+                    }
+                    if (allCorrect) {
+                        score++;
+                    }
+                });
+                
+                // --- Corrección de emparejar columnas (Tipo 9) ---
+                document.querySelectorAll('.matching-question').forEach(question => {
+                    let questionScore = 0;
+                    const items = question.querySelectorAll('.match-item[data-pair]');
+                    const pairs = new Set();
+                    items.forEach(item => {
+                        const id1 = item.dataset.matchId;
+                        const id2 = item.dataset.pair;
+                        const pairKey = [id1, id2].sort().join('-');
+                        if (!pairs.has(pairKey)) {
+                            if (id1 === id2) {
+                                questionScore++;
+                            }
+                            pairs.add(pairKey);
+                        }
+                    });
+                    // Score is per correct pair, assuming 4 pairs = 1 point for the question
+                    if (questionScore === 4) {
+                        score++;
+                    }
+                });
+
+                // --- Mostrar resultados ---
+                const finalScore = (score / TOTAL_QUESTIONS * 10).toFixed(1);
+                resultsContainer.style.display = 'block';
+                
+                let message = '';
+                if (finalScore >= 9) {
+                    message = `¡EXCELENTE! 🥳 ¡Eres un auténtico experto en historia!`;
+                    resultsContainer.className = 'results correct';
+                } else if (finalScore >= 7) {
+                    message = `¡MUY BIEN! 👍 Se nota que has estudiado mucho.`;
+                    resultsContainer.className = 'results correct';
+                } else if (finalScore >= 5) {
+                    message = `¡APROBADO! 😉 Vas por buen camino, pero repasa un poquito más.`;
+                    resultsContainer.className = 'results correct';
+                } else {
+                    message = `💩 ¡Oh, no! Necesitas repasar más. ¡Ánimo, tú puedes!`;
+                    resultsContainer.className = 'results incorrect';
+                }
+
+                resultsContainer.innerHTML = `
+                    <h3>Tu nota es: ${finalScore} / 10</h3>
+                    <p>(${score} de ${TOTAL_QUESTIONS} respuestas correctas)</p>
+                    <p>${message}</p>
+                `;
+
+                highlightAnswers();
+                submitButton.disabled = true;
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+
+            function highlightAnswers() {
+                form.classList.add('feedback');
+
+                // Highlight option-based questions (single choice)
+                document.querySelectorAll('.options:not(.multiple-choice)').forEach(container => {
+                    const correctAnswer = container.dataset.correct.trim();
+                    const selectedOption = container.querySelector('.option.selected');
+
+                    [...container.querySelectorAll('.option')].forEach(option => {
+                        const optionText = option.textContent.trim();
+                        if (optionText.includes(correctAnswer)) {
+                            option.classList.add('correct');
+                        } else if (option.classList.contains('selected')) {
+                            option.classList.add('incorrect');
+                        }
+                    });
+                     if (selectedOption && !selectedOption.textContent.trim().includes(correctAnswer)) {
+                        const helpText = document.createElement('span');
+                        helpText.className = 'correct-answer-text';
+                        helpText.textContent = `(Correcta: "${correctAnswer}")`;
+                        selectedOption.parentElement.appendChild(helpText);
+                    }
+                });
+                
+                // Highlight multiple choice
+                document.querySelectorAll('.options.multiple-choice').forEach(container => {
+                    const correctAnswers = JSON.parse(container.dataset.correct);
+                     [...container.querySelectorAll('.option')].forEach(option => {
+                        const optionText = option.textContent.trim();
+                        if (correctAnswers.includes(optionText)) {
+                            option.classList.add('correct');
+                        } else if (option.classList.contains('selected')) {
+                            option.classList.add('incorrect');
+                        }
+                    });
+                });
+
+                // Highlight order process
+                const orderDropZone = document.querySelector('.question[data-question-id="6"] .drop-zone');
+                if(orderDropZone){
+                    const userOrder = [...orderDropZone.querySelectorAll('.word')].map(w => w.textContent.trim()).join(' ');
+                    if (userOrder === orderDropZone.dataset.answer) {
+                        orderDropZone.classList.add('correct');
+                    } else {
+                        orderDropZone.classList.add('incorrect');
+                        const helpText = document.createElement('p');
+                        helpText.className = 'correct-answer-text';
+                        helpText.textContent = `Orden correcto: ${orderDropZone.dataset.answer}`;
+                        orderDropZone.parentElement.appendChild(helpText);
+                    }
+                }
+
+                // Highlight category drag-and-drop
+                document.querySelectorAll('.question[data-question-id="7"] .drop-zone, .question[data-question-id="8"] .drop-zone').forEach(zone => {
+                    const requiredCategory = zone.dataset.accept;
+                    [...zone.querySelectorAll('.word')].forEach(word => {
+                        if (word.dataset.type === requiredCategory) {
+                            word.classList.add('correct');
+                        } else {
+                            word.classList.add('incorrect');
+                        }
+                    });
+                });
+                
+                // Highlight matching
+                document.querySelectorAll('.matching-question .match-item.paired').forEach(item => {
+                    if (item.dataset.matchId === item.dataset.pair) {
+                        item.classList.add('correct-pair');
+                    } else {
+                        item.classList.add('incorrect-pair');
+                    }
+                });
+
+                // Disable all interactions
+                document.querySelectorAll('.option, .word, .match-item, input').forEach(el => {
+                    el.style.pointerEvents = 'none';
+                    el.setAttribute('draggable', 'false');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
