@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Comprensión Lectora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            transition: background-color 0.3s ease-in-out;
+        }
+        .answer {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+
+    <div id="container" class="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 md:p-10">
+
+        <!-- Pantalla de Inicio -->
+        <div id="start-screen">
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-600 mb-4">Examen de Comprensión Lectora</h1>
+            <div class="text-center bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded-lg mb-6">
+                <p class="font-semibold">Instrucciones:</p>
+                <p class="mt-2">1. Lee atentamente el texto que aparecerá a continuación.</p>
+                <p>2. Cuando termines, pulsa el botón "He terminado de leer".</p>
+                <p>3. Responde a las 7 preguntas y corrige tus respuestas.</p>
+            </div>
+            <button id="start-button" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors text-lg shadow-md">
+                Comenzar a Leer
+            </button>
+        </div>
+
+        <!-- Fase de Lectura -->
+        <div id="reading-screen" class="hidden">
+            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">Lee el siguiente texto:</h2>
+            <div id="reading-text" class="text-lg leading-relaxed bg-gray-50 p-6 rounded-lg border">
+                <!-- El texto se insertará aquí con JavaScript -->
+            </div>
+            <div id="timer" class="text-center font-bold text-2xl my-4 text-red-600"></div>
+            <button id="finish-reading-button" class="w-full mt-6 bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors text-lg shadow-md">
+                He terminado de leer
+            </button>
+        </div>
+
+        <!-- Fase de Preguntas -->
+        <div id="questions-screen" class="hidden">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 pb-4 border-b">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Cuestionario</h2>
+                <div class="text-center mt-4 md:mt-0">
+                    <span class="text-lg font-semibold">Nota:</span>
+                    <span id="score" class="text-3xl font-bold text-blue-600 ml-2">0.0</span>
+                    <span class="text-lg font-semibold">/ 10</span>
+                </div>
+            </div>
+            
+            <div id="questions-container" class="space-y-6">
+                <!-- Las preguntas se insertarán aquí -->
+            </div>
+
+            <div class="mt-8 flex flex-col md:flex-row gap-4">
+                <button id="show-answers-button" class="w-full md:w-auto flex-1 bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-yellow-600 transition-colors shadow-md">
+                    Mostrar Respuestas
+                </button>
+                <a href="index.html" class="w-full md:w-auto flex-1 text-center bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 transition-colors shadow-md">
+                    🔙 Volver al menú de materias
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // =================================================
+            // 1. PARÁMETROS CONFIGURABLES
+            // Instrucción: Modifica los valores de las siguientes variables para generar un nuevo examen.
+            // =================================================
+
+            // Tema central sobre el que tratará el texto.
+            const temaDelTexto = "Una aventura de dos hermanos, niño y niña, que tienen una aventura con una medusa en la playa de Almuñécar";
+
+            // Número aproximado de palabras que debe tener el texto.
+            const numeroDePalabras = 280;
+
+            // Modo de lectura.
+            // true = con temporizador automático.
+            // false = con un botón "He terminado de leer".
+            const conTiempo = false;
+
+            // =================================================
+            // 2. GUÍA PEDAGÓGICA (Contenido generado por la IA)
+            // =================================================
+
+            // A. Texto Generado
+            const texto = `
+                <p class="mb-4">Leo y su hermana mayor, Sofía, pasaban la tarde en la playa de San Cristóbal, en Almuñécar. El sol calentaba la arena y el sonido de las olas era la música de fondo perfecta. Mientras construían un castillo de arena, Leo vio algo extraño brillando en la orilla. Era una mancha de color con un brillo <strong>iridiscente</strong>, casi mágico, que cambiaba de color con la luz del sol.</p>
+                <p class="mb-4">"¡Mira, Sofía!", exclamó Leo, señalando el objeto. Con <strong>cautela</strong>, los dos hermanos se acercaron. No era una concha ni una piedra. Parecía una gelatina transparente con tonos azules y violetas. Era una medusa, pero no como las que habían visto en los libros. Era un ser <strong>diminuto</strong> y parecía inofensivo, pero su belleza era enigmática y les hacía dudar.</p>
+                <p class="mb-4">Sofía, que era muy curiosa, recordó lo que había leído sobre las medusas. "Tenemos que tener cuidado, Leo. Algunas pueden picar, aunque sean pequeñas", le advirtió. Juntos, <strong>escrutaron</strong> el pequeño ser sin tocarlo, observando cómo pulsaba suavemente con el vaivén del agua. Era fascinante ver cómo se movía, como si bailara una danza silenciosa en la orilla.</p>
+                <p class="mb-4">Decidieron no molestarla. Con la ayuda de un cubo, cogieron agua de mar y la echaron con cuidado cerca de la medusa para ayudarla a volver a una zona más profunda. Poco a poco, una ola más fuerte llegó y se la llevó de vuelta al mar. Los hermanos se sintieron bien por haberla ayudado. Aquel día no encontraron un tesoro pirata, pero descubrieron un pequeño y maravilloso <strong>vestigio</strong> de la vida marina.</p>
+                <p>Se quedaron mirando el mar, pensando en la pequeña aventura que acababan de vivir y en los secretos que el océano guardaba.</p>
+            `;
+
+            // B. Preguntas y Respuestas Generadas
+            const preguntas = [
+                {
+                    pregunta: "¿En qué playa ocurre la historia y quiénes son los protagonistas?",
+                    respuesta: "La historia ocurre en la playa de San Cristóbal, en Almuñécar. Los protagonistas son dos hermanos, Leo y Sofía.",
+                    isSubjective: false
+                },
+                {
+                    pregunta: "¿Qué encontraron los hermanos brillando en la orilla?",
+                    respuesta: "Encontraron una medusa pequeña y con un brillo iridiscente.",
+                    isSubjective: false
+                },
+                {
+                    pregunta: "¿Qué hicieron Leo y Sofía para ayudar a la medusa?",
+                    respuesta: "Cogieron agua con un cubo y la echaron cerca de la medusa para ayudarla a volver al mar.",
+                    isSubjective: false
+                },
+                {
+                    pregunta: "En el texto, la palabra 'cautela' significa que los hermanos se acercaron...",
+                    respuesta: "Significa que se acercaron con cuidado, con precaución, porque no sabían si podía ser peligroso.",
+                    isSubjective: true
+                },
+                {
+                    pregunta: "¿Por qué Sofía advirtió a Leo que tuvieran cuidado con la medusa?",
+                    respuesta: "Porque había leído en libros que algunas medusas pueden picar y ser peligrosas, aunque parezcan pequeñas e inofensivas.",
+                    isSubjective: true
+                },
+                {
+                    pregunta: "¿Cómo crees que se sintieron los hermanos al final del día? ¿Por qué?",
+                    respuesta: "Probablemente se sintieron felices y satisfechos. Ayudaron a una criatura viva y tuvieron una pequeña aventura que les hizo sentir que habían descubierto un secreto del mar.",
+                    isSubjective: true
+                },
+                {
+                    pregunta: "Si tú te encontraras una medusa en la orilla, ¿qué harías? ¿Por qué harías eso?",
+                    respuesta: "Esta respuesta es personal. Una buena opción sería no tocarla para no hacerme daño ni dañarla, y avisar a un adulto para que pueda ayudarla a volver al mar de forma segura.",
+                    isSubjective: true
+                }
+            ];
+
+            // =================================================
+            // 3. REQUISITOS TÉCNICOS (Lógica del HTML)
+            // =================================================
+            
+            const startScreen = document.getElementById('start-screen');
+            const readingScreen = document.getElementById('reading-screen');
+            const questionsScreen = document.getElementById('questions-screen');
+            const startButton = document.getElementById('start-button');
+            const finishReadingButton = document.getElementById('finish-reading-button');
+            const showAnswersButton = document.getElementById('show-answers-button');
+            const readingText = document.getElementById('reading-text');
+            const questionsContainer = document.getElementById('questions-container');
+            const scoreElement = document.getElementById('score');
+            const timerElement = document.getElementById('timer');
+
+            let score = 0;
+            let answeredQuestions = 0;
+            let timerInterval;
+
+            function startReading() {
+                readingText.innerHTML = texto;
+                startScreen.classList.add('hidden');
+                readingScreen.classList.remove('hidden');
+
+                if (conTiempo) {
+                    finishReadingButton.classList.add('hidden');
+                    let seconds = Math.round((numeroDePalabras / 140) * 60);
+                    timerElement.textContent = `Tiempo restante: ${seconds}s`;
+                    
+                    timerInterval = setInterval(() => {
+                        seconds--;
+                        timerElement.textContent = `Tiempo restante: ${seconds}s`;
+                        if (seconds <= 0) {
+                            clearInterval(timerInterval);
+                            startQuestions();
+                        }
+                    }, 1000);
+                }
+            }
+
+            function startQuestions() {
+                if (timerInterval) clearInterval(timerInterval);
+                readingScreen.classList.add('hidden');
+                questionsScreen.classList.remove('hidden');
+                renderQuestions();
+            }
+
+            function renderQuestions() {
+                questionsContainer.innerHTML = '';
+                preguntas.forEach((q, index) => {
+                    const questionBlock = document.createElement('div');
+                    questionBlock.className = 'card bg-gray-50 p-5 rounded-lg border border-gray-200';
+                    questionBlock.dataset.index = index;
+
+                    questionBlock.innerHTML = `
+                        <p class="text-lg font-semibold mb-3">${index + 1}. ${q.pregunta}</p>
+                        <div class="flex gap-3 mt-4">
+                            <button data-correct="true" class="correct-btn flex-1 bg-green-200 text-green-800 font-bold py-2 px-4 rounded-lg hover:bg-green-300 transition-colors">✔️ Bien</button>
+                            <button data-correct="false" class="incorrect-btn flex-1 bg-red-200 text-red-800 font-bold py-2 px-4 rounded-lg hover:bg-red-300 transition-colors">❌ Mal</button>
+                        </div>
+                        <div class="answer overflow-hidden max-h-0 opacity-0 mt-4 text-gray-600 bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r-lg">
+                            <p><strong class="font-semibold">Respuesta:</strong> ${q.isSubjective ? '<em>Ejemplo de respuesta:</em> ' : ''}${q.respuesta}</p>
+                        </div>
+                    `;
+                    questionsContainer.appendChild(questionBlock);
+                });
+            }
+
+            function handleCorrection(event) {
+                const button = event.target.closest('button');
+                if (!button || (!button.classList.contains('correct-btn') && !button.classList.contains('incorrect-btn'))) return;
+                
+                const questionBlock = button.closest('.card');
+                const isCorrect = button.dataset.correct === 'true';
+
+                // Evitar corregir de nuevo
+                if (questionBlock.dataset.answered) return;
+                questionBlock.dataset.answered = 'true';
+
+                answeredQuestions++;
+
+                if (isCorrect) {
+                    score += 1;
+                    questionBlock.classList.remove('bg-gray-50');
+                    questionBlock.classList.add('bg-green-100', 'border-green-400');
+                } else {
+                    questionBlock.classList.remove('bg-gray-50');
+                    questionBlock.classList.add('bg-red-100', 'border-red-400');
+                }
+
+                // Deshabilitar botones
+                questionBlock.querySelectorAll('button').forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                });
+
+                updateScore();
+            }
+            
+            function updateScore() {
+                const finalScore = (score / preguntas.length) * 10;
+                scoreElement.textContent = finalScore.toFixed(1);
+            }
+
+            function showAllAnswers() {
+                document.querySelectorAll('.answer').forEach(answer => {
+                    answer.classList.remove('max-h-0', 'opacity-0');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    answer.classList.add('opacity-100');
+                });
+                showAnswersButton.disabled = true;
+                showAnswersButton.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+
+            // Event Listeners
+            startButton.addEventListener('click', startReading);
+            finishReadingButton.addEventListener('click', startQuestions);
+            questionsContainer.addEventListener('click', handleCorrection);
+            showAnswersButton.addEventListener('click', showAllAnswers);
+        });
+    </script>
+</body>
+</html>
