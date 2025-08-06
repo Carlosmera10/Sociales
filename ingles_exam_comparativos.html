@@ -216,7 +216,7 @@
             flex: 1;
             min-width: 250px;
             background-color: #e6f7ff;
-            border: 1px solid #b3e0ff;
+            border: 1:px solid #b3e0ff;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
@@ -459,6 +459,7 @@
                         <div class="word" draggable="true">interesting</div>
                         <div class="word" draggable="true">than</div>
                         <div class="word" draggable="true">My</div>
+                        <div class="word" draggable="true">book</div> <!-- Added missing 'book' -->
                         <div class="word" draggable="true">.</div>
                     </div>
                 </div>
@@ -832,7 +833,6 @@
                             // For ordering words, ensure it's removed from old dropzone if moved
                             const parentWordBank = draggedWord.closest('.word-bank');
                             if (parentWordBank) {
-                                // If it was moved from another drop-zone, put it back to the word bank
                                 // This logic is simplified for now, assuming words move only from bank to zone.
                                 // For reordering within a zone, more complex logic is needed.
                             }
@@ -843,6 +843,9 @@
                 // Type 9: Matching two columns
                 let selectedMatchItem = null;
                 document.querySelectorAll('.matching-question').forEach(question => {
+                    // Initialize an array to store the actual paired items for this question
+                    question.pairedItems = [];
+
                     const matchItems = question.querySelectorAll('.match-item');
                     matchItems.forEach(item => {
                         item.addEventListener('click', () => {
@@ -862,13 +865,13 @@
                                     selectedMatchItem = item;
                                     item.classList.add('selected');
                                 } else {
-                                    // Different columns, attempt to pair
+                                    // Different columns, form a pair
                                     selectedMatchItem.classList.remove('selected');
                                     selectedMatchItem.classList.add('paired');
                                     item.classList.add('paired');
-                                    // Store the pair for later correction
-                                    question.dataset.pairs = question.dataset.pairs ? question.dataset.pairs + ',' : '';
-                                    question.dataset.pairs += `${selectedMatchItem.dataset.matchId}-${item.dataset.matchId}`;
+
+                                    // Store the actual paired items (DOM elements)
+                                    question.pairedItems.push([selectedMatchItem, item]);
                                     selectedMatchItem = null;
                                 }
                             }
@@ -892,13 +895,27 @@
                     const questionId = question.dataset.questionId;
                     let isCorrect = false;
 
-                    // Reset highlight classes
+                    // Reset highlight classes for all question types
                     question.querySelectorAll('.option').forEach(opt => {
                         opt.classList.remove('correct', 'incorrect', 'selected');
                     });
                     question.querySelectorAll('.drop-zone, .drop-zone-inline').forEach(dz => {
                         dz.classList.remove('correct', 'incorrect');
                         dz.querySelectorAll('.word').forEach(w => w.classList.remove('correct', 'incorrect'));
+                        // Move words back to word-bank for visual reset, except for category questions
+                        if (!dz.closest('.time-box')) { // Don't move words from category drop zones
+                            Array.from(dz.children).forEach(word => {
+                                if (word.classList.contains('word')) {
+                                    const parentQuestion = word.closest('.question');
+                                    if (parentQuestion) {
+                                        const wordBank = parentQuestion.querySelector('.word-bank');
+                                        if (wordBank) {
+                                            wordBank.appendChild(word);
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     });
                     question.querySelectorAll('.match-item').forEach(mi => {
                         mi.classList.remove('correct-match', 'incorrect-match', 'paired', 'selected');
@@ -906,6 +923,7 @@
                     question.querySelectorAll('.numeric-input').forEach(input => {
                         input.classList.remove('correct', 'incorrect');
                     });
+
 
                     // Type 1, 5, 6, 8: Single choice
                     if (['1', '2', '3', '4', '5', '13', '14', '15', '16', '17', '18', '19', '20', '21', '25', '26', '27', '28'].includes(questionId)) {
@@ -969,7 +987,8 @@
                         } else {
                             dropZone.classList.add('incorrect');
                             // Optionally, show the correct order
-                            // dropZone.textContent = `Correct: ${correctSentence}`;
+                            // For visual feedback, you could re-populate with correct words
+                            // but for this exam, just highlighting incorrect is enough.
                         }
                     }
                     // Type 4: Drag words to category
@@ -996,121 +1015,35 @@
                     // Type 9: Matching two columns
                     else if (['29', '30'].includes(questionId)) {
                         let correctPairsCount = 0;
-                        const pairedItems = question.querySelectorAll('.match-item.paired');
-                        const columnAItems = Array.from(question.querySelector(`#column-a-${questionId}`).children);
-                        const columnBItems = Array.from(question.querySelector(`#column-b-${questionId}`).children);
+                        const totalPossiblePairs = question.querySelector('.column').children.length; // Number of items in one column
 
-                        // Re-enable all items for re-evaluation and visual feedback
-                        question.querySelectorAll('.match-item').forEach(item => {
-                            item.classList.remove('paired', 'selected', 'correct-match', 'incorrect-match');
-                        });
+                        // Retrieve the stored paired items
+                        const pairedItems = question.pairedItems || [];
 
-                        // Re-parse pairs from data-pairs if available, or infer from current positions
-                        // For simplicity, we'll assume pairs are stored in dataset.pairs and re-evaluate.
-                        const storedPairs = question.dataset.pairs ? question.dataset.pairs.split(',') : [];
-                        let actualPairs = [];
+                        pairedItems.forEach(([item1, item2]) => {
+                            // Ensure item1 is from column A and item2 from column B for consistent check
+                            const itemA = item1.closest('#column-a-' + questionId) ? item1 : item2;
+                            const itemB = item2.closest('#column-b-' + questionId) ? item2 : item1;
 
-                        // Reconstruct pairs based on how they were selected (matchId-matchId)
-                        // This part needs careful handling if the user can unpair. For this simple setup,
-                        // we'll assume pairs are fixed once made.
-                        // A more robust solution would involve tracking actual connections.
-                        // For now, we'll just check the dataset.pairs which stores the sequence of selections.
-                        // Let's make it simpler: find items that are visually paired.
-                        // This requires a better way to store pairs than just dataset.pairs.
-                        // Let's modify the matching logic to store actual connections.
-
-                        // A simpler way: just check if the number of paired items is correct and if their match-ids align.
-                        // For a matching question, the user clicks two items to pair them.
-                        // We need to iterate through all items, and for each item from column A,
-                        // find if it has been conceptually paired with an item from column B,
-                        // and check if their data-match-id values are the same.
-
-                        // For a more robust solution, we'd need a data structure to hold active pairings.
-                        // Since the prompt specifies that paired items get the `.paired` class,
-                        // we can iterate through the items in column A and check if they have a corresponding paired item in column B.
-                        // However, the current `dataset.pairs` only stores the sequence of clicks, not the actual pairings.
-                        // Let's simplify: the user clicks two items and they get `paired`. We need to find these pairs.
-                        // This requires knowing which item was paired with which.
-
-                        // Let's assume the user has made N pairs. We need to check those N pairs.
-                        // A better way to store pairs:
-                        const pairsMade = []; // Array of [{itemA, itemB}]
-                        // This would require modifying the click listener for matching questions.
-                        // For now, let's assume the `paired` class is applied to both items of a correct pair.
-                        // This means we need to re-implement the matching logic to store pairs more explicitly.
-
-                        // Re-initializing matching for correction:
-                        // The simplest way to check: for each item in column A, find if it's paired.
-                        // If it is, find its paired counterpart in column B. Check if their match IDs are the same.
-                        let correctPairs = 0;
-                        const columnAItemsPaired = new Set(); // To track items in A that are part of a pair
-                        const columnBItemsPaired = new Set(); // To track items in B that are part of a pair
-
-                        // Re-evaluate pairings based on `paired` class (which is set by user interaction)
-                        // This part is tricky because `paired` class is removed at the start of correction.
-                        // We need to store the actual pairs made by the user before clearing classes.
-
-                        // Let's use a simpler approach for matching:
-                        // The `dataset.pairs` stores `idA-idB,idC-idD`.
-                        // We need to parse this.
-                        const currentPairs = question.dataset.pairs ? question.dataset.pairs.split(',') : [];
-                        let allPairsCorrect = true;
-                        let totalPossiblePairs = columnAItems.length; // Assuming full matching
-
-                        // Create a map of match-id to item for quick lookup
-                        const allMatchItems = {};
-                        question.querySelectorAll('.match-item').forEach(item => {
-                            allMatchItems[item.dataset.matchId] = item;
-                        });
-
-                        const pairedMatchIds = new Set(); // To ensure each matchId is used only once in a correct pair
-
-                        currentPairs.forEach(pairStr => {
-                            const [id1, id2] = pairStr.split('-').map(Number);
-                            const item1 = allMatchItems[id1];
-                            const item2 = allMatchItems[id2];
-
-                            if (item1 && item2) {
-                                // Check if they are from different columns
-                                const column1 = item1.closest('.column');
-                                const column2 = item2.closest('.column');
-
-                                if (column1 !== column2) {
-                                    if (item1.dataset.matchId === item2.dataset.matchId) {
-                                        // This is a correct pair
-                                        item1.classList.add('correct-match');
-                                        item2.classList.add('correct-match');
-                                        pairedMatchIds.add(item1.dataset.matchId);
-                                    } else {
-                                        // This is an incorrect pair
-                                        item1.classList.add('incorrect-match');
-                                        item2.classList.add('incorrect-match');
-                                        allPairsCorrect = false; // Mark overall question as incorrect
-                                    }
-                                } else {
-                                    // If items from the same column were selected, they shouldn't form a pair
-                                    // This scenario should be handled by the click listener to prevent pairing.
-                                    // If it happens, it's an error in user interaction or logic.
-                                    allPairsCorrect = false;
-                                }
+                            if (itemA && itemB && itemA.dataset.matchId === itemB.dataset.matchId) {
+                                itemA.classList.add('correct-match');
+                                itemB.classList.add('correct-match');
+                                correctPairsCount++;
                             } else {
-                                allPairsCorrect = false; // Invalid pair string
+                                itemA.classList.add('incorrect-match');
+                                itemB.classList.add('incorrect-match');
                             }
+                            // Re-apply paired class for visual consistency after correction
+                            itemA.classList.add('paired');
+                            itemB.classList.add('paired');
                         });
 
-                        // Check if all correct pairs were made (and no incorrect ones)
-                        if (pairedMatchIds.size === totalPossiblePairs && allPairsCorrect) {
+                        // Check if all pairs were made and all of them were correct
+                        if (correctPairsCount === totalPossiblePairs && pairedItems.length === totalPossiblePairs) {
                             isCorrect = true;
                         } else {
                             isCorrect = false;
                         }
-
-                        // Re-apply paired class for visual consistency after correction
-                        question.querySelectorAll('.match-item').forEach(item => {
-                            if (item.classList.contains('correct-match') || item.classList.contains('incorrect-match')) {
-                                item.classList.add('paired');
-                            }
-                        });
                     }
 
                     // Numeric input (Type 11) - Although not used, keeping the logic for completeness
