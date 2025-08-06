@@ -26,11 +26,19 @@
             background-color: var(--background-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Eliminamos el padding del body */
+            display: flex;
+            flex-direction: column; /* Apilamos los elementos verticalmente */
+            min-height: 100vh; /* Aseguramos que el body ocupe toda la altura */
+        }
+        
+        /* Nuevo contenedor principal para centrar el examen */
+        main {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            flex-grow: 1; /* Hace que el main ocupe el espacio disponible, empujando el footer hacia abajo */
+            padding: 20px;
         }
 
         .container {
@@ -280,6 +288,13 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
         }
+        
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
         .results {
             margin-top: 30px;
@@ -312,384 +327,396 @@
         .main-footer {
             text-align: center;
             padding: 20px;
-            background-color: #e9ecef;
+            background-color: transparent; /* Hacemos el fondo transparente */
+            width: 100%;
         }
 
         .main-footer a {
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .main-footer a:hover {
+            background-color: #e0e0e0;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h1>📝 Examen: La Longitud</h1>
-            <p>¡Demuestra lo que has aprendido sobre las unidades de medida!</p>
-        </div>
+    <!-- El contenedor <main> ahora centra el examen en la página -->
+    <main>
+        <div class="container">
+            <div class="header">
+                <h1>📝 Examen: La Longitud</h1>
+                <p>¡Demuestra lo que has aprendido sobre las unidades de medida!</p>
+            </div>
 
-        <div class="content">
-            <form id="quiz-form">
+            <div class="content">
+                <form id="quiz-form">
                 
-                <!-- PREGUNTAS DE TEST (UNA RESPUESTA) -->
-                <div class="question" data-question-id="1">
-                    <div class="question-text">1. ¿Cuál de estas unidades es un <strong>submúltiplo</strong> del metro?</div>
-                    <div class="options" data-correct="Centímetro (cm)">
-                        <div class="option">📏 Kilómetro (km)</div>
-                        <div class="option">📏 Hectómetro (hm)</div>
-                        <div class="option">📏 Centímetro (cm)</div>
-                        <div class="option">📏 Decámetro (dam)</div>
-                    </div>
-                </div>
-
-                <div class="question" data-question-id="2">
-                    <div class="question-text">2. Para pasar de una unidad <strong>más grande</strong> a otra <strong>más pequeña</strong> (bajar la escalera), ¿qué operación hacemos?</div>
-                    <div class="options" data-correct="Multiplicar">
-                        <div class="option">➕ Sumar</div>
-                        <div class="option">➖ Restar</div>
-                        <div class="option">✖️ Multiplicar</div>
-                        <div class="option">➗ Dividir</div>
-                    </div>
-                </div>
-
-                <div class="question" data-question-id="3">
-                    <div class="question-text">3. ¿Cuántos <strong>metros</strong> hay en 1 kilómetro?</div>
-                    <div class="options" data-correct="1.000 metros">
-                        <div class="option">🛣️ 10 metros</div>
-                        <div class="option">🛣️ 100 metros</div>
-                        <div class="option">🛣️ 1.000 metros</div>
-                        <div class="option">🛣️ 10.000 metros</div>
-                    </div>
-                </div>
-                
-                <div class="question" data-question-id="4">
-                    <div class="question-text">4. La expresión "5 km y 300 m" es una forma...</div>
-                    <div class="options" data-correct="Compleja">
-                        <div class="option">🧩 Compleja</div>
-                        <div class="option">🧩 Simple</div>
-                        <div class="option">🧩 Incorrecta</div>
-                        <div class="option">🧩 Múltiple</div>
-                    </div>
-                </div>
-
-                <div class="question" data-question-id="5">
-                    <div class="question-text">5. ¿Cuál es la unidad principal de longitud?</div>
-                    <div class="options" data-correct="El metro (m)">
-                        <div class="option">👑 El gramo (g)</div>
-                        <div class="option">👑 El litro (l)</div>
-                        <div class="option">👑 El metro (m)</div>
-                        <div class="option">👑 El segundo (s)</div>
-                    </div>
-                </div>
-
-                <!-- PREGUNTAS DE VERDADERO O FALSO -->
-                 <div class="question" data-question-id="6">
-                    <div class="question-text">6. <strong>Verdadero o Falso:</strong> Para subir la escalera métrica (pasar de una unidad pequeña a una grande) multiplicamos.</div>
-                    <div class="options" data-correct="Falso">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
-                    </div>
-                </div>
-
-                <div class="question" data-question-id="7">
-                    <div class="question-text">7. <strong>Verdadero o Falso:</strong> Un milímetro es más pequeño que un centímetro.</div>
-                    <div class="options" data-correct="Verdadero">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
-                    </div>
-                </div>
-
-                <div class="question" data-question-id="8">
-                    <div class="question-text">8. <strong>Verdadero o Falso:</strong> Para comparar dos longitudes, primero debemos pasarlas a la misma unidad.</div>
-                    <div class="options" data-correct="Verdadero">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
-                    </div>
-                </div>
-                
-                <div class="question" data-question-id="9">
-                    <div class="question-text">9. <strong>Verdadero o Falso:</strong> La distancia entre Madrid y Barcelona se mide en centímetros.</div>
-                    <div class="options" data-correct="Falso">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
-                    </div>
-                </div>
-
-                <div class="question" data-question-id="10">
-                    <div class="question-text">10. <strong>Verdadero o Falso:</strong> 2500 metros es lo mismo que 2 km y 500 m.</div>
-                    <div class="options" data-correct="Verdadero">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
-                    </div>
-                </div>
-
-                <!-- PREGUNTA DE EMPAREJAR -->
-                <div class="question matching-question" data-question-id="11">
-                    <div class="question-text">11. Empareja cada unidad con su equivalencia correcta. (5 Puntos)</div>
-                    <div class="matching-container">
-                        <div class="column" id="column-a-11">
-                            <div class="match-item" data-match-id="1">📍 1 km</div>
-                            <div class="match-item" data-match-id="2">📍 1 m</div>
-                            <div class="match-item" data-match-id="3">📍 1 dam</div>
-                            <div class="match-item" data-match-id="4">📍 1 hm</div>
-                            <div class="match-item" data-match-id="5">📍 1 cm</div>
-                        </div>
-                        <div class="column" id="column-b-11">
-                            <div class="match-item" data-match-id="4">➡️ 100 m</div>
-                            <div class="match-item" data-match-id="1">➡️ 1.000 m</div>
-                            <div class="match-item" data-match-id="5">➡️ 10 mm</div>
-                            <div class="match-item" data-match-id="2">➡️ 100 cm</div>
-                            <div class="match-item" data-match-id="3">➡️ 10 m</div>
+                    <!-- PREGUNTAS DE TEST (UNA RESPUESTA) -->
+                    <div class="question" data-question-id="1">
+                        <div class="question-text">1. ¿Cuál de estas unidades es un <strong>submúltiplo</strong> del metro?</div>
+                        <div class="options" data-correct="📏 Centímetro (cm)">
+                            <div class="option">📏 Kilómetro (km)</div>
+                            <div class="option">📏 Hectómetro (hm)</div>
+                            <div class="option">📏 Centímetro (cm)</div>
+                            <div class="option">📏 Decámetro (dam)</div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- PREGUNTA DE CLASIFICAR -->
-                <div class="question" data-question-id="12">
-                    <div class="question-text">12. Arrastra cada unidad a su categoría correcta: <strong>Múltiplos</strong> (más grandes que el metro) o <strong>Submúltiplos</strong> (más pequeños que el metro). (6 Puntos)</div>
-                    <div class="word-bank">
-                        <div class="word" draggable="true" data-type="multiplos">Kilómetro</div>
-                        <div class="word" draggable="true" data-type="submultiplos">Centímetro</div>
-                        <div class="word" draggable="true" data-type="multiplos">Hectómetro</div>
-                        <div class="word" draggable="true" data-type="submultiplos">Milímetro</div>
-                        <div class="word" draggable="true" data-type="multiplos">Decámetro</div>
-                        <div class="word" draggable="true" data-type="submultiplos">Decímetro</div>
-                    </div>
-                    <div class="category-container">
-                        <div class="category-box">
-                            <h4>🔼 MÚLTIPLOS</h4>
-                            <div class="drop-zone" data-accept="multiplos"></div>
-                        </div>
-                        <div class="category-box">
-                            <h4>🔽 SUBMÚLTIPLOS</h4>
-                            <div class="drop-zone" data-accept="submultiplos"></div>
+
+                    <div class="question" data-question-id="2">
+                        <div class="question-text">2. Para pasar de una unidad <strong>más grande</strong> a otra <strong>más pequeña</strong> (bajar la escalera), ¿qué operación hacemos?</div>
+                        <div class="options" data-correct="✖️ Multiplicar">
+                            <div class="option">➕ Sumar</div>
+                            <div class="option">➖ Restar</div>
+                            <div class="option">✖️ Multiplicar</div>
+                            <div class="option">➗ Dividir</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- PREGUNTAS DE RESPUESTA NUMÉRICA -->
-                <div class="question" data-question-id="13">
-                    <div class="question-text">13. Convierte a metros: 7 km = ? m</div>
-                    <input type="number" class="numeric-input" data-answer="7000"> m
-                </div>
-
-                <div class="question" data-question-id="14">
-                    <div class="question-text">14. Convierte a metros: 300 cm = ? m</div>
-                    <input type="number" class="numeric-input" data-answer="3"> m
-                </div>
-
-                <div class="question" data-question-id="15">
-                    <div class="question-text">15. Convierte a metros: 5 dam = ? m</div>
-                    <input type="number" class="numeric-input" data-answer="50"> m
-                </div>
-
-                <div class="question" data-question-id="16">
-                    <div class="question-text">16. Convierte a milímetros: 2 m = ? mm</div>
-                    <input type="number" class="numeric-input" data-answer="2000"> mm
-                </div>
-
-                <div class="question" data-question-id="17">
-                    <div class="question-text">17. Calcula la suma en metros: 1 km + 500 m = ? m</div>
-                    <input type="number" class="numeric-input" data-answer="1500"> m
-                </div>
-
-                <div class="question" data-question-id="18">
-                    <div class="question-text">18. Calcula la resta en centímetros: 2 m - 50 cm = ? cm</div>
-                    <input type="number" class="numeric-input" data-answer="150"> cm
-                </div>
-
-                <div class="question" data-question-id="19">
-                    <div class="question-text">19. Un atleta corre 9 km y 500 m. Si ya ha recorrido 600 dam, ¿cuántos <strong>metros</strong> le faltan?</div>
-                    <input type="number" class="numeric-input" data-answer="3500"> m
-                </div>
-
-                <div class="question" data-question-id="20">
-                    <div class="question-text">20. ¿Cuántos trozos de 5 cm se pueden hacer con un alambre de 3 metros?</div>
-                    <input type="number" class="numeric-input" data-answer="60"> trozos
-                </div>
-
-                <!-- PREGUNTA DE ORDENAR PASOS -->
-                <div class="question" data-question-id="21">
-                    <div class="question-text">21. Ordena los pasos para <strong>comparar</strong> correctamente las longitudes "2 km" y "1.500 m". (3 Puntos)</div>
-                    <div class="drop-zone" data-answer="1. Convertir todo a la misma unidad (ej: metros). 2. Comparar los números obtenidos. 3. Indicar cuál es mayor o si son iguales."></div>
-                    <div class="word-bank">
-                        <div class="word" draggable="true">2. Comparar los números obtenidos.</div>
-                        <div class="word" draggable="true">3. Indicar cuál es mayor o si son iguales.</div>
-                        <div class="word" draggable="true">1. Convertir todo a la misma unidad (ej: metros).</div>
+                    <div class="question" data-question-id="3">
+                        <div class="question-text">3. ¿Cuántos <strong>metros</strong> hay en 1 kilómetro?</div>
+                        <div class="options" data-correct="🛣️ 1.000 metros">
+                            <div class="option">🛣️ 10 metros</div>
+                            <div class="option">🛣️ 100 metros</div>
+                            <div class="option">🛣️ 1.000 metros</div>
+                            <div class="option">🛣️ 10.000 metros</div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- PREGUNTA DE ARRASTRAR Y SOLTAR EN TEXTO (CLOZE) -->
-                <div class="question" data-question-id="22">
-                    <div class="question-text">22. Completa el texto arrastrando la unidad de medida más adecuada para cada caso. (3 Puntos)</div>
-                    <div class="word-bank">
-                        <div class="word" draggable="true">kilómetros</div>
-                        <div class="word" draggable="true">centímetros</div>
-                        <div class="word" draggable="true">milímetros</div>
+                    
+                    <div class="question" data-question-id="4">
+                        <div class="question-text">4. La expresión "5 km y 300 m" es una forma...</div>
+                        <div class="options" data-correct="🧩 Compleja">
+                            <div class="option">🧩 Compleja</div>
+                            <div class="option">🧩 Simple</div>
+                            <div class="option">🧩 Incorrecta</div>
+                            <div class="option">🧩 Múltiple</div>
+                        </div>
                     </div>
-                    <div class="cloze-text">
-                        La distancia entre dos ciudades 🏙️ se mide en <span class="drop-zone-inline" data-answer="kilómetros"></span>. 
-                        La longitud de un lápiz ✏️ se suele medir en <span class="drop-zone-inline" data-answer="centímetros"></span>. 
-                        El grosor de una moneda 🪙 se mide en <span class="drop-zone-inline" data-answer="milímetros"></span>.
+
+                    <div class="question" data-question-id="5">
+                        <div class="question-text">5. ¿Cuál es la unidad principal de longitud?</div>
+                        <div class="options" data-correct="👑 El metro (m)">
+                            <div class="option">👑 El gramo (g)</div>
+                            <div class="option">👑 El litro (l)</div>
+                            <div class="option">👑 El metro (m)</div>
+                            <div class="option">👑 El segundo (s)</div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- MÁS PREGUNTAS VARIADAS -->
-                <div class="question" data-question-id="23">
-                    <div class="question-text">23. ¿Cuál de estas longitudes es la <strong>mayor</strong>?</div>
-                    <div class="options" data-correct="2 km">
-                        <div class="option">📏 2.000 cm</div>
-                        <div class="option">📏 20 m</div>
-                        <div class="option">📏 2 km</div>
-                        <div class="option">📏 20.000 mm</div>
+                    <!-- PREGUNTAS DE VERDADERO O FALSO -->
+                    <div class="question" data-question-id="6">
+                        <div class="question-text">6. <strong>Verdadero o Falso:</strong> Para subir la escalera métrica (pasar de una unidad pequeña a una grande) multiplicamos.</div>
+                        <div class="options" data-correct="👎 Falso">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question" data-question-id="24">
-                    <div class="question-text">24. Si doy 10 vueltas a una pista de 400 metros, ¿cuántos <strong>kilómetros</strong> he recorrido?</div>
-                    <div class="options" data-correct="4 km">
-                        <div class="option">🏃 40 km</div>
-                        <div class="option">🏃 4 km</div>
-                        <div class="option">🏃 400 km</div>
-                        <div class="option">🏃 0.4 km</div>
+                    <div class="question" data-question-id="7">
+                        <div class="question-text">7. <strong>Verdadero o Falso:</strong> Un milímetro es más pequeño que un centímetro.</div>
+                        <div class="options" data-correct="👍 Verdadero">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question" data-question-id="25">
-                    <div class="question-text">25. Expresa 4.810 m en forma compleja (km y m).</div>
-                    <div class="options" data-correct="4 km y 810 m">
-                        <div class="option">⛰️ 48 km y 10 m</div>
-                        <div class="option">⛰️ 4 km y 81 m</div>
-                        <div class="option">⛰️ 481 km y 0 m</div>
-                        <div class="option">⛰️ 4 km y 810 m</div>
+                    <div class="question" data-question-id="8">
+                        <div class="question-text">8. <strong>Verdadero o Falso:</strong> Para comparar dos longitudes, primero debemos pasarlas a la misma unidad.</div>
+                        <div class="options" data-correct="👍 Verdadero">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="question" data-question-id="26">
-                    <div class="question-text">26. ¿Cuántos decímetros le faltan a 80 cm para medir 1 metro?</div>
-                     <div class="options" data-correct="2 dm">
-                        <div class="option">📐 1 dm</div>
-                        <div class="option">📐 2 dm</div>
-                        <div class="option">📐 20 dm</div>
-                        <div class="option">📐 8 dm</div>
+                    
+                    <div class="question" data-question-id="9">
+                        <div class="question-text">9. <strong>Verdadero o Falso:</strong> La distancia entre Madrid y Barcelona se mide en centímetros.</div>
+                        <div class="options" data-correct="👎 Falso">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question" data-question-id="27">
-                    <div class="question-text">27. <strong>Verdadero o Falso:</strong> 6 km 7 hm 2 m es lo mismo que 6.702 m.</div>
-                    <div class="options" data-correct="Verdadero">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
+                    <div class="question" data-question-id="10">
+                        <div class="question-text">10. <strong>Verdadero o Falso:</strong> 2500 metros es lo mismo que 2 km y 500 m.</div>
+                        <div class="options" data-correct="👍 Verdadero">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question" data-question-id="28">
-                    <div class="question-text">28. ¿Cuál es el resultado de 5 m 8 cm + 7 m 7 cm?</div>
-                     <div class="options" data-correct="12 m y 15 cm">
-                        <div class="option">➕ 12 m y 15 cm</div>
-                        <div class="option">➕ 12 m y 58 cm</div>
-                        <div class="option">➕ 13 m y 5 cm</div>
-                        <div class="option">➕ 1.215 m</div>
+                    <!-- PREGUNTA DE EMPAREJAR -->
+                    <div class="question matching-question" data-question-id="11">
+                        <div class="question-text">11. Empareja cada unidad con su equivalencia correcta. (5 Puntos)</div>
+                        <div class="matching-container">
+                            <div class="column" id="column-a-11">
+                                <div class="match-item" data-match-id="1">📍 1 km</div>
+                                <div class="match-item" data-match-id="2">📍 1 m</div>
+                                <div class="match-item" data-match-id="3">📍 1 dam</div>
+                                <div class="match-item" data-match-id="4">📍 1 hm</div>
+                                <div class="match-item" data-match-id="5">📍 1 cm</div>
+                            </div>
+                            <div class="column" id="column-b-11">
+                                <div class="match-item" data-match-id="4">➡️ 100 m</div>
+                                <div class="match-item" data-match-id="1">➡️ 1.000 m</div>
+                                <div class="match-item" data-match-id="5">➡️ 10 mm</div>
+                                <div class="match-item" data-match-id="2">➡️ 100 cm</div>
+                                <div class="match-item" data-match-id="3">➡️ 10 m</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="question" data-question-id="29">
-                    <div class="question-text">29. Un coche recorre 32 km. ¿Cuántos metros son la <strong>mitad</strong> de esa distancia?</div>
-                    <input type="number" class="numeric-input" data-answer="16000"> m
-                </div>
-
-                <div class="question" data-question-id="30">
-                    <div class="question-text">30. Si una tirolina mide 4 Dam, ¿cuántos <strong>metros</strong> se recorren al usarla 3 veces?</div>
-                    <input type="number" class="numeric-input" data-answer="120"> m
-                </div>
-                
-                <div class="question" data-question-id="31">
-                    <div class="question-text">31. ¿Cuál es el resultado de 4 km 600 m - 2 km 800 m?</div>
-                     <div class="options" data-correct="1 km y 800 m">
-                        <div class="option">➖ 2 km y 200 m</div>
-                        <div class="option">➖ 1 km y 800 m</div>
-                        <div class="option">➖ 2 km y 800 m</div>
-                        <div class="option">➖ 1.200 m</div>
+                    
+                    <!-- PREGUNTA DE CLASIFICAR -->
+                    <div class="question" data-question-id="12">
+                        <div class="question-text">12. Arrastra cada unidad a su categoría correcta: <strong>Múltiplos</strong> (más grandes que el metro) o <strong>Submúltiplos</strong> (más pequeños que el metro). (6 Puntos)</div>
+                        <div class="word-bank">
+                            <div class="word" draggable="true" data-type="multiplos">Kilómetro</div>
+                            <div class="word" draggable="true" data-type="submultiplos">Centímetro</div>
+                            <div class="word" draggable="true" data-type="multiplos">Hectómetro</div>
+                            <div class="word" draggable="true" data-type="submultiplos">Milímetro</div>
+                            <div class="word" draggable="true" data-type="multiplos">Decámetro</div>
+                            <div class="word" draggable="true" data-type="submultiplos">Decímetro</div>
+                        </div>
+                        <div class="category-container">
+                            <div class="category-box">
+                                <h4>🔼 MÚLTIPLOS</h4>
+                                <div class="drop-zone" data-accept="multiplos"></div>
+                            </div>
+                            <div class="category-box">
+                                <h4>🔽 SUBMÚLTIPLOS</h4>
+                                <div class="drop-zone" data-accept="submultiplos"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="question" data-question-id="32">
-                    <div class="question-text">32. ¿Qué es más largo, 1 m 5 dm ó 132 cm?</div>
-                     <div class="options" data-correct="1 m 5 dm">
-                        <div class="option">📏 1 m 5 dm</div>
-                        <div class="option">📏 132 cm</div>
-                        <div class="option">📏 Miden lo mismo</div>
+                    <!-- PREGUNTAS DE RESPUESTA NUMÉRICA -->
+                    <div class="question" data-question-id="13">
+                        <div class="question-text">13. Convierte a metros: 7 km = ? m</div>
+                        <input type="number" class="numeric-input" data-answer="7000"> m
                     </div>
-                </div>
 
-                <div class="question" data-question-id="33">
-                    <div class="question-text">33. <strong>Verdadero o Falso:</strong> 1 km es igual a 100 dam.</div>
-                    <div class="options" data-correct="Verdadero">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
+                    <div class="question" data-question-id="14">
+                        <div class="question-text">14. Convierte a metros: 300 cm = ? m</div>
+                        <input type="number" class="numeric-input" data-answer="3"> m
                     </div>
-                </div>
 
-                <div class="question" data-question-id="34">
-                    <div class="question-text">34. Un lado de un cuadrado mide 8 m y 75 cm. ¿Cuántos <strong>metros</strong> mide su perímetro (la suma de sus 4 lados)?</div>
-                    <input type="number" class="numeric-input" data-answer="35"> m
-                </div>
-
-                <div class="question" data-question-id="35">
-                    <div class="question-text">35. ¿Cuál de estas unidades NO pertenece a las medidas de longitud?</div>
-                    <div class="options" data-correct="El gramo">
-                        <div class="option">❌ El metro</div>
-                        <div class="option">❌ El kilómetro</div>
-                        <div class="option">❌ El gramo</div>
-                        <div class="option">❌ El milímetro</div>
+                    <div class="question" data-question-id="15">
+                        <div class="question-text">15. Convierte a metros: 5 dam = ? m</div>
+                        <input type="number" class="numeric-input" data-answer="50"> m
                     </div>
-                </div>
-                
-                <div class="question" data-question-id="36">
-                    <div class="question-text">36. Pasa 54 dm y 6 cm a <strong>milímetros</strong>.</div>
-                     <div class="options" data-correct="5460 mm">
-                        <div class="option">➡️ 546 mm</div>
-                        <div class="option">➡️ 600 mm</div>
-                        <div class="option">➡️ 5460 mm</div>
-                        <div class="option">➡️ 5406 mm</div>
+
+                    <div class="question" data-question-id="16">
+                        <div class="question-text">16. Convierte a milímetros: 2 m = ? mm</div>
+                        <input type="number" class="numeric-input" data-answer="2000"> mm
                     </div>
-                </div>
 
-                <div class="question" data-question-id="37">
-                    <div class="question-text">37. Fernando mide 1 m y 46 cm. Carlos mide 162 cm. ¿Cuál es la diferencia de altura en <strong>centímetros</strong>?</div>
-                    <input type="number" class="numeric-input" data-answer="16"> cm
-                </div>
-                
-                <div class="question" data-question-id="38">
-                    <div class="question-text">38. <strong>Verdadero o Falso:</strong> 800 cm es igual a 80 m.</div>
-                    <div class="options" data-correct="Falso">
-                        <div class="option">👍 Verdadero</div>
-                        <div class="option">👎 Falso</div>
+                    <div class="question" data-question-id="17">
+                        <div class="question-text">17. Calcula la suma en metros: 1 km + 500 m = ? m</div>
+                        <input type="number" class="numeric-input" data-answer="1500"> m
                     </div>
+
+                    <div class="question" data-question-id="18">
+                        <div class="question-text">18. Calcula la resta en centímetros: 2 m - 50 cm = ? cm</div>
+                        <input type="number" class="numeric-input" data-answer="150"> cm
+                    </div>
+
+                    <div class="question" data-question-id="19">
+                        <div class="question-text">19. Un atleta corre 9 km y 500 m. Si ya ha recorrido 600 dam, ¿cuántos <strong>metros</strong> le faltan?</div>
+                        <input type="number" class="numeric-input" data-answer="3500"> m
+                    </div>
+
+                    <div class="question" data-question-id="20">
+                        <div class="question-text">20. ¿Cuántos trozos de 5 cm se pueden hacer con un alambre de 3 metros?</div>
+                        <input type="number" class="numeric-input" data-answer="60"> trozos
+                    </div>
+
+                    <!-- PREGUNTA DE ORDENAR PASOS -->
+                    <div class="question" data-question-id="21">
+                        <div class="question-text">21. Ordena los pasos para <strong>comparar</strong> correctamente las longitudes "2 km" y "1.500 m". (3 Puntos)</div>
+                        <div class="drop-zone" data-answer="1. Convertir todo a la misma unidad (ej: metros). 2. Comparar los números obtenidos. 3. Indicar cuál es mayor o si son iguales."></div>
+                        <div class="word-bank">
+                            <div class="word" draggable="true">2. Comparar los números obtenidos.</div>
+                            <div class="word" draggable="true">3. Indicar cuál es mayor o si son iguales.</div>
+                            <div class="word" draggable="true">1. Convertir todo a la misma unidad (ej: metros).</div>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTA DE ARRASTRAR Y SOLTAR EN TEXTO (CLOZE) -->
+                    <div class="question" data-question-id="22">
+                        <div class="question-text">22. Completa el texto arrastrando la unidad de medida más adecuada para cada caso. (3 Puntos)</div>
+                        <div class="word-bank">
+                            <div class="word" draggable="true">kilómetros</div>
+                            <div class="word" draggable="true">centímetros</div>
+                            <div class="word" draggable="true">milímetros</div>
+                        </div>
+                        <div class="cloze-text">
+                            La distancia entre dos ciudades 🏙️ se mide en <span class="drop-zone-inline" data-answer="kilómetros"></span>. 
+                            La longitud de un lápiz ✏️ se suele medir en <span class="drop-zone-inline" data-answer="centímetros"></span>. 
+                            El grosor de una moneda 🪙 se mide en <span class="drop-zone-inline" data-answer="milímetros"></span>.
+                        </div>
+                    </div>
+
+                    <!-- MÁS PREGUNTAS VARIADAS -->
+                    <div class="question" data-question-id="23">
+                        <div class="question-text">23. ¿Cuál de estas longitudes es la <strong>mayor</strong>?</div>
+                        <div class="options" data-correct="📏 2 km">
+                            <div class="option">📏 2.000 cm</div>
+                            <div class="option">📏 20 m</div>
+                            <div class="option">📏 2 km</div>
+                            <div class="option">📏 20.000 mm</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="24">
+                        <div class="question-text">24. Si doy 10 vueltas a una pista de 400 metros, ¿cuántos <strong>kilómetros</strong> he recorrido?</div>
+                        <div class="options" data-correct="🏃 4 km">
+                            <div class="option">🏃 40 km</div>
+                            <div class="option">🏃 4 km</div>
+                            <div class="option">🏃 400 km</div>
+                            <div class="option">🏃 0.4 km</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="25">
+                        <div class="question-text">25. Expresa 4.810 m en forma compleja (km y m).</div>
+                        <div class="options" data-correct="⛰️ 4 km y 810 m">
+                            <div class="option">⛰️ 48 km y 10 m</div>
+                            <div class="option">⛰️ 4 km y 81 m</div>
+                            <div class="option">⛰️ 481 km y 0 m</div>
+                            <div class="option">⛰️ 4 km y 810 m</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question" data-question-id="26">
+                        <div class="question-text">26. ¿Cuántos decímetros le faltan a 80 cm para medir 1 metro?</div>
+                        <div class="options" data-correct="📐 2 dm">
+                            <div class="option">📐 1 dm</div>
+                            <div class="option">📐 2 dm</div>
+                            <div class="option">📐 20 dm</div>
+                            <div class="option">📐 8 dm</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="27">
+                        <div class="question-text">27. <strong>Verdadero o Falso:</strong> 6 km 7 hm 2 m es lo mismo que 6.702 m.</div>
+                        <div class="options" data-correct="👍 Verdadero">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="28">
+                        <div class="question-text">28. ¿Cuál es el resultado de 5 m 8 cm + 7 m 7 cm?</div>
+                        <div class="options" data-correct="➕ 12 m y 15 cm">
+                            <div class="option">➕ 12 m y 15 cm</div>
+                            <div class="option">➕ 12 m y 58 cm</div>
+                            <div class="option">➕ 13 m y 5 cm</div>
+                            <div class="option">➕ 1.215 m</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="29">
+                        <div class="question-text">29. Un coche recorre 32 km. ¿Cuántos metros son la <strong>mitad</strong> de esa distancia?</div>
+                        <input type="number" class="numeric-input" data-answer="16000"> m
+                    </div>
+
+                    <div class="question" data-question-id="30">
+                        <div class="question-text">30. Si una tirolina mide 4 Dam, ¿cuántos <strong>metros</strong> se recorren al usarla 3 veces?</div>
+                        <input type="number" class="numeric-input" data-answer="120"> m
+                    </div>
+                    
+                    <div class="question" data-question-id="31">
+                        <div class="question-text">31. ¿Cuál es el resultado de 4 km 600 m - 2 km 800 m?</div>
+                        <div class="options" data-correct="➖ 1 km y 800 m">
+                            <div class="option">➖ 2 km y 200 m</div>
+                            <div class="option">➖ 1 km y 800 m</div>
+                            <div class="option">➖ 2 km y 800 m</div>
+                            <div class="option">➖ 1.200 m</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="32">
+                        <div class="question-text">32. ¿Qué es más largo, 1 m 5 dm ó 132 cm?</div>
+                        <div class="options" data-correct="📏 1 m 5 dm">
+                            <div class="option">📏 1 m 5 dm</div>
+                            <div class="option">📏 132 cm</div>
+                            <div class="option">📏 Miden lo mismo</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="33">
+                        <div class="question-text">33. <strong>Verdadero o Falso:</strong> 1 km es igual a 100 dam.</div>
+                        <div class="options" data-correct="👍 Verdadero">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="34">
+                        <div class="question-text">34. Un lado de un cuadrado mide 8 m y 75 cm. ¿Cuántos <strong>metros</strong> mide su perímetro (la suma de sus 4 lados)?</div>
+                        <input type="number" class="numeric-input" data-answer="35"> m
+                    </div>
+
+                    <div class="question" data-question-id="35">
+                        <div class="question-text">35. ¿Cuál de estas unidades NO pertenece a las medidas de longitud?</div>
+                        <div class="options" data-correct="❌ El gramo">
+                            <div class="option">❌ El metro</div>
+                            <div class="option">❌ El kilómetro</div>
+                            <div class="option">❌ El gramo</div>
+                            <div class="option">❌ El milímetro</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question" data-question-id="36">
+                        <div class="question-text">36. Pasa 54 dm y 6 cm a <strong>milímetros</strong>.</div>
+                        <div class="options" data-correct="➡️ 5460 mm">
+                            <div class="option">➡️ 546 mm</div>
+                            <div class="option">➡️ 600 mm</div>
+                            <div class="option">➡️ 5460 mm</div>
+                            <div class="option">➡️ 5406 mm</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="37">
+                        <div class="question-text">37. Fernando mide 1 m y 46 cm. Carlos mide 162 cm. ¿Cuál es la diferencia de altura en <strong>centímetros</strong>?</div>
+                        <input type="number" class="numeric-input" data-answer="16"> cm
+                    </div>
+                    
+                    <div class="question" data-question-id="38">
+                        <div class="question-text">38. <strong>Verdadero o Falso:</strong> 800 cm es igual a 80 m.</div>
+                        <div class="options" data-correct="👎 Falso">
+                            <div class="option">👍 Verdadero</div>
+                            <div class="option">👎 Falso</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question-id="39">
+                        <div class="question-text">39. ¿Cuántos <strong>metros</strong> son 2 kilómetros y medio?</div>
+                        <input type="number" class="numeric-input" data-answer="2500"> m
+                    </div>
+
+                    <div class="question" data-question-id="40">
+                        <div class="question-text">40. Si de un rollo de 12 metros corto cintas de 3 decímetros, ¿cuántas cintas puedo hacer?</div>
+                        <input type="number" class="numeric-input" data-answer="40"> cintas
+                    </div>
+
+
+                </form>
+                <button type="submit" form="quiz-form" class="submit-btn">¡Terminar y Corregir!</button>
+                <div class="results" id="results-container">
+                    <h2 class="results-title" id="results-title">Tus Resultados</h2>
+                    <p class="score" id="score-text">Puntuación: 0 / 40</p>
+                    <p class="feedback-message" id="feedback-message">¡Haz clic en corregir para ver tu nota!</p>
                 </div>
-
-                <div class="question" data-question-id="39">
-                    <div class="question-text">39. ¿Cuántos <strong>metros</strong> son 2 kilómetros y medio?</div>
-                    <input type="number" class="numeric-input" data-answer="2500"> m
-                </div>
-
-                <div class="question" data-question-id="40">
-                    <div class="question-text">40. Si de un rollo de 12 metros corto cintas de 3 decímetros, ¿cuántas cintas puedo hacer?</div>
-                    <input type="number" class="numeric-input" data-answer="40"> cintas
-                </div>
-
-
-            </form>
-            <button type="submit" form="quiz-form" class="submit-btn">¡Terminar y Corregir!</button>
-            <div class="results" id="results-container">
-                <h2 class="results-title" id="results-title">Tus Resultados</h2>
-                <p class="score" id="score-text">Puntuación: 0 / 40</p>
-                <p class="feedback-message" id="feedback-message">¡Haz clic en corregir para ver tu nota!</p>
             </div>
         </div>
-    </div>
+    </main>
+    
+    <!-- El footer ahora está fuera del main, al final del body -->
     <footer class="main-footer">
         <a href="index.html">🔙 Volver al menú de materias</a>
     </footer>
@@ -700,23 +727,21 @@
             const resultsContainer = document.getElementById('results-container');
             const scoreText = document.getElementById('score-text');
             const feedbackMessage = document.getElementById('feedback-message');
-            const TOTAL_QUESTIONS = 40; // Total de puntos posibles
+            const submitBtn = document.querySelector('.submit-btn');
+            
+            // He corregido el total de puntos para que coincida con la puntuación asignada
+            const TOTAL_POINTS = 50; 
 
             // --- Lógica para preguntas de opción ---
             const optionQuestions = document.querySelectorAll('.options');
             optionQuestions.forEach(optionsContainer => {
                 const options = optionsContainer.querySelectorAll('.option');
-                const isMultipleChoice = optionsContainer.classList.contains('multiple-choice');
-                
                 options.forEach(option => {
                     option.addEventListener('click', () => {
-                        if (isMultipleChoice) {
-                            option.classList.toggle('selected');
-                        } else {
-                            // Deseleccionar la opción hermana que estuviera seleccionada
-                            options.forEach(opt => opt.classList.remove('selected'));
-                            option.classList.add('selected');
-                        }
+                        if (submitBtn.disabled) return; // No permitir cambios después de corregir
+                        // Deseleccionar la opción hermana que estuviera seleccionada
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
                     });
                 });
             });
@@ -726,20 +751,33 @@
 
             document.querySelectorAll('.word[draggable="true"]').forEach(item => {
                 item.addEventListener('dragstart', (e) => {
+                    if (submitBtn.disabled) return;
                     draggedItem = e.target;
-                    setTimeout(() => e.target.style.display = 'none', 0);
+                    setTimeout(() => e.target.style.opacity = '0.5', 0);
                 });
 
                 item.addEventListener('dragend', (e) => {
                     setTimeout(() => {
-                        draggedItem.style.display = 'flex';
+                        e.target.style.opacity = '1';
                         draggedItem = null;
                     }, 0);
+                });
+            });
+            
+            // Permitir devolver las palabras al banco
+            document.querySelectorAll('.word-bank').forEach(bank => {
+                bank.addEventListener('dragover', (e) => e.preventDefault());
+                bank.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    if (draggedItem && !bank.contains(draggedItem)) {
+                         bank.appendChild(draggedItem);
+                    }
                 });
             });
 
             document.querySelectorAll('.drop-zone, .drop-zone-inline').forEach(zone => {
                 zone.addEventListener('dragover', (e) => {
+                    if (submitBtn.disabled) return;
                     e.preventDefault();
                     zone.classList.add('over');
                 });
@@ -749,11 +787,15 @@
                 });
 
                 zone.addEventListener('drop', (e) => {
+                    if (submitBtn.disabled) return;
                     e.preventDefault();
                     zone.classList.remove('over');
                     if (draggedItem) {
-                        // Si el drop-zone es para ordenar, no se pueden duplicar
-                        if(zone.contains(draggedItem)) return;
+                        // Para zonas de una sola palabra, reemplazar la existente
+                        if (zone.classList.contains('drop-zone-inline') && zone.children.length > 0) {
+                            const wordBank = zone.closest('.question').querySelector('.word-bank');
+                            wordBank.appendChild(zone.children[0]);
+                        }
                         zone.appendChild(draggedItem);
                     }
                 });
@@ -762,13 +804,10 @@
             // --- Lógica para Emparejar Columnas ---
             document.querySelectorAll('.matching-question').forEach(question => {
                 let selectedItem = null;
-                const columns = question.querySelectorAll('.column');
-                const columnA = columns[0];
-                const columnB = columns[1];
 
                 question.querySelectorAll('.match-item').forEach(item => {
                     item.addEventListener('click', () => {
-                        if (item.classList.contains('paired')) return;
+                        if (submitBtn.disabled || item.classList.contains('paired')) return;
 
                         if (!selectedItem) {
                             // Primer clic
@@ -784,7 +823,7 @@
                                 item.classList.add('selected');
                             } else {
                                 // Clic en la otra columna, se forma el par
-                                const pairId = `pair-${selectedItem.dataset.matchId}-${item.dataset.matchId}`;
+                                const pairId = `pair-${selectedItem.dataset.matchId}`;
                                 selectedItem.dataset.pair = pairId;
                                 item.dataset.pair = pairId;
                                 
@@ -805,58 +844,72 @@
                 e.preventDefault();
                 let score = 0;
 
-                // 1. Corregir preguntas de opción única y V/F
-                document.querySelectorAll('.options:not(.multiple-choice)').forEach(q => {
+                // 1. Corregir preguntas de opción única y V/F (1 punto cada una)
+                document.querySelectorAll('.options').forEach(q => {
                     const selected = q.querySelector('.option.selected');
+                    const correctAnswerText = q.dataset.correct.trim();
+                    
+                    // Marcar la respuesta correcta aunque no se haya seleccionado
+                    q.querySelectorAll('.option').forEach(opt => {
+                        if(opt.textContent.trim() === correctAnswerText) {
+                            opt.classList.add('correct');
+                        }
+                    });
+
                     if (selected) {
-                        const isCorrect = selected.textContent.trim() === q.dataset.correct.trim();
-                        if (isCorrect) score++;
-                        selected.classList.add(isCorrect ? 'correct' : 'incorrect');
+                        const isCorrect = selected.textContent.trim() === correctAnswerText;
+                        if (isCorrect) {
+                            score++;
+                        } else {
+                            selected.classList.add('incorrect');
+                        }
                     }
                 });
                 
-                // 2. Corregir preguntas de respuesta numérica
+                // 2. Corregir preguntas de respuesta numérica (1 punto cada una)
                 document.querySelectorAll('.numeric-input').forEach(input => {
                     const isCorrect = input.value.trim() === input.dataset.answer;
-                    if (isCorrect) score++;
-                    input.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    if (isCorrect) {
+                        score++;
+                        input.classList.add('correct');
+                    } else {
+                        input.classList.add('incorrect');
+                    }
+                    input.disabled = true;
                 });
 
-                // 3. Corregir pregunta de ordenar pasos
+                // 3. Corregir pregunta de ordenar pasos (3 puntos si es perfecta)
                 document.querySelectorAll('.question[data-question-id="21"]').forEach(q => {
                     const dropZone = q.querySelector('.drop-zone');
                     const words = Array.from(dropZone.querySelectorAll('.word')).map(w => w.textContent.trim());
                     const isCorrect = words.join(' ') === dropZone.dataset.answer;
-                    if(isCorrect) score += 3; // 3 puntos para esta pregunta
+                    if(isCorrect) score += 3;
                     dropZone.classList.add(isCorrect ? 'correct' : 'incorrect');
                 });
 
-                // 4. Corregir pregunta de clasificar
+                // 4. Corregir pregunta de clasificar (1 punto por cada acierto, total 6)
                 document.querySelectorAll('.question[data-question-id="12"]').forEach(q => {
-                    let correctWords = 0;
                     q.querySelectorAll('.drop-zone').forEach(zone => {
                         const acceptedType = zone.dataset.accept;
                         zone.querySelectorAll('.word').forEach(word => {
                             if(word.dataset.type === acceptedType) {
-                                correctWords++;
+                                score++;
                                 word.classList.add('correct');
                             } else {
                                 word.classList.add('incorrect');
                             }
                         });
                     });
-                    if (correctWords === 6) score += 6; // 6 puntos si todas son correctas
                 });
 
-                // 5. Corregir pregunta de emparejar
+                // 5. Corregir pregunta de emparejar (1 punto por cada par correcto, total 5)
                 document.querySelectorAll('.matching-question').forEach(q => {
-                    let correctPairs = 0;
                     const itemsA = q.querySelectorAll('#column-a-11 .match-item');
                     itemsA.forEach(itemA => {
                         if(itemA.dataset.pair) {
                             const pairedItemB = q.querySelector(`.match-item[data-pair="${itemA.dataset.pair}"]:not([data-match-id="${itemA.dataset.matchId}"])`);
                             if(pairedItemB && itemA.dataset.matchId === pairedItemB.dataset.matchId) {
-                                correctPairs++;
+                                score++;
                                 itemA.classList.add('correct');
                                 pairedItemB.classList.add('correct');
                             } else if (pairedItemB) {
@@ -865,27 +918,24 @@
                             }
                         }
                     });
-                     score += correctPairs;
                 });
 
-                // 6. Corregir pregunta Cloze (arrastrar a texto)
+                // 6. Corregir pregunta Cloze (1 punto por cada acierto, total 3)
                 document.querySelectorAll('.question[data-question-id="22"]').forEach(q => {
-                    let correctCloze = 0;
                     q.querySelectorAll('.drop-zone-inline').forEach(zone => {
                         const word = zone.querySelector('.word');
                         if (word && word.textContent.trim() === zone.dataset.answer) {
-                            correctCloze++;
+                            score++;
                             zone.classList.add('correct');
                         } else {
                             zone.classList.add('incorrect');
                         }
                     });
-                    if (correctCloze === 3) score += 3; // 3 puntos si todo el texto es correcto
                 });
 
                 // --- Mostrar resultados ---
-                const finalGrade = (score / TOTAL_QUESTIONS * 10).toFixed(2);
-                scoreText.textContent = `Puntuación: ${score} / ${TOTAL_QUESTIONS} (Nota: ${finalGrade} / 10)`;
+                const finalGrade = (score / TOTAL_POINTS * 10).toFixed(2);
+                scoreText.textContent = `Puntuación: ${score} / ${TOTAL_POINTS} (Nota: ${finalGrade} / 10)`;
 
                 let message = '';
                 if (finalGrade >= 9) {
@@ -902,11 +952,10 @@
                 resultsContainer.classList.add('show');
                 resultsContainer.scrollIntoView({ behavior: 'smooth' });
                 
-                // Deshabilitar el botón para no corregir de nuevo
-                e.target.disabled = true;
-                e.target.style.opacity = '0.7';
-                e.target.style.cursor = 'not-allowed';
-                e.target.textContent = 'Examen Corregido';
+                // Deshabilitar el formulario y el botón para no corregir de nuevo
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Examen Corregido';
+                document.querySelectorAll('.word[draggable="true"]').forEach(w => w.setAttribute('draggable', 'false'));
             });
         });
     </script>
