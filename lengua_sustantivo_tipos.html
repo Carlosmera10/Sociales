@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: El Sustantivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Generales */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f7ff; /* Un azul cielo muy claro */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Cabecera */
+        .main-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .main-header h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 3.5em;
+            color: #005a9c;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .main-header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        /* Tarjeta de Definición Principal */
+        .definition-card {
+            background: linear-gradient(135deg, #ffffff, #eef7ff);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            border: 1px solid #d0e8ff;
+        }
+
+        .definition-card h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2em;
+            color: #ff6b6b; /* Un color de acento vibrante */
+        }
+
+        /* Contenedor de las tarjetas de tipos */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* Estilo de cada tarjeta de tipo */
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid; /* CAMBIO: Acento de color en la parte superior */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Colores específicos para cada par de tarjetas */
+        .card.comun-propio { border-color: #4a90e2; } /* Azul */
+        .card.ind-col { border-color: #50e3c2; } /* Verde menta */
+        .card.con-abs { border-color: #f5a623; } /* Naranja */
+        .card.cont-incont { border-color: #9b59b6; } /* Morado */
+        .card.genero { border-color: #e91e63; } /* Rosa */
+        .card.numero { border-color: #009688; } /* Teal */
+
+
+        .card h3 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.6em;
+            margin-top: 0;
+            color: #333;
+        }
+
+        .card p {
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1; /* Hace que el párrafo ocupe el espacio disponible */
+        }
+        
+        /* Sección de ejemplos */
+        .examples {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: auto; /* Empuja los ejemplos al final de la tarjeta */
+        }
+
+        .examples h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            color: #555;
+            text-align: center;
+        }
+
+        .example-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .example-item span.icon {
+            font-size: 2.5em;
+            display: block;
+        }
+
+        .example-item span.text {
+            font-weight: 600;
+            color: #005a9c;
+        }
+
+        /* Pie de página */
+        .main-footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #005a9c;
+            border-radius: 15px;
+        }
+
+        .main-footer a {
+            font-family: 'Fredoka', sans-serif;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+
+        .main-footer a:hover {
+            color: #a7d8ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Título Principal -->
+        <header class="main-header">
+            <h1>📚 El Sustantivo ✏️</h1>
+            <p>¡Las palabras que usamos para nombrar el mundo!</p>
+        </header>
+
+        <!-- Definición General -->
+        <section class="definition-card">
+            <h2>¿Qué es un sustantivo?</h2>
+            <p>Es la palabra que usamos para nombrar a las <strong>personas, animales, lugares, cosas, ideas o sentimientos</strong>. ¡Están por todas partes y son súper importantes para hablar y escribir!</p>
+        </section>
+
+        <!-- Grid con los tipos de sustantivos -->
+        <main class="cards-grid">
+
+            <!-- Tarjeta: Común -->
+            <div class="card comun-propio">
+                <h3>Sustantivos Comunes</h3>
+                <p>Nombran a cualquier persona, animal o cosa de una misma clase, sin distinguirla del resto. Se escriben con minúscula.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">👧</span><span class="text">niña</span></div>
+                        <div class="example-item"><span class="icon">🏞️</span><span class="text">río</span></div>
+                        <div class="example-item"><span class="icon">🐶</span><span class="text">perro</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Propio -->
+            <div class="card comun-propio">
+                <h3>Sustantivos Propios</h3>
+                <p>Nombran a una persona, animal o cosa en particular para diferenciarla de las demás. ¡Siempre se escriben con mayúscula!</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">👧</span><span class="text">Laura</span></div>
+                        <div class="example-item"><span class="icon">🏞️</span><span class="text">Ebro</span></div>
+                        <div class="example-item"><span class="icon">🐶</span><span class="text">Toby</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Individual -->
+            <div class="card ind-col">
+                <h3>Sustantivos Individuales</h3>
+                <p>Nombran a un solo ser u objeto en singular. Aunque estén en plural, siguen nombrando cosas por separado.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">🐑</span><span class="text">oveja</span></div>
+                        <div class="example-item"><span class="icon">🌳</span><span class="text">árbol</span></div>
+                        <div class="example-item"><span class="icon">🐝</span><span class="text">abeja</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Colectivo -->
+            <div class="card ind-col">
+                <h3>Sustantivos Colectivos</h3>
+                <p>Nombran, en singular, a un conjunto de seres u objetos de la misma especie. ¡Una palabra para nombrar a un grupo!</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">🐑</span><span class="text">rebaño</span></div>
+                        <div class="example-item"><span class="icon">🌳</span><span class="text">arboleda</span></div>
+                        <div class="example-item"><span class="icon">🐝</span><span class="text">enjambre</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Concreto -->
+            <div class="card con-abs">
+                <h3>Sustantivos Concretos</h3>
+                <p>Nombran seres u objetos que podemos percibir con nuestros sentidos: los podemos ver, tocar, oír, oler...</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">🍎</span><span class="text">manzana</span></div>
+                        <div class="example-item"><span class="icon">🚲</span><span class="text">bicicleta</span></div>
+                        <div class="example-item"><span class="icon">🏠</span><span class="text">casa</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Abstracto -->
+            <div class="card con-abs">
+                <h3>Sustantivos Abstractos</h3>
+                <p>Nombran ideas, sentimientos o emociones que no podemos percibir con los sentidos. ¡No se pueden tocar, pero se pueden sentir!</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">❤️</span><span class="text">amor</span></div>
+                        <div class="example-item"><span class="icon">😊</span><span class="text">alegría</span></div>
+                        <div class="example-item"><span class="icon">💡</span><span class="text">idea</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta: Contable -->
+            <div class="card cont-incont">
+                <h3>Sustantivos Contables</h3>
+                <p>Son los que se pueden contar por unidades. Pueden estar en singular o en plural.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">📖</span><span class="text">un libro</span></div>
+                        <div class="example-item"><span class="icon">📖📖</span><span class="text">dos libros</span></div>
+                        <div class="example-item"><span class="icon">👦</span><span class="text">amigo</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Incontable -->
+            <div class="card cont-incont">
+                <h3>Sustantivos Incontables</h3>
+                <p>Son los que no se pueden contar por unidades, aunque sí se pueden medir o pesar.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">💧</span><span class="text">agua</span></div>
+                        <div class="example-item"><span class="icon">🍚</span><span class="text">arroz</span></div>
+                        <div class="example-item"><span class="icon">🎶</span><span class="text">música</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta: Masculino -->
+            <div class="card genero">
+                <h3>Sustantivos Masculinos</h3>
+                <p>Suelen llevar delante los artículos "el" o "los". Muchos acaban en -o.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">👦</span><span class="text">el niño</span></div>
+                        <div class="example-item"><span class="icon">🚗</span><span class="text">el coche</span></div>
+                        <div class="example-item"><span class="icon">🦁</span><span class="text">el león</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Femenino -->
+            <div class="card genero">
+                <h3>Sustantivos Femeninos</h3>
+                <p>Suelen llevar delante los artículos "la" o "las". Muchos acaban en -a.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">👧</span><span class="text">la niña</span></div>
+                        <div class="example-item"><span class="icon">🏠</span><span class="text">la casa</span></div>
+                        <div class="example-item"><span class="icon">🌸</span><span class="text">la flor</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Singular -->
+            <div class="card numero">
+                <h3>Sustantivos en Singular</h3>
+                <p>Se refieren a una sola persona, animal, lugar o cosa.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">🐈</span><span class="text">gato</span></div>
+                        <div class="example-item"><span class="icon">⭐</span><span class="text">estrella</span></div>
+                        <div class="example-item"><span class="icon">🎈</span><span class="text">globo</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Plural -->
+            <div class="card numero">
+                <h3>Sustantivos en Plural</h3>
+                <p>Se refieren a más de una persona, animal, lugar o cosa. Se suelen formar añadiendo -s o -es.</p>
+                <div class="examples">
+                    <h4>Ejemplos:</h4>
+                    <div class="example-items">
+                        <div class="example-item"><span class="icon">🐈🐈</span><span class="text">gatos</span></div>
+                        <div class="example-item"><span class="icon">⭐⭐⭐</span><span class="text">estrellas</span></div>
+                        <div class="example-item"><span class="icon">🎈🎈</span><span class="text">globos</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Pie de página -->
+        <footer class="main-footer">
+            <a href="#">🔙 Volver al menú de materias</a>
+        </footer>
+    </div>
+
+</body>
+</html>
