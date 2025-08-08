@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen: El Sujeto y el Predicado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Generales */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f8ff; /* Azul cielo muy claro */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        /* --- ESTILOS DE LA INFOGRAFÍA --- */
+        .main-title {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 10px;
+        }
+        .intro {
+            text-align: center;
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+        }
+        .structure-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .box {
+            flex: 1;
+            min-width: 300px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .box h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+            border-bottom: 2px solid;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .box p { font-size: 1em; line-height: 1.6; }
+        .subject-box { background-color: #eaf5ff; border: 2px solid #3498db; }
+        .subject-box h2 { color: #2980b9; border-color: #a9d6f5; }
+        .predicate-box { background-color: #e8f6f3; border: 2px solid #2ecc71; }
+        .predicate-box h2 { color: #27ae60; border-color: #a3e4d7; }
+        .example-section { margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-radius: 15px; }
+        .example-section h3 { text-align: center; font-size: 1.5em; color: #34495e; margin-bottom: 20px; }
+        .sentence-container { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); font-size: 1.4em; font-weight: 600; text-align: center; }
+        .subject-part { color: #2980b9; padding: 5px 10px; background-color: #eaf5ff; border-radius: 8px; margin-right: 10px; }
+        .predicate-part { color: #27ae60; padding: 5px 10px; background-color: #e8f6f3; border-radius: 8px; }
+        .verb { text-decoration: underline; font-weight: 700; }
+        .how-to-section { margin-top: 30px; text-align: center; }
+        .how-to-section .question-info { display: inline-block; padding: 10px 20px; background-color: #f39c12; color: white; border-radius: 20px; font-weight: 600; font-size: 1.2em; }
+        
+        /* --- ESTILOS DEL EXAMEN --- */
+        .content { padding-top: 20px; }
+        .question {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #34495e;
+        }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option {
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            border: 2px solid transparent;
+        }
+        .option:hover { background-color: #bdc3c7; }
+        .option.selected {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            border-color: #2980b9;
+            transform: scale(1.02);
+        }
+        /* Estilos para Drag and Drop */
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+        .word {
+            padding: 8px 15px;
+            background-color: #f39c12;
+            color: white;
+            border-radius: 20px;
+            cursor: grab;
+            transition: opacity 0.3s;
+        }
+        .word.dragging { opacity: 0.5; }
+        .drop-zone, .drop-zone-inline {
+            min-height: 50px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            background-color: #fff;
+        }
+        .drop-zone.drag-over { border-color: #3498db; background-color: #eaf5ff; }
+        .drop-zone-inline { display: inline-block; min-width: 100px; height: 30px; vertical-align: middle; }
+        .cloze-text { font-size: 1.2em; line-height: 2.5; }
+        /* Estilos para Emparejar */
+        .matching-container { display: flex; justify-content: space-between; gap: 20px; }
+        .column { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .match-item {
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .match-item.selected { background-color: #f1c40f; border-color: #f39c12; }
+        .match-item.paired { background-color: #95a5a6; color: white; cursor: not-allowed; opacity: 0.7; }
+        /* Estilos para clasificar */
+        .time-boxes { display: flex; gap: 20px; margin-top: 15px; }
+        .time-box { flex: 1; background-color: #f2f2f2; border-radius: 10px; padding: 15px; }
+        .time-box h4 { text-align: center; margin-top: 0; }
+        .subject-box .drop-zone { border-color: #3498db; }
+        .predicate-box .drop-zone { border-color: #2ecc71; }
+        /* Botón y Resultados */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            background-color: #2ecc71;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover { background-color: #27ae60; }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #eaf5ff;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+        }
+        .results h2 { color: #2980b9; }
+        .results p { font-size: 1.2em; }
+        #final-score { font-size: 2em; font-weight: bold; color: #e67e22; }
+        #feedback-message { font-style: italic; margin-top: 10px; }
+        /* Feedback visual */
+        .correct { border-color: #2ecc71 !important; background-color: #e8f6f3 !important; }
+        .incorrect { border-color: #e74c3c !important; background-color: #fdeded !important; }
+        .correct-answer-text { color: #27ae60; font-weight: bold; margin-left: 10px; }
+
+        .main-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            max-width: 900px;
+        }
+        .main-footer a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .main-footer a:hover { color: #f39c12; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- INFOGRAFÍA DE REPASO -->
+        <h1 class="main-title">El Sujeto y el Predicado ✏️</h1>
+        <div class="intro">
+            <p>¡Hola! Toda oración es como un equipo de dos. Siempre tiene una parte que nos dice <strong>DE QUIÉN</strong> se habla (el sujeto) y otra que nos cuenta <strong>QUÉ HACE</strong> (el predicado).</p>
+        </div>
+        <div class="structure-container">
+            <div class="box subject-box">
+                <h2>👤 El Sujeto</h2>
+                <p>Es la persona, animal o cosa que <strong>realiza la acción</strong> del verbo o de quien se dice algo.</p>
+                <p><strong>Pista:</strong> Siempre tiene una palabra muy importante llamada <strong>núcleo</strong>, que suele ser un nombre o un pronombre.</p>
+            </div>
+            <div class="box predicate-box">
+                <h2>🏃‍♂️ El Predicado</h2>
+                <p>Es todo lo que <strong>se dice del sujeto</strong>. Nos cuenta la acción que realiza.</p>
+                <p><strong>Pista:</strong> Su palabra más importante es siempre el <strong>verbo</strong>, ¡que es el motor de la oración!</p>
+            </div>
+        </div>
+        <div class="example-section">
+            <h3>Veámoslo con un ejemplo 🤔</h3>
+            <div class="sentence-container">
+                <div class="subject-part">El perro marrón</div>
+                <div class="predicate-part"><span class="verb">corre</span> por el parque.</div>
+            </div>
+            <div class="how-to-section">
+                <p>Para encontrarlos, ¡pregunta al verbo!</p>
+                <p class="question-info">¿Quién corre por el parque? 👉 El perro marrón (¡Ese es el Sujeto!)</p>
+                <p>Lo que queda, es el Predicado: 👉 corre por el parque.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- EXAMEN INTERACTIVO -->
+        <div class="header">
+            <h1>📝 Examen: Sujeto y Predicado</h1>
+            <p>¡Demuestra lo que has aprendido! Lee cada pregunta y elige la mejor respuesta.</p>
+        </div>
+        <div class="content">
+            <form id="quiz-form">
+
+                <!-- PREGUNTAS TIPO TEST -->
+                <div class="question" data-question-id="1">
+                    <div class="question-text">1. En la oración "La niña 👧 canta una canción", ¿cuál es el sujeto?</div>
+                    <div class="options" data-correct="La niña 👧">
+                        <div class="option">canta una canción</div>
+                        <div class="option">una canción</div>
+                        <div class="option">La niña 👧</div>
+                        <div class="option">canta</div>
+                    </div>
+                </div>
+
+                <div class="question" data-question-id="2">
+                    <div class="question-text">2. En la oración "Los pájaros 🐦 vuelan alto", ¿cuál es el predicado?</div>
+                    <div class="options" data-correct="vuelan alto">
+                        <div class="option">Los pájaros 🐦</div>
+                        <div class="option">alto</div>
+                        <div class="option">vuelan</div>
+                        <div class="option">vuelan alto</div>
+                    </div>
+                </div>
+
+                <div class="question" data-question-id="3">
+                    <div class="question-text">3. La palabra más importante del predicado es...</div>
+                    <div class="options" data-correct="El verbo 🏃‍♂️">
+                        <div class="option">El nombre 👤</div>
+                        <div class="option">El adjetivo ✨</div>
+                        <div class="option">El verbo 🏃‍♂️</div>
+                        <div class="option">El pronombre 🙋</div>
+                    </div>
+                </div>
+
+                <div class="question" data-question-id="4">
+                    <div class="question-text">4. Para encontrar el sujeto en una oración, le preguntamos al verbo...</div>
+                    <div class="options" data-correct="¿Quién o Quiénes? 🤔">
+                        <div class="option">¿Dónde? 🗺️</div>
+                        <div class="option">¿Cuándo? ⏰</div>
+                        <div class="option">¿Quién o Quiénes? 🤔</div>
+                        <div class="option">¿Por qué? ❓</div>
+                    </div>
+                </div>
+
+                <!-- PREGUNTAS VERDADERO/FALSO -->
+                <div class="question" data-question-id="5">
+                    <div class="question-text">5. ¿Verdadero o Falso? El predicado nos dice QUIÉN realiza la acción.</div>
+                    <div class="options" data-correct="Falso">
+                        <div class="option">Verdadero ✅</div>
+                        <div class="option">Falso ❌</div>
+                    </div>
+                </div>
+
+                <div class="question" data-question-id="6">
+                    <div class="question-text">6. ¿Verdadero o Falso? El núcleo (la palabra más importante) del sujeto suele ser un verbo.</div>
+                    <div class="options" data-correct="Falso">
+                        <div class="option">Verdadero ✅</div>
+                        <div class="option">Falso ❌</div>
+                    </div>
+                </div>
+                
+                <div class="question" data-question-id="7">
+                    <div class="question-text">7. ¿Verdadero o Falso? El verbo es la parte más importante del predicado.</div>
+                    <div class="options" data-correct="Verdadero">
+                        <div class="option">Verdadero ✅</div>
+                        <div class="option">Falso ❌</div>
+                    </div>
+                </div>
+
+                <!-- PREGUNTA DE EMPAREJAR -->
+                <div class="question matching-question" data-question-id="8">
+                    <div class="question-text">8. Empareja cada concepto 🧩 con su definición correcta. ¡Haz clic en uno de cada columna para unirlos!</div>
+                    <div class="matching-container">
+                        <div class="column" id="column-a-8">
+                            <div class="match-item" data-match-id="1">Sujeto 👤</div>
+                            <div class="match-item" data-match-id="2">Predicado 🏃‍♂️</div>
+                            <div class="match-item" data-match-id="3">Núcleo del Sujeto  핵심</div>
+                            <div class="match-item" data-match-id="4">Núcleo del Predicado ⚡</div>
+                        </div>
+                        <div class="column" id="column-b-8">
+                            <div class="match-item" data-match-id="4">El verbo de la oración.</div>
+                            <div class="match-item" data-match-id="1">Quien realiza la acción.</div>
+                            <div class="match-item" data-match-id="3">El nombre o pronombre más importante del sujeto.</div>
+                            <div class="match-item" data-match-id="2">Lo que se dice del sujeto.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PREGUNTA DE CLASIFICAR -->
+                <div class="question" data-question-id="9">
+                    <div class="question-text">9. Arrastra cada trozo a su caja correcta: ¿es Sujeto 👤 o Predicado 🏃‍♂️?</div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true" data-type="sujeto">La luna 🌙</div>
+                        <div class="word" draggable="true" data-type="predicado">come una manzana 🍎</div>
+                        <div class="word" draggable="true" data-type="sujeto">El valiente caballero 🤺</div>
+                        <div class="word" draggable="true" data-type="predicado">brilla en la noche ✨</div>
+                        <div class="word" draggable="true" data-type="sujeto">Mi hermano pequeño 👶</div>
+                        <div class="word" draggable="true" data-type="predicado">rescató a la princesa 👑</div>
+                    </div>
+                    <div class="time-boxes">
+                        <div class="time-box subject-box">
+                            <h4>👤 Sujeto</h4>
+                            <div class="drop-zone" data-accept="sujeto"></div>
+                        </div>
+                        <div class="time-box predicate-box">
+                            <h4>🏃‍♂️ Predicado</h4>
+                            <div class="drop-zone" data-accept="predicado"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PREGUNTAS RELLENAR HUECOS -->
+                <div class="question" data-question-id="10">
+                    <div class="question-text">10. La parte de la oración que nos dice quién o qué realiza la acción es el...</div>
+                    <div class="options" data-correct="sujeto 👤">
+                        <div class="option">verbo 🏃‍♂️</div>
+                        <div class="option">predicado 💬</div>
+                        <div class="option">sujeto 👤</div>
+                    </div>
+                </div>
+
+                <div class="question" data-question-id="11">
+                    <div class="question-text">11. La palabra más importante del predicado, que es el motor de la acción, es el...</div>
+                    <div class="options" data-correct="verbo 🏃‍♂️">
+                        <div class="option">verbo 🏃‍♂️</div>
+                        <div class="option">nombre 👤</div>
+                        <div class="option">artículo  artigo</div>
+                    </div>
+                </div>
+                
+                <!-- PREGUNTA ARRASTRAR A TEXTO -->
+                <div class="question" data-question-id="12">
+                    <div class="question-text">12. Completa la oración arrastrando las partes a su lugar correcto.</div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true">viven en la selva 🌳</div>
+                        <div class="word" draggable="true">Los leones 🦁</div>
+                    </div>
+                    <div class="cloze-text">
+                        <span class="drop-zone-inline" data-answer="Los leones 🦁"></span> <span class="drop-zone-inline" data-answer="viven en la selva 🌳"></span>.
+                    </div>
+                </div>
+
+                <!-- PREGUNTA ORDENAR PALABRAS -->
+                <div class="question" data-question-id="13">
+                    <div class="question-text">13. Ordena las palabras para formar una oración con sentido. ¡Arrástralas al recuadro!</div>
+                     <div class="drop-zone" data-answer="El sol ☀️ sale por la mañana."></div>
+                    <div class="word-bank">
+                        <div class="word" draggable="true">sale</div>
+                        <div class="word" draggable="true">por la mañana.</div>
+                        <div class="word" draggable="true">El sol ☀️</div>
+                    </div>
+                </div>
+
+            </form>
+            <button type="submit" form="quiz-form" class="submit-btn">¡Terminar y Corregir!</button>
+            <div class="results" id="results-container">
+                <h2>🎉 ¡Resultados! 🎉</h2>
+                <p>Has acertado <span id="correct-answers">0</span> de <span id="total-questions">13</span> preguntas.</p>
+                <p>Tu nota es: <span id="final-score">0</span> / 10</p>
+                <p id="feedback-message"></p>
+            </div>
+        </div>
+    </div>
+    <footer class="main-footer">
+        <a href="index.html">🔙 Volver al menú de materias</a>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('quiz-form');
+        const resultsContainer = document.getElementById('results-container');
+        const TOTAL_QUESTIONS = 13; // <-- TOTAL ACTUALIZADO
+
+        // --- LÓGICA PARA BARAJAR OPCIONES ---
+        function shuffleChildren(parent) {
+            let children = Array.from(parent.children);
+            parent.innerHTML = '';
+            while (children.length > 0) {
+                let randomIndex = Math.floor(Math.random() * children.length);
+                parent.appendChild(children.splice(randomIndex, 1)[0]);
+            }
+        }
+
+        document.querySelectorAll('.options, .word-bank, .column').forEach(container => {
+            if (!container.classList.contains('column')) {
+                 shuffleChildren(container);
+            }
+        });
+
+        // --- LÓGICA DE SELECCIÓN DE OPCIONES ---
+        form.addEventListener('click', (e) => {
+            if (e.target.classList.contains('option')) {
+                const optionsContainer = e.target.parentElement;
+                if (optionsContainer.classList.contains('multiple-choice')) {
+                    e.target.classList.toggle('selected');
+                } else {
+                    optionsContainer.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            }
+        });
+
+        // --- LÓGICA DE ARRASTRAR Y SOLTAR (DRAG & DROP) ---
+        let draggedItem = null;
+        form.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('word')) {
+                draggedItem = e.target;
+                setTimeout(() => e.target.classList.add('dragging'), 0);
+            }
+        });
+        form.addEventListener('dragend', (e) => {
+            if (draggedItem) {
+                draggedItem.classList.remove('dragging');
+                draggedItem = null;
+            }
+        });
+        form.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const dropZone = e.target.closest('.drop-zone, .drop-zone-inline');
+            if (dropZone) {
+                dropZone.classList.add('drag-over');
+            }
+        });
+        form.addEventListener('dragleave', (e) => {
+            const dropZone = e.target.closest('.drop-zone, .drop-zone-inline');
+            if (dropZone) {
+                dropZone.classList.remove('drag-over');
+            }
+        });
+        form.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const dropZone = e.target.closest('.drop-zone, .drop-zone-inline');
+            if (dropZone && draggedItem) {
+                dropZone.appendChild(draggedItem);
+                dropZone.classList.remove('drag-over');
+            }
+        });
+
+        // --- LÓGICA PARA EMPAREJAR COLUMNAS ---
+        let selectedMatchItem = null;
+        form.addEventListener('click', (e) => {
+            if (e.target.classList.contains('match-item') && !e.target.classList.contains('paired')) {
+                const currentColumn = e.target.parentElement;
+                if (!selectedMatchItem) {
+                    selectedMatchItem = e.target;
+                    e.target.classList.add('selected');
+                } else {
+                    if (selectedMatchItem.parentElement !== currentColumn) {
+                        const pairId = `pair-${Math.random()}`;
+                        selectedMatchItem.dataset.pairId = pairId;
+                        e.target.dataset.pairId = pairId;
+                        selectedMatchItem.classList.add('paired');
+                        e.target.classList.add('paired');
+                        selectedMatchItem.classList.remove('selected');
+                        selectedMatchItem = null;
+                    } else {
+                        selectedMatchItem.classList.remove('selected');
+                        selectedMatchItem = e.target;
+                        e.target.classList.add('selected');
+                    }
+                }
+            }
+        });
+        
+        // --- LÓGICA DE CORRECCIÓN ---
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let correctAnswers = 0;
+
+            // 1. Preguntas tipo Test, V/F, Rellenar huecos (IDs 1-7, 10, 11)
+            document.querySelectorAll('[data-question-id="1"], [data-question-id="2"], [data-question-id="3"], [data-question-id="4"], [data-question-id="5"], [data-question-id="6"], [data-question-id="7"], [data-question-id="10"], [data-question-id="11"]').forEach(q => {
+                const optionsDiv = q.querySelector('.options');
+                const selected = optionsDiv.querySelector('.option.selected');
+                if (selected && selected.textContent.trim() === optionsDiv.dataset.correct.trim()) {
+                    correctAnswers++;
+                }
+            });
+
+            // 2. Pregunta de emparejar (ID 8)
+            const question8 = document.querySelector('[data-question-id="8"]');
+            const pairedItems = question8.querySelectorAll('.match-item.paired');
+            const pairs = {};
+            pairedItems.forEach(item => {
+                const pairId = item.dataset.pairId;
+                if (!pairs[pairId]) pairs[pairId] = [];
+                pairs[pairId].push(item.dataset.matchId);
+            });
+            Object.values(pairs).forEach(pair => {
+                if (pair.length === 2 && pair[0] === pair[1]) {
+                    correctAnswers++;
+                }
+            });
+
+            // 3. Pregunta de clasificar (ID 9)
+            const question9 = document.querySelector('[data-question-id="9"]');
+            const droppedWords = question9.querySelectorAll('.drop-zone .word');
+            let allClassifiedCorrectly = true;
+            if (droppedWords.length === 6) { 
+                droppedWords.forEach(word => {
+                    const dropZone = word.parentElement;
+                    if (word.dataset.type !== dropZone.dataset.accept) {
+                        allClassifiedCorrectly = false;
+                    }
+                });
+                if (allClassifiedCorrectly) correctAnswers++;
+            }
+            
+            // 4. Pregunta de arrastrar a texto (ID 12)
+            const question12 = document.querySelector('[data-question-id="12"]');
+            const dropZones12 = question12.querySelectorAll('.drop-zone-inline');
+            let clozeCorrect = true;
+            dropZones12.forEach(zone => {
+                const word = zone.querySelector('.word');
+                if (!word || word.textContent.trim() !== zone.dataset.answer.trim()) {
+                    clozeCorrect = false;
+                }
+            });
+            if (clozeCorrect && dropZones12[0].children.length > 0 && dropZones12[1].children.length > 0) correctAnswers++;
+
+            // 5. Pregunta de ordenar palabras (ID 13)
+            const question13 = document.querySelector('[data-question-id="13"]');
+            const dropZone13 = question13.querySelector('.drop-zone');
+            const wordsInOrder = Array.from(dropZone13.querySelectorAll('.word')).map(w => w.textContent.trim()).join(' ');
+            if (wordsInOrder === dropZone13.dataset.answer) {
+                correctAnswers++;
+            }
+
+            // Mostrar resultados
+            highlightAnswers();
+            document.getElementById('correct-answers').textContent = correctAnswers;
+            document.getElementById('total-questions').textContent = TOTAL_QUESTIONS;
+            const score = ((correctAnswers / TOTAL_QUESTIONS) * 10).toFixed(1);
+            document.getElementById('final-score').textContent = score;
+
+            const feedback = document.getElementById('feedback-message');
+            if (score >= 9) {
+                feedback.textContent = "¡IMPRESIONANTE! 🚀 ¡Eres un auténtico genio de la gramática!";
+            } else if (score >= 7) {
+                feedback.textContent = "¡Muy bien! 👍 ¡Sigue así, vas por un camino excelente!";
+            } else if (score >= 5) {
+                feedback.textContent = "¡Aprobado! 😊 ¡Has hecho un buen trabajo, a seguir practicando un poquito más!";
+            } else {
+                feedback.textContent = "💩 ¡Uy! Parece que hoy no ha sido tu mejor día. ¡No te preocupes! Repasa la infografía y vuelve a intentarlo. ¡Tú puedes!";
+            }
+            resultsContainer.style.display = 'block';
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function highlightAnswers() {
+            // Highlight para Test, V/F, etc.
+             document.querySelectorAll('[data-question-id="1"], [data-question-id="2"], [data-question-id="3"], [data-question-id="4"], [data-question-id="5"], [data-question-id="6"], [data-question-id="7"], [data-question-id="10"], [data-question-id="11"]').forEach(q => {
+                const optionsDiv = q.querySelector('.options');
+                const correctAnswer = optionsDiv.dataset.correct.trim();
+                optionsDiv.querySelectorAll('.option').forEach(opt => {
+                    const isCorrect = opt.textContent.trim() === correctAnswer;
+                    const isSelected = opt.classList.contains('selected');
+                    if (isSelected) {
+                        opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                    }
+                    if (!isSelected && isCorrect) {
+                         const helpText = document.createElement('span');
+                         helpText.className = 'correct-answer-text';
+                         helpText.textContent = '← Respuesta correcta';
+                         opt.appendChild(helpText);
+                    }
+                });
+            });
+
+            // Highlight para emparejar
+            const question8 = document.querySelector('[data-question-id="8"]');
+            const allMatchItems = question8.querySelectorAll('.match-item');
+            allMatchItems.forEach(item => {
+                if (item.classList.contains('paired')) {
+                    const partner = question8.querySelector(`.match-item[data-pair-id="${item.dataset.pairId}"]:not([data-match-id="${item.dataset.matchId}"])`);
+                    if (partner) {
+                         item.classList.add('incorrect');
+                    } else {
+                         item.classList.add('correct');
+                    }
+                } else if (!item.classList.contains('paired')) {
+                    item.classList.add('incorrect');
+                }
+            });
+
+            // Highlight para clasificar
+            const question9 = document.querySelector('[data-question-id="9"]');
+            question9.querySelectorAll('.drop-zone .word').forEach(word => {
+                const dropZone = word.parentElement;
+                if (word.dataset.type === dropZone.dataset.accept) {
+                    word.style.backgroundColor = '#2ecc71'; // Verde
+                } else {
+                    word.style.backgroundColor = '#e74c3c'; // Rojo
+                }
+            });
+
+            // Highlight para arrastrar a texto
+            document.querySelector('[data-question-id="12"]').querySelectorAll('.drop-zone-inline').forEach(zone => {
+                const word = zone.querySelector('.word');
+                if (word && word.textContent.trim() === zone.dataset.answer.trim()) {
+                    zone.classList.add('correct');
+                } else {
+                    zone.classList.add('incorrect');
+                    if (!zone.querySelector('.correct-answer-text')) {
+                        zone.innerHTML += `<span class="correct-answer-text">(${zone.dataset.answer})</span>`;
+                    }
+                }
+            });
+            
+            // Highlight para ordenar palabras
+            const dropZone13 = document.querySelector('[data-question-id="13"] .drop-zone');
+            const isOrderCorrect = Array.from(dropZone13.querySelectorAll('.word')).map(w => w.textContent.trim()).join(' ') === dropZone13.dataset.answer;
+            dropZone13.classList.add(isOrderCorrect ? 'correct' : 'incorrect');
+            if(!isOrderCorrect) {
+                 dropZone13.innerHTML += `<span class="correct-answer-text">Orden correcto: ${dropZone13.dataset.answer}</span>`;
+            }
+        }
+    });
+    </script>
+</body>
+</html>
