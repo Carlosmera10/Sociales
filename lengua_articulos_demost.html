@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: Determinantes y Pronombres</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-primary: 'Poppins', sans-serif;
+            --color-bg: #f0f4f8;
+            --color-card-bg: #ffffff;
+            --color-header: #2c3e50;
+            --color-text: #34495e;
+            --color-accent1: #3498db; /* Azul para artículos */
+            --color-accent2: #e74c3c; /* Rojo para demostrativos */
+            --color-accent3: #2ecc71; /* Verde para posesivos */
+            --color-accent4: #f39c12; /* Naranja para pronombres */
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 15px;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--color-card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+
+        .main-header {
+            text-align: center;
+            color: var(--color-header);
+            margin-bottom: 30px;
+        }
+
+        .main-header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .intro-text {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .concept-card {
+            background-color: var(--color-card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-articulos { border-color: var(--color-accent1); }
+        .card-demostrativos { border-color: var(--color-accent2); }
+        .card-posesivos { border-color: var(--color-accent3); }
+
+        .concept-card h2 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .concept-card h2 .emoji {
+            font-size: 1.8rem;
+            margin-right: 10px;
+        }
+
+        .concept-card p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .concept-card ul {
+            list-style: none;
+            padding: 0;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+        
+        .concept-card ul li {
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .concept-card ul li strong {
+            color: var(--color-header);
+        }
+
+        .example {
+            background-color: #f8f9fa;
+            border-left: 3px solid;
+            padding: 10px;
+            border-radius: 5px;
+            font-style: italic;
+        }
+        
+        .example-articulos { border-color: var(--color-accent1); }
+        .example-demostrativos { border-color: var(--color-accent2); }
+        .example-posesivos { border-color: var(--color-accent3); }
+        .example-pronombres { border-color: var(--color-accent4); }
+
+        .example strong {
+            font-style: normal;
+        }
+
+        .diferencia-section {
+            background-color: #e9f5ff;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px dashed var(--color-accent4);
+        }
+
+        .diferencia-section h2 {
+            color: var(--color-header);
+            text-align: center;
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+
+        .comparison-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .comparison-box {
+            flex: 1;
+            min-width: 280px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .comparison-box h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .determinante-box {
+            background-color: #eaf2f8;
+        }
+
+        .pronombre-box {
+            background-color: #fef5e7;
+        }
+
+        .main-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .main-footer a {
+            text-decoration: none;
+            color: var(--color-accent1);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="main-header">
+            <h1>📚 Determinantes y Pronombres</h1>
+        </header>
+        
+        <p class="intro-text">
+            ¡Hola! ¿Alguna vez te has confundido con palabras como "el", "este" o "mi"? ¡Son determinantes! Y aunque se parecen a otras palabras, hoy descubrirás qué los hace especiales. ¡Vamos a ello!
+        </p>
+
+        <div class="grid-container">
+            <!-- Tarjeta de Artículos -->
+            <div class="concept-card card-articulos">
+                <h2><span class="emoji">✏️</span>Artículos</h2>
+                <p>Presentan al sustantivo. ¡Aquí están todos!</p>
+                <ul>
+                    <li><strong>Determinados:</strong> el, la, los, las</li>
+                    <li><strong>Indeterminados:</strong> un, una, unos, unas</li>
+                </ul>
+            </div>
+
+            <!-- Tarjeta de Demostrativos -->
+            <div class="concept-card card-demostrativos">
+                <h2><span class="emoji">👇</span>Demostrativos</h2>
+                <p>Indican la distancia a la que está el sustantivo.</p>
+                 <ul>
+                    <li><strong>Cerca:</strong> este, esta, estos, estas</li>
+                    <li><strong>Distancia media:</strong> ese, esa, esos, esas</li>
+                    <li><strong>Lejos:</strong> aquel, aquella, aquellos, aquellas</li>
+                </ul>
+            </div>
+
+            <!-- Tarjeta de Posesivos -->
+            <div class="concept-card card-posesivos">
+                <h2><span class="emoji">🙋‍♂️</span>Posesivos</h2>
+                <p>Nos dicen de quién es algo. ¡Apréndetelos!</p>
+                <ul>
+                    <li><strong>Un poseedor:</strong> mi, mis, tu, tus, su, sus</li>
+                    <li><strong>Varios poseedores:</strong> nuestro/a, nuestros/as, vuestro/a, vuestros/as, su, sus</li>
+                </ul>
+            </div>
+        </div>
+
+        <section class="diferencia-section">
+            <h2>🚨 ¡Ojo! La Gran Diferencia 🚨</h2>
+            <p style="text-align: center; margin-bottom: 25px;">Aquí está el truco para no confundir un determinante con un pronombre.</p>
+            <div class="comparison-container">
+                <div class="comparison-box determinante-box">
+                    <h3>Determinantes</h3>
+                    <p><strong>SIEMPRE</strong> acompañan a un nombre (sustantivo). ¡Son sus mejores amigos y no van a ninguna parte sin él!</p>
+                    <div class="example example-demostrativos">
+                        <p>Me gusta <strong>este</strong> <u>coche</u>.</p>
+                    </div>
+                    <div class="example example-posesivos">
+                        <p><strong>Mi</strong> <u>casa</u> es grande.</p>
+                    </div>
+                </div>
+                <div class="comparison-box pronombre-box">
+                    <h3>Pronombres</h3>
+                    <p><strong>SUSTITUYEN</strong> al nombre. Lo "reemplazan" para no tener que repetirlo. ¡Trabajan en su lugar!</p>
+                     <div class="example example-pronombres">
+                        <p>No quiero ese coche, quiero <strong>este</strong>.</p>
+                    </div>
+                     <div class="example example-pronombres">
+                        <p>La casa grande es la <strong>mía</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="main-footer">
+            <a href="index.html">🔙 Volver al menú de materias</a>
+        </footer>
+    </div>
+
+</body>
+</html>
