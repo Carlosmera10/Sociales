@@ -107,9 +107,10 @@
         .verb-infinitive {
             font-size: 1.5rem;
             font-weight: 600;
+            margin-bottom: 8px; /* Added spacing */
         }
         
-        .verb-past {
+        .verb-tense {
             font-size: 1.2rem;
             font-style: italic;
         }
@@ -236,7 +237,6 @@
             margin-top: 15px;
         }
         
-        /* CORRECCIÓN: Estilos para el pie de página persistente */
         footer {
             margin-top: 30px;
             padding-top: 20px;
@@ -275,7 +275,8 @@
                     </div>
                     <div class="card-face card-back">
                         <div id="card-back-infinitive" class="verb-infinitive"></div>
-                        <div id="card-back-past" class="verb-past"></div>
+                        <div id="card-back-past" class="verb-tense"></div>
+                        <div id="card-back-participle" class="verb-tense"></div>
                         <div class="audio-control">
                             <button id="play-audio-btn">🔊 Escuchar</button>
                         </div>
@@ -311,7 +312,6 @@
             </div>
         </div>
         
-        <!-- CORRECCIÓN: Pie de página movido fuera de las vistas para que sea persistente -->
         <footer>
             <a href="index.html">🔙 Volver al menú de materias</a>
         </footer>
@@ -320,50 +320,64 @@
     <script>
         // --- 1. DATOS Y CONSTANTES ---
         const STORAGE_KEY = 'irregularVerbs_progress';
+        // Lista de verbos actualizada desde el PDF
         const verbs = [
-            { infinitive: "To see", past: "saw", meaning: "ver", emoji: "👀" },
-            { infinitive: "To send", past: "sent", meaning: "enviar, mandar", emoji: "✉️" },
-            { infinitive: "To sing", past: "sang", meaning: "cantar", emoji: "🎤" },
-            { infinitive: "To sleep", past: "slept", meaning: "dormir", emoji: "😴" },
-            { infinitive: "To spend", past: "spent", meaning: "gastar (dinero), pasar (tiempo)", emoji: "💸" },
-            { infinitive: "To swim", past: "swam", meaning: "nadar", emoji: "🏊" },
-            { infinitive: "To swing", past: "swung", meaning: "balancearse, columpiarse", emoji: "🤸" },
-            { infinitive: "To take", past: "took", meaning: "tomar, coger, llevar", emoji: "🤲" },
-            { infinitive: "To tell", past: "told", meaning: "decir, contar", emoji: "🗣️" },
-            { infinitive: "To think", past: "thought", meaning: "pensar", emoji: "🤔" },
-            { infinitive: "To wear", past: "wore", meaning: "llevar puesto (ropa)", emoji: "👕" },
-            { infinitive: "To win", past: "won", meaning: "ganar", emoji: "🏆" },
-            { infinitive: "To write", past: "wrote", meaning: "escribir", emoji: "✍️" },
-            { infinitive: "To break", past: "broke", meaning: "romper", emoji: "💔" },
-            { infinitive: "To build", past: "built", meaning: "construir", emoji: "🏗️" },
-            { infinitive: "To catch", past: "caught", meaning: "atrapar, coger", emoji: "⚾" },
-            { infinitive: "To choose", past: "chose", meaning: "elegir", emoji: "✅" },
-            { infinitive: "To come", past: "came", meaning: "venir", emoji: "🚶" },
-            { infinitive: "To cost", past: "cost", meaning: "costar", emoji: "💲" },
-            { infinitive: "To cut", past: "cut", meaning: "cortar", emoji: "✂️" },
-            { infinitive: "To do", past: "did", meaning: "hacer (actividades)", emoji: "🛠️" },
-            { infinitive: "To drink", past: "drank", meaning: "beber", emoji: "🥤" },
-            { infinitive: "To eat", past: "ate", meaning: "comer", emoji: "🍔" },
-            { infinitive: "To fall", past: "fell", meaning: "caer(se)", emoji: "🍂" },
-            { infinitive: "To feel", past: "felt", meaning: "sentir(se)", emoji: "❤️" },
-            { infinitive: "To find", past: "found", meaning: "encontrar", emoji: "🔍" },
-            { infinitive: "To fly", past: "flew", meaning: "volar", emoji: "✈️" },
-            { infinitive: "To forget", past: "forgot", meaning: "olvidar", emoji: "❓" },
-            { infinitive: "To get", past: "got", meaning: "obtener, conseguir", emoji: "🤝" },
-            { infinitive: "To give", past: "gave", meaning: "dar", emoji: "🎁" },
-            { infinitive: "To go", past: "went", meaning: "ir", emoji: "➡️" },
-            { infinitive: "To grow", past: "grew", meaning: "crecer, cultivar", emoji: "🌱" },
-            { infinitive: "To have", past: "had", meaning: "tener, haber", emoji: "🙌" },
-            { infinitive: "To hear", past: "heard", meaning: "oír", emoji: "👂" },
-            { infinitive: "To hurt", past: "hurt", meaning: "herir, doler", emoji: "🤕" },
-            { infinitive: "To know", past: "knew", meaning: "saber, conocer", emoji: "🧠" },
-            { infinitive: "To lose", past: "lost", meaning: "perder", emoji: "📉" },
-            { infinitive: "To make", past: "made", meaning: "hacer, fabricar", emoji: "👨‍🍳" },
-            { infinitive: "To put", past: "put", meaning: "poner", emoji: "📥" },
-            { infinitive: "To read", past: "read", pastPronunciation: "red", meaning: "leer", emoji: "📖" },
-            { infinitive: "To ride", past: "rode", meaning: "montar (bici, caballo)", emoji: "🚲" },
-            { infinitive: "To run", past: "ran", meaning: "correr", emoji: "🏃" },
-            { infinitive: "To say", past: "said", meaning: "decir", emoji: "💬" }
+            { infinitive: "To be", past: "was/were", participle: "been", meaning: "ser/estar", emoji: "👤" },
+            { infinitive: "To begin", past: "began", participle: "begun", meaning: "empezar", emoji: "🏁" },
+            { infinitive: "To break", past: "broke", participle: "broken", meaning: "romper", emoji: "💔" },
+            { infinitive: "To build", past: "built", participle: "built", meaning: "construir", emoji: "🏗️" },
+            { infinitive: "To burn", past: "burnt", participle: "burnt", meaning: "quemar", emoji: "🔥" },
+            { infinitive: "To buy", past: "bought", participle: "bought", meaning: "comprar", emoji: "🛒" },
+            { infinitive: "To catch", past: "caught", participle: "caught", meaning: "atrapar", emoji: "⚾" },
+            { infinitive: "To choose", past: "chose", participle: "chosen", meaning: "elegir", emoji: "✅" },
+            { infinitive: "To come", past: "came", participle: "come", meaning: "venir", emoji: "🚶" },
+            { infinitive: "To cost", past: "cost", participle: "cost", meaning: "costar", emoji: "💲" },
+            { infinitive: "To do", past: "did", participle: "done", meaning: "hacer", emoji: "🛠️" },
+            { infinitive: "To draw", past: "drew", participle: "drawn", meaning: "dibujar", emoji: "🎨" },
+            { infinitive: "To drink", past: "drank", participle: "drunk", meaning: "beber", emoji: "🥤" },
+            { infinitive: "To drive", past: "drove", participle: "driven", meaning: "conducir", emoji: "🚗" },
+            { infinitive: "To eat", past: "ate", participle: "eaten", meaning: "comer", emoji: "🍔" },
+            { infinitive: "To fall", past: "fell", participle: "fallen", meaning: "caer(se)", emoji: "🍂" },
+            { infinitive: "To feel", past: "felt", participle: "felt", meaning: "sentir(se)", emoji: "❤️" },
+            { infinitive: "To find", past: "found", participle: "found", meaning: "encontrar", emoji: "🔍" },
+            { infinitive: "To fly", past: "flew", participle: "flown", meaning: "volar", emoji: "✈️" },
+            { infinitive: "To forget", past: "forgot", participle: "forgotten", meaning: "olvidar", emoji: "❓" },
+            { infinitive: "To get", past: "got", participle: "got", meaning: "obtener", emoji: "🤝" },
+            { infinitive: "To give", past: "gave", participle: "given", meaning: "dar", emoji: "🎁" },
+            { infinitive: "To go", past: "went", participle: "gone", meaning: "ir", emoji: "➡️" },
+            { infinitive: "To have", past: "had", participle: "had", meaning: "tener, haber", emoji: "🙌" },
+            { infinitive: "To hear", past: "heard", participle: "heard", meaning: "oír", emoji: "👂" },
+            { infinitive: "To know", past: "knew", participle: "known", meaning: "saber, conocer", emoji: "🧠" },
+            { infinitive: "To lead", past: "led", participle: "led", meaning: "guiar, dirigir", emoji: "🗺️" },
+            { infinitive: "To learn", past: "learnt", participle: "learnt", meaning: "aprender", emoji: "🧑‍🏫" },
+            { infinitive: "To leave", past: "left", participle: "left", meaning: "dejar, salir", emoji: "🚪" },
+            { infinitive: "To lend", past: "lent", participle: "lent", meaning: "prestar", emoji: "💸" },
+            { infinitive: "To lose", past: "lost", participle: "lost", meaning: "perder", emoji: "📉" },
+            { infinitive: "To make", past: "made", participle: "made", meaning: "hacer, fabricar", emoji: "👨‍🍳" },
+            { infinitive: "To meet", past: "met", participle: "met", meaning: "conocer, encontrarse", emoji: "👋" },
+            { infinitive: "To pay", past: "paid", participle: "paid", meaning: "pagar", emoji: "💳" },
+            { infinitive: "To put", past: "put", participle: "put", meaning: "poner", emoji: "📥" },
+            { infinitive: "To read", past: "read", participle: "read", pastPronunciation: "red", participlePronunciation: "red", meaning: "leer", emoji: "📖" },
+            { infinitive: "To ride", past: "rode", participle: "ridden", meaning: "montar", emoji: "🚲" },
+            { infinitive: "To rise", past: "rose", participle: "risen", meaning: "elevarse, salir", emoji: "🌅" },
+            { infinitive: "To run", past: "ran", participle: "run", meaning: "correr", emoji: "🏃" },
+            { infinitive: "To say", past: "said", participle: "said", meaning: "decir", emoji: "💬" },
+            { infinitive: "To see", past: "saw", participle: "seen", meaning: "ver", emoji: "👀" },
+            { infinitive: "To sell", past: "sold", participle: "sold", meaning: "vender", emoji: "🛍️" },
+            { infinitive: "To send", past: "sent", participle: "sent", meaning: "enviar", emoji: "✉️" },
+            { infinitive: "To show", past: "showed", participle: "shown", meaning: "mostrar", emoji: "🖼️" },
+            { infinitive: "To sing", past: "sang", participle: "sung", meaning: "cantar", emoji: "🎤" },
+            { infinitive: "To sit", past: "sat", participle: "sat", meaning: "sentarse", emoji: "🧘" },
+            { infinitive: "To sleep", past: "slept", participle: "slept", meaning: "dormir", emoji: "😴" },
+            { infinitive: "To speak", past: "spoke", participle: "spoken", meaning: "hablar", emoji: "🗣️" },
+            { infinitive: "To spend", past: "spent", participle: "spent", meaning: "gastar, pasar tiempo", emoji: "⏳" },
+            { infinitive: "To take", past: "took", participle: "taken", meaning: "tomar, coger", emoji: "🤲" },
+            { infinitive: "To teach", past: "taught", participle: "taught", meaning: "enseñar", emoji: "👨‍🏫" },
+            { infinitive: "To tell", past: "told", participle: "told", meaning: "decir, contar", emoji: "🗨️" },
+            { infinitive: "To think", past: "thought", participle: "thought", meaning: "pensar", emoji: "🤔" },
+            { infinitive: "To understand", past: "understood", participle: "understood", meaning: "entender", emoji: "💡" },
+            { infinitive: "To wear", past: "wore", participle: "worn", meaning: "llevar puesto", emoji: "👕" },
+            { infinitive: "To write", past: "wrote", participle: "written", meaning: "escribir", emoji: "✍️" }
         ];
 
         // --- 2. REFERENCIAS A ELEMENTOS DEL DOM ---
@@ -374,6 +388,7 @@
         const cardFrontMeaning = document.getElementById('card-front-meaning');
         const cardBackInfinitive = document.getElementById('card-back-infinitive');
         const cardBackPast = document.getElementById('card-back-past');
+        const cardBackParticiple = document.getElementById('card-back-participle');
         const flipBtn = document.getElementById('flip-btn');
         const answerControls = document.getElementById('answer-controls');
         const knownBtn = document.getElementById('known-btn');
@@ -402,7 +417,8 @@
         const saveProgress = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(unknownVerbs));
         const loadProgress = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
         const clearProgress = () => {
-            if (confirm("¿Estás seguro de que quieres borrar todo tu progreso de repaso? Esta acción no se puede deshacer.")) {
+             // Usaremos un modal personalizado en el futuro, por ahora un simple confirm.
+            if (window.confirm("¿Estás seguro de que quieres borrar todo tu progreso de repaso? Esta acción no se puede deshacer.")) {
                 localStorage.removeItem(STORAGE_KEY);
                 unknownVerbs = [];
                 updateInitialView();
@@ -450,6 +466,7 @@
                 cardFrontMeaning.textContent = verb.meaning;
                 cardBackInfinitive.textContent = verb.infinitive;
                 cardBackPast.textContent = `Past: ${verb.past}`;
+                cardBackParticiple.textContent = `Participle: ${verb.participle}`;
                 statusEl.textContent = `Tarjeta ${currentIndex + 1} de ${currentDeck.length}`;
             }, 100);
         };
@@ -496,10 +513,10 @@
             }
             
             if (currentDeck.length === 0) {
-                 sessionTitle.textContent = "Nada que repasar";
-                 sessionMessage.textContent = isReview ? "¡Felicidades! Ya te sabes todos los verbos que habías fallado." : "Error: No hay verbos para mostrar.";
-                 updateInitialView();
-                 return;
+                  sessionTitle.textContent = "Nada que repasar";
+                  sessionMessage.textContent = isReview ? "¡Felicidades! Ya te sabes todos los verbos que habías fallado." : "Error: No hay verbos para mostrar.";
+                  updateInitialView();
+                  return;
             }
 
             sessionView.classList.add('hidden');
@@ -584,7 +601,8 @@
             const verbData = currentDeck[currentIndex];
             const verbToSpeak = verbData.infinitive.replace('To ', '');
             const pastToSpeak = verbData.pastPronunciation || verbData.past;
-            speak(`${verbToSpeak}. ${pastToSpeak}.`);
+            const participleToSpeak = verbData.participlePronunciation || verbData.participle;
+            speak(`${verbToSpeak}. ${pastToSpeak}. ${participleToSpeak}.`);
         });
 
     </script>
