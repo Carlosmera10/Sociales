@@ -320,7 +320,7 @@
     <script>
         // --- 1. DATOS Y CONSTANTES ---
         const STORAGE_KEY = 'irregularVerbs_progress';
-        // Lista de verbos actualizada desde el PDF
+        // Lista de verbos actualizada con traducciones específicas
         const verbs = [
             { infinitive: "To be", past: "was/were", participle: "been", meaning: "ser/estar", emoji: "👤" },
             { infinitive: "To begin", past: "began", participle: "begun", meaning: "empezar", emoji: "🏁" },
@@ -328,11 +328,11 @@
             { infinitive: "To build", past: "built", participle: "built", meaning: "construir", emoji: "🏗️" },
             { infinitive: "To burn", past: "burnt", participle: "burnt", meaning: "quemar", emoji: "🔥" },
             { infinitive: "To buy", past: "bought", participle: "bought", meaning: "comprar", emoji: "🛒" },
-            { infinitive: "To catch", past: "caught", participle: "caught", meaning: "atrapar", emoji: "⚾" },
+            { infinitive: "To catch", past: "caught", participle: "caught", meaning: "atrapar, coger", emoji: "⚾" },
             { infinitive: "To choose", past: "chose", participle: "chosen", meaning: "elegir", emoji: "✅" },
             { infinitive: "To come", past: "came", participle: "come", meaning: "venir", emoji: "🚶" },
             { infinitive: "To cost", past: "cost", participle: "cost", meaning: "costar", emoji: "💲" },
-            { infinitive: "To do", past: "did", participle: "done", meaning: "hacer", emoji: "🛠️" },
+            { infinitive: "To do", past: "did", participle: "done", meaning: "hacer (actividad, tarea)", emoji: "🛠️" },
             { infinitive: "To draw", past: "drew", participle: "drawn", meaning: "dibujar", emoji: "🎨" },
             { infinitive: "To drink", past: "drank", participle: "drunk", meaning: "beber", emoji: "🥤" },
             { infinitive: "To drive", past: "drove", participle: "driven", meaning: "conducir", emoji: "🚗" },
@@ -342,24 +342,24 @@
             { infinitive: "To find", past: "found", participle: "found", meaning: "encontrar", emoji: "🔍" },
             { infinitive: "To fly", past: "flew", participle: "flown", meaning: "volar", emoji: "✈️" },
             { infinitive: "To forget", past: "forgot", participle: "forgotten", meaning: "olvidar", emoji: "❓" },
-            { infinitive: "To get", past: "got", participle: "got", meaning: "obtener", emoji: "🤝" },
+            { infinitive: "To get", past: "got", participle: "got", meaning: "obtener, conseguir, recibir", emoji: "🤝" },
             { infinitive: "To give", past: "gave", participle: "given", meaning: "dar", emoji: "🎁" },
             { infinitive: "To go", past: "went", participle: "gone", meaning: "ir", emoji: "➡️" },
             { infinitive: "To have", past: "had", participle: "had", meaning: "tener, haber", emoji: "🙌" },
             { infinitive: "To hear", past: "heard", participle: "heard", meaning: "oír", emoji: "👂" },
             { infinitive: "To know", past: "knew", participle: "known", meaning: "saber, conocer", emoji: "🧠" },
-            { infinitive: "To lead", past: "led", participle: "led", meaning: "guiar, dirigir", emoji: "🗺️" },
+            { infinitive: "To lead", past: "led", participle: "led", meaning: "guiar, dirigir, liderar", emoji: "🗺️" },
             { infinitive: "To learn", past: "learnt", participle: "learnt", meaning: "aprender", emoji: "🧑‍🏫" },
-            { infinitive: "To leave", past: "left", participle: "left", meaning: "dejar, salir", emoji: "🚪" },
-            { infinitive: "To lend", past: "lent", participle: "lent", meaning: "prestar", emoji: "💸" },
+            { infinitive: "To leave", past: "left", participle: "left", meaning: "dejar, salir, abandonar", emoji: "🚪" },
+            { infinitive: "To lend", past: "lent", participle: "lent", meaning: "prestar (algo a alguien)", emoji: "💸" },
             { infinitive: "To lose", past: "lost", participle: "lost", meaning: "perder", emoji: "📉" },
-            { infinitive: "To make", past: "made", participle: "made", meaning: "hacer, fabricar", emoji: "👨‍🍳" },
-            { infinitive: "To meet", past: "met", participle: "met", meaning: "conocer, encontrarse", emoji: "👋" },
+            { infinitive: "To make", past: "made", participle: "made", meaning: "hacer (fabricar, crear)", emoji: "👨‍🍳" },
+            { infinitive: "To meet", past: "met", participle: "met", meaning: "conocer (a alguien), reunirse", emoji: "👋" },
             { infinitive: "To pay", past: "paid", participle: "paid", meaning: "pagar", emoji: "💳" },
             { infinitive: "To put", past: "put", participle: "put", meaning: "poner", emoji: "📥" },
             { infinitive: "To read", past: "read", participle: "read", pastPronunciation: "red", participlePronunciation: "red", meaning: "leer", emoji: "📖" },
-            { infinitive: "To ride", past: "rode", participle: "ridden", meaning: "montar", emoji: "🚲" },
-            { infinitive: "To rise", past: "rose", participle: "risen", meaning: "elevarse, salir", emoji: "🌅" },
+            { infinitive: "To ride", past: "rode", participle: "ridden", meaning: "montar (bici, caballo)", emoji: "🚲" },
+            { infinitive: "To rise", past: "rose", participle: "risen", meaning: "elevarse, salir (el sol)", emoji: "🌅" },
             { infinitive: "To run", past: "ran", participle: "run", meaning: "correr", emoji: "🏃" },
             { infinitive: "To say", past: "said", participle: "said", meaning: "decir", emoji: "💬" },
             { infinitive: "To see", past: "saw", participle: "seen", meaning: "ver", emoji: "👀" },
@@ -370,13 +370,13 @@
             { infinitive: "To sit", past: "sat", participle: "sat", meaning: "sentarse", emoji: "🧘" },
             { infinitive: "To sleep", past: "slept", participle: "slept", meaning: "dormir", emoji: "😴" },
             { infinitive: "To speak", past: "spoke", participle: "spoken", meaning: "hablar", emoji: "🗣️" },
-            { infinitive: "To spend", past: "spent", participle: "spent", meaning: "gastar, pasar tiempo", emoji: "⏳" },
-            { infinitive: "To take", past: "took", participle: "taken", meaning: "tomar, coger", emoji: "🤲" },
+            { infinitive: "To spend", past: "spent", participle: "spent", meaning: "gastar (dinero), pasar (tiempo)", emoji: "⏳" },
+            { infinitive: "To take", past: "took", participle: "taken", meaning: "tomar, coger, llevar", emoji: "🤲" },
             { infinitive: "To teach", past: "taught", participle: "taught", meaning: "enseñar", emoji: "👨‍🏫" },
-            { infinitive: "To tell", past: "told", participle: "told", meaning: "decir, contar", emoji: "🗨️" },
+            { infinitive: "To tell", past: "told", participle: "told", meaning: "decir, contar (a alguien)", emoji: "🗨️" },
             { infinitive: "To think", past: "thought", participle: "thought", meaning: "pensar", emoji: "🤔" },
             { infinitive: "To understand", past: "understood", participle: "understood", meaning: "entender", emoji: "💡" },
-            { infinitive: "To wear", past: "wore", participle: "worn", meaning: "llevar puesto", emoji: "👕" },
+            { infinitive: "To wear", past: "wore", participle: "worn", meaning: "llevar puesto (ropa)", emoji: "👕" },
             { infinitive: "To write", past: "wrote", participle: "written", meaning: "escribir", emoji: "✍️" }
         ];
 
@@ -608,3 +608,4 @@
     </script>
 </body>
 </html>
+
