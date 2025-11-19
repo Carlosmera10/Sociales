@@ -4,179 +4,613 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Repaso de Verano - ¡A Estudiar Jugando!</title>
+    <!-- Fuente Nunito -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS para diseño moderno rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* Estilos Generales */
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #f0f9ff;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-            color: #333;
+            background-color: #f3f4f6;
         }
-        h1 {
-            color: #ff6347;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        
+        /* Colores específicos por materia para los bordes y acentos */
+        .theme-sociales { --theme-color: #4a90e2; --theme-bg: #ebf4ff; }
+        .theme-naturales { --theme-color: #10b981; --theme-bg: #d1fae5; }
+        .theme-mates { --theme-color: #f59e0b; --theme-bg: #fef3c7; }
+        .theme-lengua { --theme-color: #ef4444; --theme-bg: #fee2e2; }
+        .theme-ingles { --theme-color: #8b5cf6; --theme-bg: #ede9fe; }
+
+        /* Estilo de las pestañas activas */
+        .tab-btn.active {
+            background-color: var(--btn-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        .materias-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        .materia-card {
-            background-color: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+
+        /* Transiciones suaves para las tarjetas */
+        .resource-card {
             transition: all 0.3s ease;
-            border-top: 10px solid;
+            border-left: 5px solid var(--theme-color);
         }
-        .materia-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background-color: var(--theme-bg);
         }
-        #sociales { border-color: #4a90e2; }
-        #naturales { border-color: #50e3c2; }
-        #matematicas { border-color: #f5a623; }
-        #ingles { border-color: #9013fe; }
-        #lengua { border-color: #d0021b; }
-        .materia-card h2 {
-            font-size: 1.8em;
-            margin-top: 0;
-            margin-bottom: 20px;
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        #sociales h2 { color: #4a90e2; }
-        #naturales h2 { color: #50e3c2; }
-        #matematicas h2 { color: #f5a623; }
-        #ingles h2 { color: #9013fe; }
-        #lengua h2 { color: #d0021b; }
-        .materia-card ul {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-        }
-        .materia-card li {
-            margin-bottom: 10px;
-        }
-        .materia-card a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            display: block;
-            padding: 12px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            transition: all 0.2s ease-in-out;
-            border-left: 5px solid #ccc;
-        }
-        .materia-card a:hover {
-            background-color: #e9ecef;
-            color: #000;
-            padding-left: 20px;
-        }
-        footer {
-            margin-top: 40px;
-            font-size: 1.2em;
-            color: #555;
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col text-gray-700">
 
-    <h1>☀️ ¡A Repasar Jugando este Verano! ☀️</h1>
+    <!-- Encabezado Hero -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-3 mb-4 md:mb-0">
+                <div class="bg-yellow-400 p-2 rounded-full text-white">
+                    <i class="fa-solid fa-sun text-2xl animate-pulse"></i>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 tracking-tight">
+                    Repaso de <span class="text-indigo-600">Verano</span>
+                </h1>
+            </div>
+            <p class="text-sm md:text-base font-semibold text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
+                ¡A Estudiar Jugando! 🚀
+            </p>
+        </div>
+    </header>
 
-    <div class="materias-container">
+    <!-- Contenedor Principal -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full">
 
-        <div class="materia-card" id="sociales">
-            <h2>🌍 Sociales</h2>
-            <ul>
-                <li><a href="sociales_apuntes_clima.html">📖 Apuntes: El tiempo y el clima</a></li>
-                <li><a href="sociales_el_agua.html">📖 Apuntes: El ciclo del agua 💧</a></li> 
-                <li><a href="sociales_examen_agua.html">📝 Examen: Estados del agua y el ciclo del agua ☔🌊</a></li> 
-                <li><a href="sociales_edades_historia.html">📜 Apuntes: Las Edades de la Historia 📚</a></li>
-                <li><a href="sociales_examen_edades.html">📝 Examen: Las Edades de la Historia 📚</a></li>                                                                
-                <li><a href="Examen prehistoria.html">📝 Examen: La Prehistoria</a></li>
-                <li><a href="Historia Península Ibérica - Esquema visual.pdf">📝 Apuntes: La Península en la Edad Antigua</a></li>                
-                <li><a href="sociales_apuntes_relieve.html">📖 Apuntes: El relieve de España</a></li>
-                <li><a href="sociales_examen_relieve.html">📝 Examen: El relieve de España</a></li>
-            </ul>
+        <!-- Navegación de Pestañas -->
+        <!-- Se usa scroll horizontal en móviles para mejor UX -->
+        <nav class="flex overflow-x-auto pb-4 gap-2 md:gap-4 mb-8 justify-start md:justify-center no-scrollbar">
+            <button onclick="filterSubjects('all')" class="tab-btn active px-6 py-3 rounded-xl font-bold text-gray-600 bg-white hover:bg-gray-50 transition whitespace-nowrap border border-gray-200" style="--btn-color: #374151;">
+                🌈 Todo
+            </button>
+            <button onclick="filterSubjects('sociales')" class="tab-btn px-6 py-3 rounded-xl font-bold text-gray-600 bg-white hover:bg-blue-50 transition whitespace-nowrap border border-blue-100" style="--btn-color: #4a90e2;">
+                🌍 Sociales
+            </button>
+            <button onclick="filterSubjects('naturales')" class="tab-btn px-6 py-3 rounded-xl font-bold text-gray-600 bg-white hover:bg-green-50 transition whitespace-nowrap border border-green-100" style="--btn-color: #10b981;">
+                🌿 Naturales
+            </button>
+            <button onclick="filterSubjects('matematicas')" class="tab-btn px-6 py-3 rounded-xl font-bold text-gray-600 bg-white hover:bg-yellow-50 transition whitespace-nowrap border border-yellow-100" style="--btn-color: #f59e0b;">
+                🔢 Mates
+            </button>
+            <button onclick="filterSubjects('lengua')" class="tab-btn px-6 py-3 rounded-xl font-bold text-gray-600 bg-white hover:bg-red-50 transition whitespace-nowrap border border-red-100" style="--btn-color: #ef4444;">
+                📖 Lengua
+            </button>
+            <button onclick="filterSubjects('ingles')" class="tab-btn px-6 py-3 rounded-xl font-bold text-gray-600 bg-white hover:bg-purple-50 transition whitespace-nowrap border border-purple-100" style="--btn-color: #8b5cf6;">
+                💂‍♂️ Inglés
+            </button>
+        </nav>
+
+        <!-- Grid de Contenido -->
+        <div id="content-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- SOCIALES -->
+            <a href="sociales_apuntes_clima.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">El tiempo y el clima</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes de repaso</p>
+                    </div>
+                    <i class="fa-solid fa-cloud-sun text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="sociales_el_agua.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">El ciclo del agua</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes esenciales 💧</p>
+                    </div>
+                    <i class="fa-solid fa-water text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="sociales_examen_agua.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">Estados y ciclo del agua</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen práctico ☔🌊</p>
+                    </div>
+                    <i class="fa-solid fa-file-pen text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="sociales_edades_historia.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">Las Edades de la Historia</h3>
+                        <p class="text-gray-500 text-sm mt-1">📜 Apuntes históricos 📚</p>
+                    </div>
+                    <i class="fa-solid fa-timeline text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="sociales_examen_edades.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">Las Edades de la Historia</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen de conocimientos</p>
+                    </div>
+                    <i class="fa-solid fa-scroll text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="Examen prehistoria.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">La Prehistoria</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen temático</p>
+                    </div>
+                    <i class="fa-solid fa-bone text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="Historia Península Ibérica - Esquema visual.pdf" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">Península en Edad Antigua</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Apuntes y esquema visual</p>
+                    </div>
+                    <i class="fa-solid fa-map-location-dot text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="sociales_apuntes_relieve.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">El relieve de España</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes geográficos</p>
+                    </div>
+                    <i class="fa-solid fa-mountain-sun text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="sociales_examen_relieve.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">El relieve de España</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen de geografía</p>
+                    </div>
+                    <i class="fa-solid fa-pen-to-square text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+                </div>
+            </a>
+
+            <!-- NATURALES -->
+            <a href="naturales_celula.html" class="resource-card theme-naturales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="naturales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-green-500 uppercase tracking-wide mb-1 block">Naturales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-green-600">La célula</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes fundamentales 🦠🔬</p>
+                    </div>
+                    <i class="fa-solid fa-dna text-green-200 text-3xl group-hover:text-green-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="naturales_invert_vertebrados.html" class="resource-card theme-naturales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="naturales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-green-500 uppercase tracking-wide mb-1 block">Naturales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-green-600">Vertebrados e Invertebrados</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes de animales</p>
+                    </div>
+                    <i class="fa-solid fa-paw text-green-200 text-3xl group-hover:text-green-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="naturales_examen_seres_vivos.html" class="resource-card theme-naturales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="naturales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-green-500 uppercase tracking-wide mb-1 block">Naturales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-green-600">Los seres vivos</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen completo</p>
+                    </div>
+                    <i class="fa-solid fa-leaf text-green-200 text-3xl group-hover:text-green-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="naturales_apuntes_cuerpo.html" class="resource-card theme-naturales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="naturales">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-green-500 uppercase tracking-wide mb-1 block">Naturales</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-green-600">El cuerpo humano</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes anatomía</p>
+                    </div>
+                    <i class="fa-solid fa-heart-pulse text-green-200 text-3xl group-hover:text-green-400 transition"></i>
+                </div>
+            </a>
+
+            <!-- MATEMATICAS -->
+            <a href="mates_repaso_multiplicar.html" class="resource-card theme-mates bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="matematicas">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-500 uppercase tracking-wide mb-1 block">Mates</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-yellow-600">Tablas de multiplicar</h3>
+                        <p class="text-gray-500 text-sm mt-1">➕ Repaso intensivo</p>
+                    </div>
+                    <i class="fa-solid fa-xmark text-yellow-200 text-3xl group-hover:text-yellow-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="mates_examen_numeros.html" class="resource-card theme-mates bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="matematicas">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-500 uppercase tracking-wide mb-1 block">Mates</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-yellow-600">Los Números 1️⃣▶9️⃣</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen básico</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-1-9 text-yellow-200 text-3xl group-hover:text-yellow-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="mates_exam_longitud.html" class="resource-card theme-mates bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="matematicas">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-500 uppercase tracking-wide mb-1 block">Mates</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-yellow-600">Medir la longitud</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen práctico 📏</p>
+                    </div>
+                    <i class="fa-solid fa-ruler-combined text-yellow-200 text-3xl group-hover:text-yellow-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="mates_medidas.html" class="resource-card theme-mates bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="matematicas">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-500 uppercase tracking-wide mb-1 block">Mates</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-yellow-600">Medidas y tiempo</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Apuntes y Examen</p>
+                    </div>
+                    <i class="fa-solid fa-clock text-yellow-200 text-3xl group-hover:text-yellow-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="matematicas_numeros_romanos.html" class="resource-card theme-mates bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="matematicas">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-500 uppercase tracking-wide mb-1 block">Mates</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-yellow-600">Números Romanos</h3>
+                        <p class="text-gray-500 text-sm mt-1">🏛 Repaso histórico</p>
+                    </div>
+                    <i class="fa-solid fa-building-columns text-yellow-200 text-3xl group-hover:text-yellow-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="https://juego.calculomental.co/" target="_blank" rel="noopener noreferrer" class="resource-card theme-mates bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="matematicas">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-500 uppercase tracking-wide mb-1 block">Mates</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-yellow-600">Juego de Cálculo</h3>
+                        <p class="text-gray-500 text-sm mt-1">🧠➕ Enlace externo</p>
+                    </div>
+                    <i class="fa-solid fa-gamepad text-yellow-200 text-3xl group-hover:text-yellow-400 transition"></i>
+                </div>
+            </a>
+
+            <!-- LENGUA -->
+            <a href="lengua_gramatica_palabras.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">Categorías Gramaticales</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Sustantivo, verbo, etc.</p>
+                    </div>
+                    <i class="fa-solid fa-shapes text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_articulos_demost.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">Artículos y pronombres</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Repaso general</p>
+                    </div>
+                    <i class="fa-solid fa-hand-point-up text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_sustantivo_tipos.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">El sustantivo</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Tipos y uso 💬</p>
+                    </div>
+                    <i class="fa-solid fa-tag text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_sujeto_predicado.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">Sujeto y predicado</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes y examen</p>
+                    </div>
+                    <i class="fa-solid fa-puzzle-piece text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_examen_comprension.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">Comprensión Lectora</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen práctico</p>
+                    </div>
+                    <i class="fa-solid fa-book-open-reader text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_apuntes_acentuacion.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">Reglas de acentuación</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes ortografía</p>
+                    </div>
+                    <i class="fa-solid fa-pen-nib text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_juego_acentuacion.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">Acentuador Espacial</h3>
+                        <p class="text-gray-500 text-sm mt-1">🚀 Juego interactivo</p>
+                    </div>
+                    <i class="fa-solid fa-rocket text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_juego_clasificar.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">El Taller de Palabras</h3>
+                        <p class="text-gray-500 text-sm mt-1">🛠️ Juego de clasificación</p>
+                    </div>
+                    <i class="fa-solid fa-hammer text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_comprension_1.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">Tesoro de El Retiro</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Comprensión lectora</p>
+                    </div>
+                    <i class="fa-solid fa-map text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="lengua_comprension_medusa.html" class="resource-card theme-lengua bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="lengua">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide mb-1 block">Lengua</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-red-600">La Medusa 🌊</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Comprensión lectora</p>
+                    </div>
+                    <i class="fa-solid fa-fish text-red-200 text-3xl group-hover:text-red-400 transition"></i>
+                </div>
+            </a>
+
+            <!-- INGLES -->
+            <a href="ingles_tarjetas_verbos.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Irregular Verbs</h3>
+                        <p class="text-gray-500 text-sm mt-1">📑 Tarjetas de estudio</p>
+                    </div>
+                    <i class="fa-solid fa-layer-group text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_tiempos_verbales.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Tiempos verbales</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes gramaticales</p>
+                    </div>
+                    <i class="fa-solid fa-clock-rotate-left text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_pasado_simple.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Pasado Simple</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes: Past Simple ⏳</p>
+                    </div>
+                    <i class="fa-solid fa-backward text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_presente_simple_vs_continuo.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Simple vs Continuous</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Apuntes comparativos</p>
+                    </div>
+                    <i class="fa-solid fa-scale-balanced text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_examen_listening.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Listening Test</h3>
+                        <p class="text-gray-500 text-sm mt-1">🎧 Examen auditivo</p>
+                    </div>
+                    <i class="fa-solid fa-headphones text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_examen_simple_continuo.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Simple vs Continuous</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen práctico</p>
+                    </div>
+                    <i class="fa-solid fa-pen text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_compara.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Comparativos</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Y superlativos</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-dots text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_exam_comparativos.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Comparativos</h3>
+                        <p class="text-gray-500 text-sm mt-1">📝 Examen 🔼🔽</p>
+                    </div>
+                    <i class="fa-solid fa-check-double text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
+            <a href="ingles_repaso_must.html" class="resource-card theme-ingles bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="ingles">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-bold text-purple-500 uppercase tracking-wide mb-1 block">Inglés</span>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-purple-600">Must y Should</h3>
+                        <p class="text-gray-500 text-sm mt-1">📖 Repaso obligaciones</p>
+                    </div>
+                    <i class="fa-solid fa-exclamation text-purple-200 text-3xl group-hover:text-purple-400 transition"></i>
+                </div>
+            </a>
+
         </div>
 
-        <div class="materia-card" id="naturales">
-            <h2>🌿 Naturales</h2>
-            <ul>
-                <li><a href="naturales_celula.html">📖 Apuntes: La célula 🦠🔬</a></li>
-                <li><a href="naturales_invert_vertebrados.html">📖 Apuntes: Vertebrados e Invertebrados</a></li>                
-                <li><a href="naturales_examen_seres_vivos.html">📝 Examen: Los seres vivos</a></li>
-                <li><a href="naturales_apuntes_cuerpo.html">📖 Apuntes: El cuerpo humano</a></li>
-            </ul>
+        <!-- Estado vacío (por si acaso) -->
+        <div id="empty-state" class="hidden text-center py-20">
+            <p class="text-xl text-gray-400">Selecciona una materia para ver el contenido 👆</p>
         </div>
 
-        <div class="materia-card" id="matematicas">
-            <h2>🔢 Matemáticas</h2>
-            <ul>
-                <li><a href="mates_repaso_multiplicar.html">➕ Repaso: Tablas de multiplicar</a></li>
-                <li><a href="mates_examen_numeros.html">📝 Examen: Los Números 1️⃣▶9️⃣</a></li>
-                <li><a href="mates_exam_longitud.html">📝 Examen: Medir la longitud 📏</a></li>                                
-                <li><a href="mates_medidas.html">📝 Apuntes y Examen: Midiendo las cosas y el tiempo</a></li>
-                <li><a href="matematicas_numeros_romanos.html">🏛 Repaso: Números Romanos</a></li>
-                <li><a href="https://juego.calculomental.co/" target="_blank" rel="noopener noreferrer">🧠➕ Juego de Cálculo Mental</a></li>
-            </ul>
-        </div>
+    </main>
 
-        <div class="materia-card" id="lengua">
-            <h2>📖 Lengua</h2>
-            <ul>
-                <li><a href="lengua_gramatica_palabras.html">📖 Repaso: Sustantivo, Adjetivo, Verbo, Pronombre, Determinante</a></li>
-                <li><a href="lengua_articulos_demost.html">📖 Repaso: Artículos, demostrativos y pronombres</a></li>                
-                <li><a href="lengua_sustantivo_tipos.html">📖 Repaso: El sustantivo y sus tipos 💬</a></li>                
-                <li><a href="lengua_sujeto_predicado.html">📖 Apuntes y examen: Sujeto y predicado</a></li>
-                <li><a href="lengua_examen_comprension.html">📝 Examen: Comprensión Lectora</a></li>
-                <li><a href="lengua_apuntes_acentuacion.html">📖 Apuntes: Reglas de acentuación</a></li>
-                <li><a href="lengua_juego_acentuacion.html">🚀 Juego: El Acentuador Espacial</a></li>
-                <li><a href="lengua_juego_clasificar.html">🛠️ Juego: El Taller de Palabras</a></li>
-                <li><a href="lengua_comprension_1.html">Comprensión lectora: el tesoro de El Retiro</a></li>
-                <li><a href="lengua_comprension_medusa.html">Comprensión lectora: La Medusa 🌊</a></li>
-    
-                
-            </ul>
-        </div>
-
-        <div class="materia-card" id="ingles">
-            <h2>💂‍♂️ Inglés</h2>
-            <ul>
-                <li><a href="ingles_tarjetas_verbos.html">📑Tarjetas: Irregular Verbs</a></li>
-                <li><a href="ingles_tiempos_verbales.html">📖 Apuntes: Tiempos verbales</a></li>
-                <li><a href="ingles_pasado_simple.html">📖 Apuntes: Pasado Simple ⏳</a></li>                
-                <li><a href="ingles_presente_simple_vs_continuo.html">📖 Apuntes: Present Simple y Present Continuous</a></li>
-                <li><a href="ingles_examen_listening.html">🎧 Examen: Listening Test</a></li>
-                <li><a href="ingles_examen_simple_continuo.html">📝 Examen: Present Simple y Present Continuous</a></li>
-                <li><a href="ingles_compara.html">📖 Repaso: Comparativos y superlativos</a></li>                
-                <li><a href="ingles_exam_comparativos.html">📝 Examen: Comparativos 🔼🔽</a></li>                
-                <li><a href="ingles_repaso_must.html">📖 Repaso: Obligaciones: Must y Should</a></li>
-            </ul>
-        </div>
-
-    </div>
-
-    <footer>
-        <p>¡Tú puedes con todo! 💪✨</p>
+    <footer class="bg-white border-t mt-auto py-8 text-center">
+        <p class="text-lg text-gray-500 font-medium">¡Tú puedes con todo! 💪✨</p>
+        <p class="text-sm text-gray-400 mt-2">Material de repaso de verano</p>
     </footer>
+
+    <script>
+        function filterSubjects(category) {
+            const cards = document.querySelectorAll('.resource-card');
+            const buttons = document.querySelectorAll('.tab-btn');
+            const emptyState = document.getElementById('empty-state');
+            let visibleCount = 0;
+
+            // 1. Gestionar estado de los botones (visual)
+            buttons.forEach(btn => {
+                // Comprobamos si el botón clickeado contiene la categoría en su onclick
+                if(btn.getAttribute('onclick').includes(`'${category}'`)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // 2. Filtrar las tarjetas
+            cards.forEach(card => {
+                // Reiniciar animación
+                card.classList.remove('animate-fade-in');
+                void card.offsetWidth; // forzar reflow para reiniciar animación css
+
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.classList.add('animate-fade-in');
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // 3. Mostrar mensaje si no hay nada (raro, pero buena práctica)
+            if (visibleCount === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+    </script>
+
+    <!-- 
+    =======================================================================
+    🛠️ ZONA DE MANTENIMIENTO - PLANTILLA PARA AÑADIR NUEVOS ENLACES
+    =======================================================================
+    
+    Para añadir una nueva tarjeta, copia el código de abajo y pégalo DENTRO 
+    del div con id="content-grid" (busca la línea <div id="content-grid"...>).
+    
+    Asegúrate de cambiar:
+    1. href="..." -> El enlace a tu archivo
+    2. theme-XXXX -> El color de la materia (sociales, naturales, mates, lengua, ingles)
+    3. data-category="XXXX" -> La categoría para que funcione el filtro (sociales, naturales, mates, lengua, ingles)
+    4. Texto del título y descripción
+    5. Clase del icono (busca en FontAwesome: https://fontawesome.com/search?m=free)
+    
+    👇 COPIA DESDE AQUÍ 👇
+    -->
+    <!--
+    <a href="TU_ARCHIVO.html" class="resource-card theme-sociales bg-white p-5 rounded-xl shadow-sm hover:shadow-md block group" data-category="sociales">
+        <div class="flex justify-between items-start">
+            <div>
+                <span class="text-xs font-bold text-blue-500 uppercase tracking-wide mb-1 block">Sociales</span>
+                <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600">TÍTULO DEL EJERCICIO</h3>
+                <p class="text-gray-500 text-sm mt-1">📖 DESCRIPCIÓN CORTA</p>
+            </div>
+            <i class="fa-solid fa-star text-blue-200 text-3xl group-hover:text-blue-400 transition"></i>
+        </div>
+    </a>
+    -->
+    <!-- 👆 HASTA AQUÍ 👆 -->
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
