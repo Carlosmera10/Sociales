@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen: English Quantifiers</title>
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #00cec9;
+            --accent-color: #fdcb6e;
+            --background-color: #dfe6e9;
+            --text-color: #2d3436;
+            --card-bg: #ffffff;
+            --success: #00b894;
+            --error: #ff7675;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            background: var(--primary-color);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        .question {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Estilos para Botones de Opción (Tipos 1, 6, 8) */
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option {
+            background-color: #f1f2f6;
+            border: 2px solid #dfe6e9;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .option.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        /* Feedback Visual */
+        .option.correct-answer {
+            background-color: var(--success) !important;
+            border-color: var(--success) !important;
+            color: white !important;
+        }
+
+        .option.wrong-answer {
+            background-color: var(--error) !important;
+            border-color: var(--error) !important;
+            color: white !important;
+            opacity: 0.7;
+        }
+
+        /* Drag and Drop (General) */
+        .word-bank {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px dashed var(--primary-color);
+            min-height: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .word {
+            background: var(--accent-color);
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: grab;
+            font-weight: bold;
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .word:active {
+            cursor: grabbing;
+        }
+
+        /* Tipo 4: Categorías */
+        .category-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .category-box {
+            flex: 1;
+            min-width: 250px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .category-box h3 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .drop-zone {
+            min-height: 150px;
+            background: #f8f9fa;
+            border: 2px dashed #b2bec3;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-content: flex-start;
+        }
+
+        /* Tipo 10: Inline Drop Zones */
+        .cloze-text {
+            font-size: 1.2em;
+            line-height: 2.5;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        .drop-zone-inline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 35px;
+            border-bottom: 3px solid var(--primary-color);
+            margin: 0 5px;
+            vertical-align: middle;
+            background-color: rgba(108, 92, 231, 0.1);
+        }
+        
+        .drop-zone-inline .word {
+            margin: 0;
+            padding: 2px 8px;
+            font-size: 0.9em;
+        }
+
+        /* Resultados y Botón */
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #009174;
+        }
+
+        .submit-btn:hover {
+            background: #00a383;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        #results-container {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .good-score {
+            background: #d1f2eb;
+            border: 2px solid #00b894;
+            color: #0e6655;
+        }
+
+        .bad-score {
+            background: #fadbd8;
+            border: 2px solid #e74c3c;
+            color: #7b241c;
+        }
+
+        .final-grade {
+            font-size: 3em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid #b2bec3;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🇬🇧 English Grammar Exam</h1>
+            <p>Topic: Many, Much, Some, A lot of, Enough</p>
+        </div>
+
+        <form id="quiz-form">
+            
+            <!-- SECCIÓN 1: Rellenar Huecos (10 preguntas) -->
+            <h2>1. Choose the correct word ✍️</h2>
+            <p>Select the best option to complete the sentence.</p>
+
+            <div class="question" data-question-id="1_1">
+                <div class="question-text">1. We don't have ______ time before the movie starts. ⏰</div>
+                <div class="options" data-correct="much">
+                    <div class="option">many</div><div class="option">much</div><div class="option">some</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_2">
+                <div class="question-text">2. She has ______ beautiful dresses in her closet. 👗</div>
+                <div class="options" data-correct="a lot of">
+                    <div class="option">much</div><div class="option">any</div><div class="option">a lot of</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_3">
+                <div class="question-text">3. How ______ players are in a football team? ⚽</div>
+                <div class="options" data-correct="many">
+                    <div class="option">much</div><div class="option">enough</div><div class="option">many</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_4">
+                <div class="question-text">4. I'm not hungry. I don't want ______ food. 🍲</div>
+                <div class="options" data-correct="any">
+                    <div class="option">some</div><div class="option">any</div><div class="option">many</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_5">
+                <div class="question-text">5. Do you have ______ money for the bus? 🚌</div>
+                <div class="options" data-correct="enough">
+                    <div class="option">many</div><div class="option">enough</div><div class="option">a lot</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_6">
+                <div class="question-text">6. Would you like ______ coffee? ☕</div>
+                <div class="options" data-correct="some">
+                    <div class="option">some</div><div class="option">many</div><div class="option">any</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_7">
+                <div class="question-text">7. There is too ______ noise here! 📢</div>
+                <div class="options" data-correct="much">
+                    <div class="option">many</div><div class="option">much</div><div class="option">few</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_8">
+                <div class="question-text">8. I didn't buy ______ apples. 🍎</div>
+                <div class="options" data-correct="many">
+                    <div class="option">much</div><div class="option">many</div><div class="option">some</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_9">
+                <div class="question-text">9. Is there ______ sugar in the bowl? 🍚</div>
+                <div class="options" data-correct="any">
+                    <div class="option">many</div><div class="option">any</div><div class="option">few</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="1_10">
+                <div class="question-text">10. You are not old ______ to drive a car. 🚗</div>
+                <div class="options" data-correct="enough">
+                    <div class="option">much</div><div class="option">enough</div><div class="option">some</div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: Arrastrar a Categoría (10 items) -->
+            <h2>2. Countable or Uncountable? 🧺</h2>
+            <p>Drag the words to the correct box. Remember: Countable uses "Many", Uncountable uses "Much".</p>
+
+            <div class="question" data-question-id="4_1">
+                <div class="word-bank">
+                    <div class="word" draggable="true" data-type="count">Apples 🍎</div>
+                    <div class="word" draggable="true" data-type="uncount">Water 💧</div>
+                    <div class="word" draggable="true" data-type="count">Chairs 🪑</div>
+                    <div class="word" draggable="true" data-type="uncount">Sand 🏖️</div>
+                    <div class="word" draggable="true" data-type="count">Bottles 🍼</div>
+                    <div class="word" draggable="true" data-type="uncount">Love ❤️</div>
+                    <div class="word" draggable="true" data-type="count">Seconds ⏱️</div>
+                    <div class="word" draggable="true" data-type="uncount">Bread 🍞</div>
+                    <div class="word" draggable="true" data-type="count">Cats 🐱</div>
+                    <div class="word" draggable="true" data-type="uncount">Information ℹ️</div>
+                </div>
+                <div class="category-container">
+                    <div class="category-box">
+                        <h3>Countable (1, 2, 3...)</h3>
+                        <div class="drop-zone" data-accept="count"></div>
+                    </div>
+                    <div class="category-box">
+                        <h3>Uncountable (Mass)</h3>
+                        <div class="drop-zone" data-accept="uncount"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: Test (6 preguntas) -->
+            <h2>3. Quiz Time! 🧠</h2>
+            <p>Select the correct answer.</p>
+
+            <div class="question" data-question-id="6_1">
+                <div class="question-text">11. I have _____ friends in Spain. 🇪🇸</div>
+                <div class="options" data-correct="a few">
+                    <div class="option">a little</div><div class="option">a few</div><div class="option">much</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="6_2">
+                <div class="question-text">12. Can I have _____ water, please? 🥤</div>
+                <div class="options" data-correct="some">
+                    <div class="option">some</div><div class="option">any</div><div class="option">many</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="6_3">
+                <div class="question-text">13. How _____ homework do you have? 📚</div>
+                <div class="options" data-correct="much">
+                    <div class="option">many</div><div class="option">much</div><div class="option">a lot</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="6_4">
+                <div class="question-text">14. There aren't _____ people in the street. 🏙️</div>
+                <div class="options" data-correct="many">
+                    <div class="option">much</div><div class="option">some</div><div class="option">many</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="6_5">
+                <div class="question-text">15. The soup has too _____ salt. 🧂</div>
+                <div class="options" data-correct="much">
+                    <div class="option">many</div><div class="option">much</div><div class="option">a few</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="6_6">
+                <div class="question-text">16. Is the room big _____ for the party? 🎉</div>
+                <div class="options" data-correct="enough">
+                    <div class="option">enough</div><div class="option">much</div><div class="option">too</div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 4: Frase Correcta (10 preguntas) -->
+            <h2>4. Find the correct sentence ✅</h2>
+            <p>Read both sentences carefully and select the one with correct grammar.</p>
+
+            <div class="question" data-question-id="8_1">
+                <div class="question-text">17. Which is correct?</div>
+                <div class="options" data-correct="He has a lot of money.">
+                    <div class="option">He has a lot of money.</div>
+                    <div class="option">He has much money today.</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_2">
+                <div class="question-text">18. Which is correct?</div>
+                <div class="options" data-correct="There isn't much snow.">
+                    <div class="option">There isn't much snow.</div>
+                    <div class="option">There isn't many snow.</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_3">
+                <div class="question-text">19. Which is correct?</div>
+                <div class="options" data-correct="Do you have enough time?">
+                    <div class="option">Do you have enough time?</div>
+                    <div class="option">Do you have time enough?</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_4">
+                <div class="question-text">20. Which is correct?</div>
+                <div class="options" data-correct="How many cousins do you have?">
+                    <div class="option">How many cousins do you have?</div>
+                    <div class="option">How much cousins do you have?</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_5">
+                <div class="question-text">21. Which is correct?</div>
+                <div class="options" data-correct="I would like some water.">
+                    <div class="option">I would like some water.</div>
+                    <div class="option">I would like any water.</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_6">
+                <div class="question-text">22. Which is correct?</div>
+                <div class="options" data-correct="She is strong enough.">
+                    <div class="option">She is strong enough.</div>
+                    <div class="option">She is enough strong.</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_7">
+                <div class="question-text">23. Which is correct?</div>
+                <div class="options" data-correct="There are too many cars.">
+                    <div class="option">There are too many cars.</div>
+                    <div class="option">There are too much cars.</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_8">
+                <div class="question-text">24. Which is correct?</div>
+                <div class="options" data-correct="I don't have any brothers.">
+                    <div class="option">I don't have any brothers.</div>
+                    <div class="option">I don't have some brothers.</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_9">
+                <div class="question-text">25. Which is correct?</div>
+                <div class="options" data-correct="How much is this T-shirt?">
+                    <div class="option">How much is this T-shirt?</div>
+                    <div class="option">How many is this T-shirt?</div>
+                </div>
+            </div>
+
+            <div class="question" data-question-id="8_10">
+                <div class="question-text">26. Which is correct?</div>
+                <div class="options" data-correct="We have some good news.">
+                    <div class="option">We have some good news.</div>
+                    <div class="option">We have a few good news.</div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 5: Texto con Huecos (8 huecos) -->
+            <h2>5. Complete the story 📖</h2>
+            <p>Drag the words to complete the text about "My Birthday Party".</p>
+
+            <div class="question" data-question-id="10_1">
+                <div class="word-bank">
+                    <div class="word" draggable="true">many</div>
+                    <div class="word" draggable="true">much</div>
+                    <div class="word" draggable="true">a lot of</div>
+                    <div class="word" draggable="true">enough</div>
+                    <div class="word" draggable="true">some</div>
+                    <div class="word" draggable="true">any</div>
+                    <div class="word" draggable="true">much</div>
+                    <div class="word" draggable="true">enough</div>
+                </div>
+                <div class="cloze-text">
+                    It was my birthday yesterday. I invited <span class="drop-zone-inline" data-answer="many"></span> friends to my house.
+                    My dad bought <span class="drop-zone-inline" data-answer="a lot of"></span> balloons to decorate the room.
+                    We didn't have <span class="drop-zone-inline" data-answer="much"></span> time to cook, so we ordered pizza.
+                    I wanted to buy soda, but I didn't have <span class="drop-zone-inline" data-answer="enough"></span> money.
+                    Luckily, my mom had <span class="drop-zone-inline" data-answer="some"></span> juice in the fridge.
+                    Was there <span class="drop-zone-inline" data-answer="any"></span> cake left? No, we ate it all!
+                    We made too <span class="drop-zone-inline" data-answer="much"></span> noise and the neighbors were angry.
+                    But it was fun <span class="drop-zone-inline" data-answer="enough"></span> for me!
+                </div>
+            </div>
+
+        </form>
+
+        <button type="submit" form="quiz-form" class="submit-btn">Check Answers! 🚀</button>
+
+        <div id="results-container">
+            <!-- JS rellenará esto -->
+        </div>
+
+    </div>
+
+    <footer>
+        <a href="index.html">🔙 Volver al menú</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- UTILIDADES ---
+            function shuffle(element) {
+                for (let i = element.children.length; i >= 0; i--) {
+                    element.appendChild(element.children[Math.random() * i | 0]);
+                }
+            }
+
+            // 1. Barajar opciones y bancos de palabras
+            document.querySelectorAll('.options, .word-bank').forEach(container => {
+                shuffle(container);
+            });
+
+            // 2. Selección de Opciones (Tipos 1, 6, 8)
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // 3. DRAG AND DROP LOGIC
+            const draggables = document.querySelectorAll('.word');
+            const dropZones = document.querySelectorAll('.drop-zone, .drop-zone-inline');
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', () => {
+                    draggable.classList.add('dragging');
+                });
+                draggable.addEventListener('dragend', () => {
+                    draggable.classList.remove('dragging');
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault(); // Permitir drop
+                    zone.style.backgroundColor = '#dfe6e9'; // Highlight
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.style.backgroundColor = ''; // Remove highlight
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.style.backgroundColor = '';
+                    
+                    const draggable = document.querySelector('.dragging');
+                    if(!draggable) return;
+
+                    // Lógica para inline drop zones (solo 1 palabra)
+                    if(zone.classList.contains('drop-zone-inline')) {
+                        if(zone.children.length > 0) {
+                            // Si ya hay una palabra, la "devolvemos" al word-bank (opcional, aquí la reemplazamos)
+                            // Para simplificar, simplemente appendChild mueve el nodo, 
+                            // pero si la zona está llena, podríamos impedir o swap.
+                            // Aquí permitiremos reemplazar:
+                            // Mover la palabra existente de vuelta al banco (si quisiéramos ser estrictos)
+                            // o simplemente dejar que se acumulen (visualmente feo).
+                            // Limpiamos la zona antes de añadir:
+                            const existing = zone.querySelector('.word');
+                            if(existing) {
+                                // Devolver al banco original (padre del draggable actual no es fiable si ya se movió)
+                                // Buscamos el word-bank más cercano de la pregunta
+                                const question = zone.closest('.question');
+                                const bank = question.querySelector('.word-bank');
+                                bank.appendChild(existing);
+                            }
+                        }
+                    }
+                    zone.appendChild(draggable);
+                });
+            });
+
+            // 4. LÓGICA DE CORRECCIÓN
+            const form = document.getElementById('quiz-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                checkAnswers();
+            });
+
+            function checkAnswers() {
+                let score = 0;
+                let maxScore = 0;
+
+                // -- Corrección Tipos de Selección (1, 6, 8) --
+                // Iteramos por cada contenedor de opciones
+                document.querySelectorAll('.options').forEach(container => {
+                    maxScore++;
+                    const selected = container.querySelector('.option.selected');
+                    const correctAnswer = container.dataset.correct;
+
+                    if(selected) {
+                        if(selected.textContent.trim() === correctAnswer) {
+                            score++;
+                            selected.classList.add('correct-answer');
+                            selected.innerHTML += ' ✅';
+                        } else {
+                            selected.classList.add('wrong-answer');
+                            // Marcar la correcta
+                            Array.from(container.children).forEach(opt => {
+                                if(opt.textContent.trim() === correctAnswer) {
+                                    opt.classList.add('correct-answer');
+                                }
+                            });
+                        }
+                    } else {
+                        // No seleccionó nada - Marcar la correcta para que aprenda
+                        Array.from(container.children).forEach(opt => {
+                            if(opt.textContent.trim() === correctAnswer) {
+                                opt.classList.add('wrong-answer'); // Usamos estilo wrong para resaltar suavemente o crear uno nuevo
+                                opt.style.border = "2px dashed #00b894";
+                            }
+                        });
+                    }
+                });
+
+                // -- Corrección Tipo 4 (Categorías) --
+                document.querySelectorAll('.drop-zone[data-accept]').forEach(zone => {
+                    const correctType = zone.dataset.accept;
+                    const words = zone.querySelectorAll('.word');
+                    
+                    // Nota: MaxScore aquí depende de CADA palabra, no de la zona.
+                    // Contamos las palabras que deberían estar aquí? No, contamos cada palabra individualmente.
+                    // Vamos a iterar sobre TODAS las palabras de la pregunta para sumar maxScore.
+                });
+
+                // Para simplificar maxScore en DragAndDrop, buscamos todas las 'word' con data-type
+                // y vemos si están en la zona correcta.
+                document.querySelectorAll('.word[data-type]').forEach(word => {
+                    maxScore++;
+                    const parentZone = word.parentElement;
+                    // Si el padre es una drop-zone y tiene el data-accept correcto
+                    if(parentZone.classList.contains('drop-zone')) {
+                        if(parentZone.dataset.accept === word.dataset.type) {
+                            score++;
+                            word.style.backgroundColor = 'var(--success)';
+                            word.style.color = 'white';
+                        } else {
+                            word.style.backgroundColor = 'var(--error)';
+                            word.style.color = 'white';
+                        }
+                    } else {
+                        // No se movió o está mal
+                        // No sumamos punto
+                    }
+                });
+
+                // -- Corrección Tipo 10 (Inline Cloze) --
+                document.querySelectorAll('.drop-zone-inline').forEach(zone => {
+                    maxScore++;
+                    const correct = zone.dataset.answer;
+                    const word = zone.querySelector('.word');
+
+                    if(word) {
+                        if(word.textContent.trim() === correct) {
+                            score++;
+                            word.style.backgroundColor = 'var(--success)';
+                            word.style.color = 'white';
+                        } else {
+                            word.style.backgroundColor = 'var(--error)';
+                            word.style.color = 'white';
+                        }
+                    } else {
+                        zone.style.borderBottom = "3px solid var(--error)";
+                    }
+                });
+
+                // CALCULO FINAL
+                const finalGrade = (score / maxScore) * 10;
+                const roundedGrade = finalGrade.toFixed(1);
+                
+                const resultsDiv = document.getElementById('results-container');
+                let msg = "";
+                let emoji = "";
+                let cssClass = "";
+
+                if (finalGrade < 5) {
+                    emoji = "💩";
+                    msg = "Oh no! Keep practicing! You need to study quantifiers a bit more.";
+                    cssClass = "bad-score";
+                } else if (finalGrade < 7) {
+                    msg = "Good job! You passed, but check your mistakes.";
+                    cssClass = "good-score"; // Usamos verde claro o amarillo
+                    resultsDiv.style.borderColor = "#fdcb6e";
+                    resultsDiv.style.background = "#fff7d1";
+                    resultsDiv.style.color = "#d35400";
+                } else if (finalGrade < 9) {
+                    msg = "Great work! You understand quantifiers very well!";
+                    cssClass = "good-score";
+                } else {
+                    msg = "Outstanding! Perfect grammar skills! 🌟";
+                    cssClass = "good-score";
+                }
+
+                // Si es menor de 5, aplicar el emoji obligatorio
+                const prefix = finalGrade < 5 ? emoji + " " : "";
+
+                resultsDiv.innerHTML = `
+                    <span class="final-grade">${prefix}Nota: ${roundedGrade} / 10</span>
+                    <p>${msg}</p>
+                    <small>Score: ${score} / ${maxScore}</small>
+                `;
+                
+                resultsDiv.className = ""; // Reset
+                resultsDiv.classList.add(cssClass);
+                resultsDiv.style.display = "block";
+                resultsDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
