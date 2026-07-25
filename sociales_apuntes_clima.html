@@ -451,8 +451,36 @@
             </div>
 
             <div class="info-card">
-                <h2>🌡️ Los Elementos e Instrumentos</h2>
-                <p style="margin-bottom: 15px;">Para conocer el tiempo, usamos instrumentos que forman una <strong>estación meteorológica</strong>.</p>
+                <h2>🌤️ Los Elementos del Tiempo</h2>
+                <p style="margin-bottom: 15px;">El tiempo atmosférico es como un puzle formado por <strong>cinco piezas o elementos</strong> principales:</p>
+                
+                <div class="concept-grid">
+                    <div class="concept-item">
+                        <h3>🌡️ Temperatura</h3>
+                        <p>Nos dice el grado de calor o frío que tiene el aire. Se mide en <strong>grados centígrados (°C)</strong>.</p>
+                    </div>
+                    <div class="concept-item">
+                        <h3>🌧️ Precipitaciones</h3>
+                        <p>Es el agua que cae de las nubes. Puede ser líquida (<strong>lluvia</strong>) o sólida (<strong>nieve</strong>, <strong>granizo</strong>).</p>
+                    </div>
+                    <div class="concept-item">
+                        <h3>💨 Viento</h3>
+                        <p>Es el aire en movimiento. Se mide su velocidad (km/h) y la dirección desde donde sopla.</p>
+                    </div>
+                    <div class="concept-item">
+                        <h3>💧 Humedad</h3>
+                        <p>Es la cantidad de vapor de agua flotando en el aire. ¡El aire tiene agua aunque no la veamos!</p>
+                    </div>
+                    <div class="concept-item">
+                        <h3>☁️ Nubosidad</h3>
+                        <p>Es la cantidad de nubes que cubren el cielo en ese momento.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h2>🌡️ Los Instrumentos</h2>
+                <p style="margin-bottom: 15px;">Para medir los elementos del tiempo que acabamos de ver, usamos instrumentos reunidos en una <strong>estación meteorológica</strong>.</p>
                 
                 <div class="instrument-grid">
                     <div class="instrument-item">
@@ -685,6 +713,225 @@
                     <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
                     <div class="explanation hidden" data-text-shown-on-correction="true">
                         💡 <strong>Explicación:</strong> El clima influye mucho en el paisaje. Si llueve mucho, la naturaleza tiene agua de sobra para hacer crecer bosques grandes y verdes.
+                    </div>
+                </div>
+
+                
+                <!-- P9: Cloze (Precipitaciones) -->
+                <div class="question" data-type="cloze">
+                    <div class="question-title">9. Completa la frase sobre las precipitaciones tocando la palabra y luego el hueco.</div>
+                    
+                    <div class="word-bank" id="bank-q9">
+                        <div class="word-item" data-id="w9-1">lluvia</div>
+                        <div class="word-item" data-id="w9-2">nieve</div>
+                        <div class="word-item" data-id="w9-3">granizo</div>
+                    </div>
+
+                    <p class="cloze-text">
+                        El agua que cae de las nubes puede ser líquida en forma de <span class="drop-zone-inline" data-accept="w9-1"></span>, o puede ser sólida y muy fría en forma de <span class="drop-zone-inline" data-accept="w9-2"></span> o de bolas de hielo llamadas <span class="drop-zone-inline" data-accept="w9-3"></span>.
+                    </p>
+
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> Las tres son formas de precipitación. La lluvia es agua líquida, y si hace mucho frío se congela en forma de nieve o de granizo.
+                    </div>
+                </div>
+
+                <!-- P10: Test Simple (Meteorólogo) -->
+                <div class="question" data-type="single-choice">
+                    <div class="question-title">10. ¿Cómo se llama el científico o científica que estudia y predice el tiempo atmosférico?</div>
+                    <ul class="options-list shuffle-options">
+                        <li><label class="option-label"><input type="radio" name="q10" value="a"> Astrónomo/a</label></li>
+                        <li><label class="option-label"><input type="radio" name="q10" value="b" data-correct="true"> Meteorólogo/a</label></li>
+                        <li><label class="option-label"><input type="radio" name="q10" value="c"> Geólogo/a</label></li>
+                        <li><label class="option-label"><input type="radio" name="q10" value="d"> Climatólogo/a espacial</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> La ciencia que estudia el tiempo es la Meteorología, por eso los profesionales que nos dan el pronóstico del tiempo se llaman meteorólogos.
+                    </div>
+                </div>
+
+                <!-- P11: Verdadero/Falso (Humedad) -->
+                <div class="question" data-type="true-false">
+                    <div class="question-title">11. La humedad es la cantidad de vapor de agua que hay en el aire, aunque no lo veamos.</div>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="radio" name="q11" value="verdadero" data-correct="true"> Verdadero</label></li>
+                        <li><label class="option-label"><input type="radio" name="q11" value="falso"> Falso</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> ¡Verdadero! El aire que nos rodea siempre tiene algo de agua flotando en forma de gas (vapor). Eso es lo que mide el higrómetro.
+                    </div>
+                </div>
+
+                <!-- P12: Emparejar (Unidades de medida) -->
+                <div class="question" data-type="matching">
+                    <div class="question-title">12. Cada elemento del tiempo tiene su unidad de medida. Toca la unidad y colócala con su elemento.</div>
+                    
+                    <div class="word-bank" id="bank-q12">
+                        <div class="word-item" data-id="w12-1">Grados centígrados (°C)</div>
+                        <div class="word-item" data-id="w12-2">Litros por metro cuadrado</div>
+                        <div class="word-item" data-id="w12-3">Kilómetros por hora (km/h)</div>
+                    </div>
+
+                    <div class="matching-container">
+                        <div class="match-row">
+                            <div class="match-fixed">Temperatura ➡</div>
+                            <div class="drop-zone" data-accept="w12-1"></div>
+                        </div>
+                        <div class="match-row">
+                            <div class="match-fixed">Precipitaciones (lluvia) ➡</div>
+                            <div class="drop-zone" data-accept="w12-2"></div>
+                        </div>
+                        <div class="match-row">
+                            <div class="match-fixed">Velocidad del viento ➡</div>
+                            <div class="drop-zone" data-accept="w12-3"></div>
+                        </div>
+                    </div>
+                    
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> La temperatura usa grados (°C), el viento se mide por lo rápido que va (km/h), y la lluvia por la cantidad de agua que cae en una zona (litros).
+                    </div>
+                </div>
+
+                <!-- P13: Test Simple (Paisaje de montaña) -->
+                <div class="question" data-type="single-choice">
+                    <div class="question-title">13. ¿Por qué en las zonas de clima de alta montaña las casas suelen tener los tejados muy inclinados?</div>
+                    <ul class="options-list shuffle-options">
+                        <li><label class="option-label"><input type="radio" name="q13" value="a"> Porque hace mucho calor en verano.</label></li>
+                        <li><label class="option-label"><input type="radio" name="q13" value="b" data-correct="true"> Para que la nieve resbale y su peso no hunda el techo.</label></li>
+                        <li><label class="option-label"><input type="radio" name="q13" value="c"> Para atrapar mejor el agua de la lluvia en botellas.</label></li>
+                        <li><label class="option-label"><input type="radio" name="q13" value="d"> Para que el viento de las montañas no se lleve las tejas.</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> El clima nos hace adaptar cómo vivimos. Si el tejado fuera totalmente plano, los montones de nieve pesarían muchísimo y podrían derrumbar la casa.
+                    </div>
+                </div>
+
+                <!-- P14: Agrupar (Frases Tiempo vs Clima) -->
+                <div class="question" data-type="grouping">
+                    <div class="question-title">14. Clasifica estas frases. ¿Están hablando del TIEMPO atmosférico (ahora) o del CLIMA (de siempre)?</div>
+                    
+                    <div class="word-bank" id="bank-q14">
+                        <div class="word-item" data-id="w14-1">"Hoy está lloviendo a cántaros."</div>
+                        <div class="word-item" data-id="w14-1">"Ayer hizo un viento terrible."</div>
+                        <div class="word-item" data-id="w14-2">"Aquí los inviernos siempre son fríos."</div>
+                        <div class="word-item" data-id="w14-2">"En Canarias la temperatura es cálida."</div>
+                    </div>
+
+                    <div class="categories-container">
+                        <div class="category-box">
+                            <div class="category-title">Tiempo (corto plazo)</div>
+                            <div class="category-zone" data-accept="w14-1"></div>
+                        </div>
+                        <div class="category-box">
+                            <div class="category-title">Clima (largo plazo)</div>
+                            <div class="category-zone" data-accept="w14-2"></div>
+                        </div>
+                    </div>
+
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> Las frases con "hoy" o "ayer" cuentan algo que pasa y se acaba (el tiempo). Las frases que explican cómo son los inviernos o los lugares hablan del clima (lo normal de muchos años).
+                    </div>
+                </div>
+
+                <!-- P15: Verdadero/Falso (Veleta vs Anemómetro) -->
+                <div class="question" data-type="true-false">
+                    <div class="question-title">15. El anemómetro sirve para ver la dirección del viento y la veleta mide la velocidad a la que va.</div>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="radio" name="q15" value="verdadero"> Verdadero</label></li>
+                        <li><label class="option-label"><input type="radio" name="q15" value="falso" data-correct="true"> Falso</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> ¡Falso! Es justo al revés. La veleta (que a veces tiene forma de gallo) apunta hacia donde va el viento, y el anemómetro (que da vueltas) mide lo rápido que va.
+                    </div>
+                </div>
+
+                <!-- P16: Test Simple (Mapa del tiempo) -->
+                <div class="question" data-type="single-choice">
+                    <div class="question-title">16. Al mirar un mapa del tiempo en la tele, vemos el dibujo de un sol gigante en el sur de España. ¿Qué significa?</div>
+                    <ul class="options-list shuffle-options">
+                        <li><label class="option-label"><input type="radio" name="q16" value="a"> Que en el sur hay un clima desértico para siempre.</label></li>
+                        <li><label class="option-label"><input type="radio" name="q16" value="b" data-correct="true"> Que la predicción para ese día es de cielos despejados allí.</label></li>
+                        <li><label class="option-label"><input type="radio" name="q16" value="c"> Que la temperatura será de más de 40 grados seguro.</label></li>
+                        <li><label class="option-label"><input type="radio" name="q16" value="d"> Que el sol está a punto de explotar.</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> Los mapas del tiempo muestran una predicción para los próximos días. Un sol significa que no habrá nubes (cielo despejado), pero no nos cambia el clima ni nos dice los grados exactos por sí solo.
+                    </div>
+                </div>
+
+                <!-- P17: Test Múltiple (Estación meteorológica) -->
+                <div class="question" data-type="multiple-choice">
+                    <div class="question-title">17. ¿Qué aparatos podemos encontrar dentro de una ESTACIÓN METEOROLÓGICA? (Selecciona TODOS los correctos)</div>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="checkbox" name="q17" value="a" data-correct="true"> Pluviómetro</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q17" value="b"> Telescopio</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q17" value="c" data-correct="true"> Higrómetro</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q17" value="d"> Microscopio</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q17" value="e" data-correct="true"> Termómetro</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> El telescopio sirve para mirar las estrellas y el microscopio cosas diminutas. Los aparatos que miden el tiempo (pluviómetro, higrómetro, termómetro, etc.) están todos juntos en la estación meteorológica.
+                    </div>
+                </div>
+
+                <!-- P18: Cloze (Definición Estación) -->
+                <div class="question" data-type="cloze">
+                    <div class="question-title">18. Completa la frase sobre cómo se recogen los datos del tiempo.</div>
+                    
+                    <div class="word-bank" id="bank-q18">
+                        <div class="word-item" data-id="w18-1">instrumentos</div>
+                        <div class="word-item" data-id="w18-2">meteorológica</div>
+                        <div class="word-item" data-id="w18-3">datos</div>
+                    </div>
+
+                    <p class="cloze-text">
+                        El lugar fijo donde se reúnen varios <span class="drop-zone-inline" data-accept="w18-1"></span> para medir el tiempo y recoger <span class="drop-zone-inline" data-accept="w18-3"></span> todos los días se llama estación <span class="drop-zone-inline" data-accept="w18-2"></span>.
+                    </p>
+
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> Las estaciones meteorológicas son lugares, a veces con forma de pequeñas casetas, llenas de instrumentos que recogen y envían datos útiles.
+                    </div>
+                </div>
+
+                <!-- P19: Test Simple (Paisaje) -->
+                <div class="question" data-type="single-choice">
+                    <div class="question-title">19. El relieve (montañas, valles), la vegetación, los ríos y todo lo que vemos alrededor en un lugar forman su:</div>
+                    <ul class="options-list shuffle-options">
+                        <li><label class="option-label"><input type="radio" name="q19" value="a"> Clima</label></li>
+                        <li><label class="option-label"><input type="radio" name="q19" value="b" data-correct="true"> Paisaje</label></li>
+                        <li><label class="option-label"><input type="radio" name="q19" value="c"> Tiempo atmosférico</label></li>
+                        <li><label class="option-label"><input type="radio" name="q19" value="d"> Continente</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> Todo lo que nuestros ojos pueden ver en una zona de la naturaleza se llama paisaje. Este paisaje se transforma totalmente dependiendo de si el clima es húmedo, seco o frío.
+                    </div>
+                </div>
+
+                <!-- P20: Test Múltiple (Los 4 climas) -->
+                <div class="question" data-type="multiple-choice">
+                    <div class="question-title">20. Selecciona los 4 tipos de clima principales que tenemos en España (¡cuidado con los intrusos!).</div>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="checkbox" name="q20" value="a" data-correct="true"> Mediterráneo</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q20" value="b"> Desértico</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q20" value="c" data-correct="true"> Subtropical</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q20" value="d" data-correct="true"> Oceánico</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q20" value="e"> Polar</label></li>
+                        <li><label class="option-label"><input type="checkbox" name="q20" value="f" data-correct="true"> De Montaña</label></li>
+                    </ul>
+                    <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+                    <div class="explanation hidden" data-text-shown-on-correction="true">
+                        💡 <strong>Explicación:</strong> En España no tenemos clima polar (propio del Polo Norte o Sur) ni clima desértico. Nuestros 4 climas son: Mediterráneo (el más extendido), Oceánico (el del norte), de Montaña (zonas muy altas) y Subtropical (Canarias).
                     </div>
                 </div>
 
