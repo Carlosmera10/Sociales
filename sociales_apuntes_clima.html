@@ -367,6 +367,9 @@
              flex-direction: column;
              gap: 5px;
              cursor: pointer;
+             padding: 6px;
+             border: 2px dashed #ddd;
+             border-radius: 8px;
         }
 
         /* Skip y Explicación */
@@ -817,19 +820,19 @@
                     
                     <div class="word-bank" id="bank-q14">
                         <div class="word-item" data-id="w14-1">"Hoy está lloviendo a cántaros."</div>
-                        <div class="word-item" data-id="w14-1">"Ayer hizo un viento terrible."</div>
+                        <div class="word-item" data-id="w14-1b">"Ayer hizo un viento terrible."</div>
                         <div class="word-item" data-id="w14-2">"Aquí los inviernos siempre son fríos."</div>
-                        <div class="word-item" data-id="w14-2">"En Canarias la temperatura es cálida."</div>
+                        <div class="word-item" data-id="w14-2b">"En Canarias la temperatura es cálida."</div>
                     </div>
 
                     <div class="categories-container">
                         <div class="category-box">
                             <div class="category-title">Tiempo (corto plazo)</div>
-                            <div class="category-zone" data-accept="w14-1"></div>
+                            <div class="category-zone" data-accept="w14-1,w14-1b"></div>
                         </div>
                         <div class="category-box">
                             <div class="category-title">Clima (largo plazo)</div>
-                            <div class="category-zone" data-accept="w14-2"></div>
+                            <div class="category-zone" data-accept="w14-2,w14-2b"></div>
                         </div>
                     </div>
 
@@ -972,68 +975,83 @@
             });
 
             // --- Lógica de Interacción Táctil (Toque Origen -> Toque Destino) ---
+            // Reescrita como un único listener delegado en document para que
+            // funcione de forma fiable aunque una caja/categoría ya tenga
+            // elementos dentro (el punto que fallaba en la pregunta 14).
             let selectedWord = null;
 
-            // 1. Tocar banco de palabras
-            document.querySelectorAll('.word-item').forEach(word => {
-                word.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Evitar propagación a drop-zones si estuviera dentro
-                    
-                    // Si ya estaba seleccionada, la deseleccionamos
-                    if (this.classList.contains('selected-word')) {
-                        this.classList.remove('selected-word');
-                        selectedWord = null;
+            function clearSelection() {
+                if (selectedWord) selectedWord.classList.remove('selected-word');
+                selectedWord = null;
+            }
+
+            function returnToBank(word) {
+                const questionDiv = word.closest('.question');
+                const bank = questionDiv ? questionDiv.querySelector('.word-bank') : null;
+                if (bank) bank.appendChild(word);
+            }
+
+            function placeInZone(word, zone) {
+                word.classList.remove('selected-word');
+
+                if (zone.classList.contains('category-zone')) {
+                    // Las categorías aceptan varios elementos: simplemente se añade.
+                    zone.appendChild(word);
+                } else {
+                    // drop-zone / drop-zone-inline: solo aceptan 1 elemento.
+                    // Si ya había algo (y no es la misma palabra), lo devolvemos al banco.
+                    if (zone.children.length > 0 && zone.children[0] !== word) {
+                        returnToBank(zone.children[0]);
+                    }
+                    zone.appendChild(word);
+                }
+                selectedWord = null;
+            }
+
+            document.addEventListener('click', function (e) {
+                const wordEl = e.target.closest('.word-item');
+                const zoneEl = e.target.closest('.drop-zone, .drop-zone-inline, .category-zone');
+
+                // --- Se ha tocado una palabra (esté en el banco o ya colocada) ---
+                if (wordEl) {
+                    const isPlaced = zoneEl !== null;
+
+                    // Si ya hay una palabra seleccionada y se toca OTRA palabra que
+                    // está dentro de una caja/hueco, lo interpretamos como "quiero
+                    // soltar aquí" en vez de "quiero recoger esta otra palabra".
+                    // Esto es lo que arregla el fallo de la pregunta 14: cuando la
+                    // caja ya tiene un elemento dentro, tocar la caja en realidad
+                    // toca ese elemento, así que hay que tratarlo igualmente como
+                    // un intento de soltar la palabra seleccionada ahí.
+                    if (selectedWord && selectedWord !== wordEl && isPlaced) {
+                        placeInZone(selectedWord, zoneEl);
                         return;
                     }
 
-                    // Si está en una drop-zone (ya colocada), la devolvemos al banco
-                    if (this.parentElement.classList.contains('drop-zone') || 
-                        this.parentElement.classList.contains('drop-zone-inline') ||
-                        this.parentElement.classList.contains('category-zone')) {
-                        
-                        // Encontrar su banco de palabras original buscando el ID en data-id
-                        const questionDiv = this.closest('.question');
-                        const bank = questionDiv.querySelector('.word-bank');
-                        if (bank) {
-                            bank.appendChild(this);
-                        }
+                    // Tocar la palabra que ya estaba seleccionada -> deseleccionar
+                    if (wordEl.classList.contains('selected-word')) {
+                        clearSelection();
                         return;
                     }
 
-                    // Seleccionar nueva palabra (deseleccionando la anterior)
-                    document.querySelectorAll('.word-item').forEach(w => w.classList.remove('selected-word'));
-                    this.classList.add('selected-word');
-                    selectedWord = this;
-                });
-            });
-
-            // 2. Tocar zona de destino
-            document.querySelectorAll('.drop-zone, .drop-zone-inline, .category-zone').forEach(zone => {
-                zone.addEventListener('click', function() {
-                    if (selectedWord) {
-                        // Limpiar selección visual
-                        selectedWord.classList.remove('selected-word');
-                        
-                        // Mover el elemento
-                        // Si es drop-zone normal o inline (solo aceptan 1 elemento)
-                        if (this.classList.contains('drop-zone') || this.classList.contains('drop-zone-inline')) {
-                            // Si ya hay algo, lo devolvemos al banco (para intercambiar)
-                            if (this.children.length > 0) {
-                                const oldWord = this.children[0];
-                                const questionDiv = this.closest('.question');
-                                const bank = questionDiv.querySelector('.word-bank');
-                                if (bank) bank.appendChild(oldWord);
-                            }
-                            this.appendChild(selectedWord);
-                        } 
-                        // Si es category-zone (acepta varios)
-                        else if (this.classList.contains('category-zone')) {
-                            this.appendChild(selectedWord);
-                        }
-                        
-                        selectedWord = null;
+                    // Tocar una palabra ya colocada (sin otra seleccionada) -> recogerla
+                    if (isPlaced) {
+                        clearSelection();
+                        returnToBank(wordEl);
+                        return;
                     }
-                });
+
+                    // Tocar una palabra del banco -> seleccionarla
+                    document.querySelectorAll('.word-item.selected-word').forEach(w => w.classList.remove('selected-word'));
+                    wordEl.classList.add('selected-word');
+                    selectedWord = wordEl;
+                    return;
+                }
+
+                // --- Se ha tocado directamente el fondo de una caja/hueco (sin palabra encima) ---
+                if (zoneEl && selectedWord) {
+                    placeInZone(selectedWord, zoneEl);
+                }
             });
 
             // --- Lógica de Corrección ---
@@ -1072,7 +1090,11 @@
                 }
 
                 const nota = (correctCount / totalCounted) * 10;
-                const notaFormateada = nota.toFixed(1).replace('.0', ''); // Redondeo limpio
+                // Redondeo limpio a 1 decimal, quitando el ".0" solo cuando
+                // aparece al final del número (evita tocar por error un
+                // ".0" que estuviera en medio, aunque con toFixed(1) no
+                // puede ocurrir, se deja explícito por claridad).
+                const notaFormateada = nota.toFixed(1).replace(/\.0$/, '');
 
                 let mensaje = '';
                 if (nota === 10) mensaje = "¡Perfecto! Eres un auténtico/a meteorólogo/a. 🌪️☀️";
@@ -1121,7 +1143,7 @@
                             placedSomething = true;
                             if (zone.children[0].dataset.id !== expectedId) allCorrect = false;
                         } else {
-                            allCorrect = false; // Faltan por rellenar
+                            allCorrect = false; // Faltan por rellenar (o sobran)
                         }
                     });
                     return placedSomething && allCorrect;
@@ -1131,20 +1153,29 @@
                     const categoryZones = q.querySelectorAll('.category-zone');
                     let allCorrect = true;
                     let placedSomething = false;
-                    
+                    let totalPlaced = 0;
+                    let totalExpected = 0;
+
                     categoryZones.forEach(zone => {
-                        const expectedIds = zone.dataset.accept.split(','); // Puede aceptar varios si lo diseñamos así (aquí es 1 a 1 en el HTML, pero por si acaso)
+                        const expectedIds = zone.dataset.accept.split(',').map(s => s.trim());
+                        totalExpected += expectedIds.length;
+
                         Array.from(zone.children).forEach(word => {
                             placedSomething = true;
+                            totalPlaced++;
                             if (!expectedIds.includes(word.dataset.id)) {
-                                allCorrect = false; // Hay una intrusa
+                                allCorrect = false; // Hay una intrusa en esta caja
                             }
                         });
                     });
-                    
-                    // Comprobar que no se han dejado palabras sin clasificar
+
+                    // Cada caja debe recibir exactamente el número de elementos
+                    // que le corresponden (ni de más ni de menos), y el banco
+                    // debe quedar vacío.
+                    if (totalPlaced !== totalExpected) allCorrect = false;
+
                     const bank = q.querySelector('.word-bank');
-                    if(bank && bank.children.length > 0) allCorrect = false;
+                    if (bank && bank.children.length > 0) allCorrect = false;
 
                     return placedSomething && allCorrect;
                 }
@@ -1180,9 +1211,13 @@
                 if (type === 'matching' || type === 'cloze' || type === 'grouping') {
                      const zones = q.querySelectorAll('.drop-zone, .drop-zone-inline, .category-zone');
                      zones.forEach(zone => {
-                         const expectedIds = zone.dataset.accept.split(',');
+                         const expectedIds = zone.dataset.accept.split(',').map(s => s.trim());
                          let hasError = false;
-                         
+
+                         if (zone.classList.contains('category-zone') && zone.children.length !== expectedIds.length) {
+                             hasError = true;
+                         }
+
                          Array.from(zone.children).forEach(word => {
                              if (!expectedIds.includes(word.dataset.id)) {
                                  hasError = true;
