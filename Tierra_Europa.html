@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Repaso y Examen: La Tierra y Europa</title>
+  <style>
+    /* VARIABLES Y RESET */
+    :root {
+      --primary: #2c7a7b;
+      --primary-light: #e6fffa;
+      --secondary: #b45309;
+      --secondary-light: #fef3c7;
+      --bg: #fdf6e3;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --border: #e2e8f0;
+      --correct: #22c55e;
+      --wrong: #ef4444;
+      --correct-bg: #dcfce7;
+      --wrong-bg: #fee2e2;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 18px; 
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 15px;
+      background: var(--bg);
+      min-height: 100vh;
+    }
+
+    /* CABECERA */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .header h1 { font-size: 1.6rem; margin-bottom: 5px; }
+    .header p { font-size: 1.1rem; opacity: 0.9; }
+
+    /* SECCIÓN DE REPASO */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      border-top: 5px solid var(--secondary);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-content { margin-bottom: 15px; }
+    .highlight { font-weight: bold; color: var(--secondary); }
+    
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .comp-item {
+      background: var(--primary-light);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+    .comp-item h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--primary); }
+    
+    .curiosity {
+      background: var(--secondary-light);
+      padding: 15px;
+      border-radius: 8px;
+      font-style: italic;
+      border-left: 4px solid var(--secondary);
+      margin-top: 15px;
+    }
+    .alert-box {
+      background: #fee2e2;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #ef4444;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+
+    .list-detailed { margin-left: 20px; margin-top: 10px; }
+    .list-detailed li { margin-bottom: 8px; }
+
+    /* ANIMACIÓN */
+    .floating-emoji {
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* BOTONES */
+    .cta-exam {
+      text-align: center;
+      margin: 40px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .start-exam-btn, .submit-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 0 #1e5c5d;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .start-exam-btn:active, .submit-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #1e5c5d;
+    }
+
+    /* SECCIÓN DE EXAMEN */
+    .hidden { display: none !important; }
+    
+    .question {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+      border-left: 5px solid var(--primary);
+    }
+    .question-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    .options-grid { display: grid; gap: 10px; }
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option-label:hover { background: #f1f5f9; }
+    .option-label input { margin-right: 15px; transform: scale(1.3); }
+    
+    .num-input {
+      width: 100px;
+      padding: 10px;
+      font-size: 1.1rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    /* INTERACCIÓN TÁCTIL */
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+      padding: 15px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      min-height: 60px;
+    }
+    .word-item {
+      padding: 8px 15px;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 20px;
+      color: var(--primary);
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .word-item.selected-word {
+      background: var(--primary);
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+    .drop-zone {
+      display: inline-block;
+      min-width: 120px;
+      height: 42px;
+      border: 2px dashed #94a3b8;
+      border-radius: 8px;
+      vertical-align: middle;
+      background: #f8fafc;
+      margin: 0 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .category-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    .category-box {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 100px;
+      background: #f8fafc;
+      cursor: pointer;
+    }
+    .category-box h4 { margin-bottom: 10px; text-align: center; color: var(--secondary); }
+
+    .skip-option {
+      display: block;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.95rem;
+      color: #64748b;
+      cursor: pointer;
+    }
+    .skip-option input { margin-right: 8px; transform: scale(1.2); }
+
+    .explanation {
+      margin-top: 15px;
+      padding: 15px;
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .correct-answer { background: var(--correct-bg) !important; border-color: var(--correct) !important; }
+    .wrong-answer { background: var(--wrong-bg) !important; border-color: var(--wrong) !important; text-decoration: line-through; }
+    
+    .results {
+      text-align: center;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      box-shadow: var(--shadow);
+    }
+    .grade-text { font-size: 3rem; margin: 10px 0; color: var(--primary); }
+
+    .main-footer { text-align: center; padding: 20px; margin-top: 30px; }
+    .main-footer a { color: var(--primary); text-decoration: none; font-weight: bold; }
+    
+    @media (min-width: 600px) {
+      .comparison { grid-template-columns: 1fr 1fr; }
+      .category-container { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌍 El Planeta y Europa</h1>
+      <p>Repasa Geografía y ponte a prueba con 30 preguntas</p>
+    </div>
+
+    <!-- SECCIÓN DE REPASO VISUAL -->
+    <section id="review-section">
+      
+      <div class="card">
+        <h2><span class="floating-emoji">🪐</span> 1. La Forma de la Tierra y la Rotación</h2>
+        <p>Nuestro planeta no es una esfera perfecta. Está ligeramente achatado por los polos y ensanchado por el Ecuador. A esta forma real se le llama <strong>Geoide</strong>.</p>
+        <div class="comp-item" style="margin-top: 15px;">
+          <h3>🌀 Movimiento de Rotación</h3>
+          <p>La Tierra gira sobre su propio <strong>eje imaginario</strong> (como una peonza). Ese eje está ligeramente inclinado.</p>
+          <ul class="list-detailed">
+            <li>⏱️ <strong>Duración exacta:</strong> 23 horas y 56 minutos (lo redondeamos a 24 horas = 1 día solar).</li>
+            <li>✨ <strong>Consecuencia principal:</strong> La sucesión del <strong>día y la noche</strong>.</li>
+            <li>🌍 <strong>Husos horarios:</strong> Como la Tierra es redonda, no amanece a la vez en todas partes. Por eso dividimos el mundo en 24 franjas verticales llamadas husos horarios (cada franja mide 15 grados).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="floating-emoji">☀️</span> 2. Traslación y el Secreto de las Estaciones</h2>
+        <p>A la vez que gira sobre sí misma, la Tierra viaja alrededor del Sol siguiendo una <strong>órbita elíptica</strong> (casi circular, pero un poco estirada).</p>
+        <div class="comp-item" style="margin-top: 15px;">
+          <h3>🚀 Movimiento de Traslación</h3>
+          <ul class="list-detailed">
+            <li>⏱️ <strong>Duración exacta:</strong> 365 días, 5 horas y 48 minutos.</li>
+            <li>📅 <strong>El año bisiesto:</strong> Esas casi 6 horas que sobran cada año se acumulan. Al cabo de 4 años, forman 24 horas (un día entero). Por eso, cada 4 años, febrero tiene 29 días y el año tiene 366.</li>
+          </ul>
+        </div>
+        
+        <div class="alert-box">
+          🚨 ¡Cuidado! La traslación sola NO causa las estaciones. Si el eje de la Tierra fuera recto, todo el planeta tendría la misma temperatura siempre, aunque diéramos vueltas al sol.<br><br>
+          El verdadero causante de las estaciones es <strong>LA INCLINACIÓN DEL EJE (23,5°)</strong>, que hace que los rayos del sol caigan más directos sobre un hemisferio o sobre el otro según el momento del año.
+        </div>
+
+        <ul class="list-detailed" style="margin-top: 15px;">
+          <li>🌞 <strong>Solsticios:</strong> (Verano e Invierno). Días de máxima diferencia entre el día y la noche. En verano el día es larguísimo.</li>
+          <li>🌗 <strong>Equinoccios:</strong> (Primavera y Otoño). Los rayos caen rectos en el Ecuador. El día y la noche duran exactamente lo mismo (12 horas).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2><span class="floating-emoji">🗺️</span> 3. Coordenadas: El GPS de la Tierra</h2>
+        <p>Para no perdernos, usamos una cuadrícula imaginaria sobre la Tierra compuesta por Paralelos y Meridianos.</p>
+        <div class="comparison">
+          <div class="comp-item">
+            <h3>📏 Paralelos y Latitud</h3>
+            <p>Líneas horizontales (acostadas). Miden la <strong>Latitud</strong>.</p>
+            <p>Se mide hacia el <strong>Norte</strong> o el <strong>Sur</strong>.</p>
+            <p>El principal es el <strong>Ecuador (0°)</strong>, que divide la Tierra en Hemisferio Norte y Hemisferio Sur.</p>
+            <p>La máxima latitud es 90° (los polos).</p>
+          </div>
+          <div class="comp-item">
+            <h3>📐 Meridianos y Longitud</h3>
+            <p>Líneas verticales (de polo a polo). Miden la <strong>Longitud</strong>.</p>
+            <p>Se mide hacia el <strong>Este</strong> o el <strong>Oeste</strong>.</p>
+            <p>El principal es <strong>Greenwich (0°)</strong>, que divide la Tierra en Hemisferio Oriental (Este) y Occidental (Oeste).</p>
+            <p>La máxima longitud es 180°.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="floating-emoji">🔍</span> 4. Las Escalas Cartográficas</h2>
+        <p>Los mapas son dibujos reducidos de la realidad. La escala nos dice matemáticamente cuánto se ha encogido.</p>
+        <ul class="list-detailed">
+          <li><strong>Escala Numérica:</strong> Es una fracción. Ej. <span class="highlight">1:50.000</span>. Esto se lee: "1 cm en el mapa equivale a 50.000 cm en la realidad".</li>
+          <li><strong>Escala Gráfica:</strong> Es un dibujito de una barra segmentada parecida a una regla. Nos permite medir directamente.</li>
+        </ul>
+        <div class="curiosity">
+          💡 <strong>Truco de cálculo:</strong> Si tienes un mapa 1:100.000 y mides 3 cm, multiplicas (3 x 100.000 = 300.000 cm). Para pasar a kilómetros, <strong>tacha 5 ceros</strong>. ¡300.000 cm son 3 km!
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="floating-emoji">🏔️</span> 5. Geografía Física de Europa</h2>
+        <p>Europa es un continente situado en el Hemisferio Norte. Destaca por tener un relieve muy variado y unas costas muy recortadas.</p>
+        
+        <div class="comparison">
+          <div class="comp-item">
+            <h3>⛰️ El Relieve</h3>
+            <p><strong>Gran Llanura Europea:</strong> Ocupa todo el centro y el este del continente. Es muy plana.</p>
+            <p><strong>Cordilleras Jóvenes (Sur):</strong> Son montañas muy altas y con picos puntiagudos. Destacan los <strong>Pirineos</strong> (entre España y Francia), los <strong>Alpes</strong> (centro de Europa) y los <strong>Cárpatos</strong>.</p>
+            <p><strong>Frontera Natural:</strong> Los <strong>Montes Urales</strong> y la cordillera del <strong>Cáucaso</strong> separan Europa de Asia.</p>
+          </div>
+          <div class="comp-item">
+            <h3>🌊 Ríos y Costas</h3>
+            <p><strong>Penínsulas:</strong> Las más famosas son la Ibérica (España y Portugal), la Itálica (forma de bota), la Balcánica (Grecia) y la Escandinava (Noruega/Suecia).</p>
+            <p><strong>Ríos:</strong> El <strong>Volga</strong> es el río más largo y caudaloso de Europa (desemboca en el Mar Caspio). Otros muy importantes son el <strong>Danubio</strong> y el <strong>Rin</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-exam">
+        <p>¿Has leído todo con atención? ¡Hay 30 preguntas esperándote! 💪</p>
+        <button id="start-exam-btn" class="start-exam-btn">🚀 ¡Empezar el Súper Examen!</button>
+      </div>
+    </section>
+
+    <!-- SECCIÓN DE EXAMEN -->
+    <section id="exam-section" class="hidden">
+      <form id="quiz-form">
+        
+        <!-- P1 -->
+        <div class="question q-vf" data-type="vf">
+          <div class="question-title">1. ¿Verdadero o Falso? La Tierra es una esfera perfecta matemática.</div>
+          <div class="options-grid">
+            <label class="option-label"><input type="radio" name="q1" value="v"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q1" value="f" data-correct="true"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Falso. La Tierra está achatada por los polos y abultada en el Ecuador. A esa forma se le llama Geoide.</div>
+        </div>
+
+        <!-- P2 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">2. ¿Cuánto dura exactamente el movimiento de rotación?</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q2" value="1"> 24 horas y 30 minutos</label>
+            <label class="option-label"><input type="radio" name="q2" value="2" data-correct="true"> 23 horas y 56 minutos</label>
+            <label class="option-label"><input type="radio" name="q2" value="3"> 365 días</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Dura 23 horas y 56 minutos, aunque para hacer los días prácticos lo redondeamos a 24 horas.</div>
+        </div>
+
+        <!-- P3 -->
+        <div class="question q-agrupar" data-type="agrupar">
+          <div class="question-title">3. Clasifica las características tocando y moviendo a su caja.</div>
+          <div class="word-bank" id="bank-q3">
+            <div class="word-item" data-id="q3_r1" data-bank-id="bank-q3">El día y la noche</div>
+            <div class="word-item" data-id="q3_t1" data-bank-id="bank-q3">Año bisiesto</div>
+            <div class="word-item" data-id="q3_r2" data-bank-id="bank-q3">Giro sobre su eje</div>
+            <div class="word-item" data-id="q3_t2" data-bank-id="bank-q3">Giro alrededor del Sol</div>
+          </div>
+          <div class="category-container">
+            <div class="category-box" data-accept="q3_r1,q3_r2" data-expected="2"><h4>Rotación</h4></div>
+            <div class="category-box" data-accept="q3_t1,q3_t2" data-expected="2"><h4>Traslación</h4></div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Rotación: gira sobre su eje y causa día/noche. Traslación: viaja alrededor del Sol y causa el año.</div>
+        </div>
+
+        <!-- P4 -->
+        <div class="question q-vf" data-type="vf">
+          <div class="question-title">4. ¿Verdadero o Falso? El simple hecho de dar vueltas alrededor del sol (la traslación) es la única causa de las estaciones del año.</div>
+          <div class="options-grid">
+            <label class="option-label"><input type="radio" name="q4" value="v"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q4" value="f" data-correct="true"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Falso. Como indicaba el aviso rojo, la traslación sola NO causaría las estaciones. La verdadera causante es la <strong>inclinación del eje</strong>.</div>
+        </div>
+
+        <!-- P5 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">5. ¿Cuántos grados está inclinado el eje de la Tierra?</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q5" value="1"> 90°</label>
+            <label class="option-label"><input type="radio" name="q5" value="2" data-correct="true"> 23,5°</label>
+            <label class="option-label"><input type="radio" name="q5" value="3"> 180°</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> El eje terrestre está inclinado 23,5 grados. ¡Esa pequeña inclinación es el secreto de nuestro clima y de las estaciones!</div>
+        </div>
+
+        <!-- P6 -->
+        <div class="question q-multi" data-type="multi">
+          <div class="question-title">6. ¿Qué ocurre en los Equinoccios (primavera y otoño)? (Marca todas las correctas)</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="checkbox" name="q6_1" value="1" data-correct="true"> Los rayos del sol caen rectos en el Ecuador.</label>
+            <label class="option-label"><input type="checkbox" name="q6_2" value="2" data-correct="false"> Es el momento en que hace más frío en todo el planeta.</label>
+            <label class="option-label"><input type="checkbox" name="q6_3" value="3" data-correct="true"> El día y la noche duran exactamente lo mismo (12h).</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> En los equinoccios (equi = igual, noccio = noche), la noche y el día miden lo mismo porque el Sol incide verticalmente en el Ecuador.</div>
+        </div>
+
+        <!-- P7 -->
+        <div class="question q-emparejar" data-type="emparejar">
+          <div class="question-title">7. Empareja cada término con su definición.</div>
+          <div class="word-bank" id="bank-q7">
+            <div class="word-item" data-id="q7_sol" data-bank-id="bank-q7">Solsticio</div>
+            <div class="word-item" data-id="q7_equi" data-bank-id="bank-q7">Equinoccio</div>
+          </div>
+          <div style="margin-top: 15px; line-height: 2.5;">
+            <p>Días de máxima diferencia entre el día y la noche (Verano/Invierno): <span class="drop-zone" data-accept="q7_sol" data-max-items="1"></span></p>
+            <p>El día y la noche duran lo mismo (Primavera/Otoño): <span class="drop-zone" data-accept="q7_equi" data-max-items="1"></span></p>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Los solsticios marcan el inicio del verano y el invierno. Los equinoccios marcan primavera y otoño.</div>
+        </div>
+
+        <!-- P8 -->
+        <div class="question q-num" data-type="num">
+          <div class="question-title">8. Escribe el número exacto: ¿Cada cuántos años ocurre un año bisiesto?</div>
+          <input type="number" class="num-input" name="q8" data-answer="4"> años
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Cada 4 años sumamos las 6 horitas sobrantes de la traslación (6 x 4 = 24h) y añadimos un día al calendario.</div>
+        </div>
+
+        <!-- P9 -->
+        <div class="question q-cloze" data-type="cloze">
+          <div class="question-title">9. Completa tocando las palabras. Un año bisiesto tiene <span class="drop-zone" data-accept="q9_d" data-max-items="1"></span> días, porque al mes de <span class="drop-zone" data-accept="q9_m" data-max-items="1"></span> se le añade el día <span class="drop-zone" data-accept="q9_n" data-max-items="1"></span>.</div>
+          <div class="word-bank" id="bank-q9">
+            <div class="word-item" data-id="q9_m" data-bank-id="bank-q9">febrero</div>
+            <div class="word-item" data-id="q9_n" data-bank-id="bank-q9">29</div>
+            <div class="word-item" data-id="q9_d" data-bank-id="bank-q9">366</div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Un año normal tiene 365. Un bisiesto suma 1 más (366) que se añade al final de febrero (29).</div>
+        </div>
+
+        <!-- P10 -->
+        <div class="question q-vf" data-type="vf">
+          <div class="question-title">10. ¿Verdadero o Falso? El sol amanece a la misma vez en todo el planeta Tierra.</div>
+          <div class="options-grid">
+            <label class="option-label"><input type="radio" name="q10" value="v"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q10" value="f" data-correct="true"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Falso. Como la Tierra es redonda, la luz del Sol va iluminando distintas zonas poco a poco. ¡Por eso necesitamos los husos horarios!</div>
+        </div>
+
+        <!-- P11 -->
+        <div class="question q-num" data-type="num">
+          <div class="question-title">11. ¿Cuántos husos horarios (franjas) hay en total en el planeta Tierra?</div>
+          <input type="number" class="num-input" name="q11" data-answer="24">
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Hay exactamente 24 husos horarios, uno por cada hora que tarda la Tierra en dar una vuelta completa sobre sí misma.</div>
+        </div>
+
+        <!-- P12 -->
+        <div class="question q-agrupar" data-type="agrupar">
+          <div class="question-title">12. Clasifica tocando origen y destino: Paralelos vs Meridianos.</div>
+          <div class="word-bank" id="bank-q12">
+            <div class="word-item" data-id="q12_p1" data-bank-id="bank-q12">Son horizontales</div>
+            <div class="word-item" data-id="q12_m1" data-bank-id="bank-q12">Son verticales</div>
+            <div class="word-item" data-id="q12_p2" data-bank-id="bank-q12">El principal es el Ecuador</div>
+            <div class="word-item" data-id="q12_m2" data-bank-id="bank-q12">El principal es Greenwich</div>
+          </div>
+          <div class="category-container">
+            <div class="category-box" data-accept="q12_p1,q12_p2" data-expected="2"><h4>Paralelos</h4></div>
+            <div class="category-box" data-accept="q12_m1,q12_m2" data-expected="2"><h4>Meridianos</h4></div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Paralelos = Ecuador (horizontales). Meridianos = Greenwich (verticales de polo a polo).</div>
+        </div>
+
+        <!-- P13 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">13. ¿Qué mide exactamente la Latitud?</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q13" value="1" data-correct="true"> La distancia hacia el Norte o el Sur desde el Ecuador.</label>
+            <label class="option-label"><input type="radio" name="q13" value="2"> La distancia hacia el Este o el Oeste desde Greenwich.</label>
+            <label class="option-label"><input type="radio" name="q13" value="3"> La distancia desde la Tierra al Sol.</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Recuerda el truco: LAtitud va con paralelos (horizontales, que te separan hacia arriba/Norte o abajo/Sur).</div>
+        </div>
+
+        <!-- P14 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">14. ¿Qué mide exactamente la Longitud?</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q14" value="1"> La distancia hacia el Norte o el Sur desde el Ecuador.</label>
+            <label class="option-label"><input type="radio" name="q14" value="2" data-correct="true"> La distancia hacia el Este o el Oeste desde Greenwich.</label>
+            <label class="option-label"><input type="radio" name="q14" value="3"> La altura de una montaña.</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> La Longitud (relacionada con los meridianos verticales) mide cuánto te desplazas hacia la derecha (Este) o izquierda (Oeste).</div>
+        </div>
+
+        <!-- P15 -->
+        <div class="question q-emparejar" data-type="emparejar">
+          <div class="question-title">15. Empareja cada línea principal con lo que divide.</div>
+          <div class="word-bank" id="bank-q15">
+            <div class="word-item" data-id="q15_ec" data-bank-id="bank-q15">Ecuador</div>
+            <div class="word-item" data-id="q15_gr" data-bank-id="bank-q15">Greenwich</div>
+          </div>
+          <div style="margin-top: 15px; line-height: 2.5;">
+            <p>Divide la Tierra en Hemisferio Oriental (Este) y Occidental (Oeste): <span class="drop-zone" data-accept="q15_gr" data-max-items="1"></span></p>
+            <p>Divide la Tierra en Hemisferio Norte y Hemisferio Sur: <span class="drop-zone" data-accept="q15_ec" data-max-items="1"></span></p>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> El Ecuador parte la Tierra por la "cintura" (Norte/Sur). Greenwich la parte de arriba a abajo (Este/Oeste).</div>
+        </div>
+
+        <!-- P16 -->
+        <div class="question q-multi" data-type="multi">
+          <div class="question-title">16. Si Europa está situada por encima del Ecuador, ¿en qué hemisferio o hemisferios está? (Marca la correcta)</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="checkbox" name="q16_1" value="1" data-correct="true"> Hemisferio Norte</label>
+            <label class="option-label"><input type="checkbox" name="q16_2" value="2" data-correct="false"> Hemisferio Sur</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Todo lo que está por encima del Ecuador (paralelo 0) pertenece al Hemisferio Norte.</div>
+        </div>
+
+        <!-- P17 -->
+        <div class="question q-vf" data-type="vf">
+          <div class="question-title">17. ¿Verdadero o Falso? La latitud máxima que existe es 180°.</div>
+          <div class="options-grid">
+            <label class="option-label"><input type="radio" name="q17" value="v"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q17" value="f" data-correct="true"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Falso. La latitud va de 0° (Ecuador) hasta un máximo de 90° (los Polos). La que llega a 180° es la longitud.</div>
+        </div>
+
+        <!-- P18 -->
+        <div class="question q-cloze" data-type="cloze">
+          <div class="question-title">18. Completa con las palabras adecuadas sobre coordenadas.</div>
+          <div class="word-bank" id="bank-q18">
+            <div class="word-item" data-id="q18_lat" data-bank-id="bank-q18">Latitud</div>
+            <div class="word-item" data-id="q18_lon" data-bank-id="bank-q18">Longitud</div>
+          </div>
+          <p style="line-height: 2.5;">Para dar la coordenada exacta de un punto, siempre decimos primero su <span class="drop-zone" data-accept="q18_lat" data-max-items="1"></span> (Norte o Sur) y después su <span class="drop-zone" data-accept="q18_lon" data-max-items="1"></span> (Este u Oeste).</p>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Siempre se dice en ese orden. Por ejemplo: 40° Norte (Latitud), 3° Oeste (Longitud).</div>
+        </div>
+
+        <!-- P19 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">19. ¿Qué tipo de escala se representa con una fracción como 1:50.000?</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q19" value="1"> Escala Gráfica</label>
+            <label class="option-label"><input type="radio" name="q19" value="2" data-correct="true"> Escala Numérica</label>
+            <label class="option-label"><input type="radio" name="q19" value="3"> Escala de Coordenadas</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Las fracciones numéricas (1:50.000) son la Escala Numérica. La gráfica es la que parece una barrita pintada.</div>
+        </div>
+
+        <!-- P20 -->
+        <div class="question q-vf" data-type="vf">
+          <div class="question-title">20. ¿Verdadero o Falso? Un mapa de España a escala 1:1.000.000 tiene MÁS detalle que un plano de mi barrio a escala 1:10.000.</div>
+          <div class="options-grid">
+            <label class="option-label"><input type="radio" name="q20" value="v"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q20" value="f" data-correct="true"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Falso. A mayor número en la derecha, más se ha encogido la realidad y MENOS detalles ves. El plano del barrio (1:10.000) muestra mucho más detalle.</div>
+        </div>
+
+        <!-- P21 -->
+        <div class="question q-num" data-type="num">
+          <div class="question-title">21. Problema de escala: Mides 3 cm en un mapa cuya escala es 1:100.000. ¿Cuántos kilómetros son en la realidad?</div>
+          <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">(Pista: 3 x 100.000 y luego tacha 5 ceros para pasar a km)</p>
+          <input type="number" class="num-input" name="q21" data-answer="3"> km
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> 3 cm x 100.000 = 300.000 cm. Si le quitas 5 ceros (para pasar de cm a km), te quedan 3 km.</div>
+        </div>
+
+        <!-- P22 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">22. ¿Cuáles son los montes que sirven de frontera natural entre Europa y Asia?</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q22" value="1"> Los Alpes</label>
+            <label class="option-label"><input type="radio" name="q22" value="2" data-correct="true"> Los Montes Urales</label>
+            <label class="option-label"><input type="radio" name="q22" value="3"> Los Pirineos</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Los Urales (junto con el Cáucaso) forman la barrera que divide a Europa de Asia en el mapa.</div>
+        </div>
+
+        <!-- P23 -->
+        <div class="question q-agrupar" data-type="agrupar">
+          <div class="question-title">23. Clasifica el relieve europeo según su forma predominante.</div>
+          <div class="word-bank" id="bank-q23">
+            <div class="word-item" data-id="q23_alp" data-bank-id="bank-q23">Alpes</div>
+            <div class="word-item" data-id="q23_pir" data-bank-id="bank-q23">Pirineos</div>
+            <div class="word-item" data-id="q23_llan" data-bank-id="bank-q23">Gran Llanura Europea</div>
+          </div>
+          <div class="category-container">
+            <div class="category-box" data-accept="q23_alp,q23_pir" data-expected="2"><h4>Cordilleras altas</h4></div>
+            <div class="category-box" data-accept="q23_llan" data-expected="1"><h4>Terreno muy plano</h4></div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Los Alpes y Pirineos son montañas elevadas al Sur de Europa. El centro/este está dominado por la inmensa llanura.</div>
+        </div>
+
+        <!-- P24 -->
+        <div class="question q-emparejar" data-type="emparejar">
+          <div class="question-title">24. Empareja la península con el país o países que la forman.</div>
+          <div class="word-bank" id="bank-q24">
+            <div class="word-item" data-id="q24_ib" data-bank-id="bank-q24">España y Portugal</div>
+            <div class="word-item" data-id="q24_it" data-bank-id="bank-q24">Italia</div>
+          </div>
+          <div style="margin-top: 15px; line-height: 2.5;">
+            <p>Península Ibérica: <span class="drop-zone" data-accept="q24_ib" data-max-items="1"></span></p>
+            <p>Península Itálica (la bota): <span class="drop-zone" data-accept="q24_it" data-max-items="1"></span></p>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> España y Portugal forman la Península Ibérica. Italia forma la Itálica, famosa por parecer una bota.</div>
+        </div>
+
+        <!-- P25 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">25. ¿Cuál es el río más largo y caudaloso de Europa?</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q25" value="1"> El Rin</label>
+            <label class="option-label"><input type="radio" name="q25" value="2"> El Danubio</label>
+            <label class="option-label"><input type="radio" name="q25" value="3" data-correct="true"> El Volga</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> El Volga es el rey de los ríos europeos y desemboca en el inmenso Mar Caspio.</div>
+        </div>
+
+        <!-- P26 -->
+        <div class="question q-multi" data-type="multi">
+          <div class="question-title">26. Europa es un continente con mucha costa. ¿Qué grandes masas de agua la rodean? (Marca las 2 correctas)</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="checkbox" name="q26_1" value="1" data-correct="true"> Océano Atlántico</label>
+            <label class="option-label"><input type="checkbox" name="q26_2" value="2" data-correct="false"> Océano Índico</label>
+            <label class="option-label"><input type="checkbox" name="q26_3" value="3" data-correct="true"> Mar Mediterráneo</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Europa está bañada por el Atlántico (al Oeste) y el Mediterráneo (al Sur). El Índico está muy lejos.</div>
+        </div>
+
+        <!-- P27 -->
+        <div class="question q-cloze" data-type="cloze">
+          <div class="question-title">27. Completa la frase sobre montañas europeas.</div>
+          <div class="word-bank" id="bank-q27">
+            <div class="word-item" data-id="q27_pir" data-bank-id="bank-q27">Pirineos</div>
+            <div class="word-item" data-id="q27_alp" data-bank-id="bank-q27">Alpes</div>
+          </div>
+          <p style="line-height: 2.5;">Los <span class="drop-zone" data-accept="q27_pir" data-max-items="1"></span> forman la frontera natural entre España y Francia, mientras que los <span class="drop-zone" data-accept="q27_alp" data-max-items="1"></span> son una cordillera central muy famosa por sus cumbres nevadas.</p>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Los Pirineos están justo en nuestra frontera (España/Francia), y los Alpes están más al centro (Francia, Suiza, Italia, Austria...).</div>
+        </div>
+
+        <!-- P28 -->
+        <div class="question q-vf" data-type="vf">
+          <div class="question-title">28. ¿Verdadero o Falso? El Mar Caspio, donde desemboca el río Volga, es en realidad un lago gigante de agua salada.</div>
+          <div class="options-grid">
+            <label class="option-label"><input type="radio" name="q28" value="v" data-correct="true"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q28" value="f"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> ¡Verdadero! Aunque se le llame "Mar" por su enorme tamaño y porque tiene agua salada, geográficamente está completamente cerrado por tierra, por lo que es un lago.</div>
+        </div>
+
+        <!-- P29 -->
+        <div class="question q-test" data-type="test">
+          <div class="question-title">29. Las penínsulas son extensiones de tierra rodeadas de agua por todas partes...</div>
+          <div class="options-grid shuffle-container">
+            <label class="option-label"><input type="radio" name="q29" value="1"> ...y punto. Son islas.</label>
+            <label class="option-label"><input type="radio" name="q29" value="2" data-correct="true"> ...menos por una parte (el istmo) que las une al continente.</label>
+            <label class="option-label"><input type="radio" name="q29" value="3"> ...menos por dos partes.</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Una península casi es una isla, pero se mantiene pegada al continente por un "cuello" de tierra llamado istmo. (Ej: Los Pirineos son el istmo de nuestra península).</div>
+        </div>
+
+        <!-- P30 -->
+        <div class="question q-emparejar" data-type="emparejar">
+          <div class="question-title">30. ¡Última pregunta! Relaciona los conceptos principales.</div>
+          <div class="word-bank" id="bank-q30">
+            <div class="word-item" data-id="q30_rot" data-bank-id="bank-q30">Rotación</div>
+            <div class="word-item" data-id="q30_tras" data-bank-id="bank-q30">Traslación + Inclinación</div>
+          </div>
+          <div style="margin-top: 15px; line-height: 2.5;">
+            <p>Husos horarios y Día/Noche: <span class="drop-zone" data-accept="q30_rot" data-max-items="1"></span></p>
+            <p>Estaciones del año: <span class="drop-zone" data-accept="q30_tras" data-max-items="1"></span></p>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> ¡El gran resumen! Rotación = 24h, husos horarios y día/noche. Traslación (unida a la inclinación del eje) = año y estaciones.</div>
+        </div>
+
+      </form>
+
+      <button type="submit" form="quiz-form" class="submit-btn" id="submit-btn">✅ ¡Corregir Examen Final!</button>
+      <div class="results hidden" id="results-container"></div>
+    </section>
+  </div>
+
+  <footer class="main-footer">
+    <a href="index.html">🔙 Volver al menú de materias</a>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // BARAJAR OPCIONES
+      const shuffleContainers = document.querySelectorAll('.shuffle-container');
+      shuffleContainers.forEach(container => {
+        for (let i = container.children.length; i >= 0; i--) {
+          container.appendChild(container.children[Math.random() * i | 0]);
+        }
+      });
+
+      // MOSTRAR EXAMEN
+      document.getElementById('start-exam-btn').addEventListener('click', () => {
+        document.getElementById('review-section').classList.add('hidden');
+        const examSection = document.getElementById('exam-section');
+        examSection.classList.remove('hidden');
+        examSection.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // LÓGICA TÁCTIL UNIVERSAL
+      let selectedElement = null;
+
+      document.getElementById('exam-section').addEventListener('click', function(e) {
+        if(e.target.closest('.skip-option')) return;
+
+        const wordItem = e.target.closest('.word-item');
+        const dropZone = e.target.closest('.drop-zone, .category-box');
+
+        if (wordItem) {
+          if (wordItem.closest('.word-bank')) {
+            if (selectedElement === wordItem) {
+              selectedElement.classList.remove('selected-word');
+              selectedElement = null;
+            } else {
+              if (selectedElement) selectedElement.classList.remove('selected-word');
+              selectedElement = wordItem;
+              selectedElement.classList.add('selected-word');
+            }
+          } 
+          else if (wordItem.closest('.drop-zone') || wordItem.closest('.category-box')) {
+            if (selectedElement) {
+              const box = wordItem.closest('.drop-zone, .category-box');
+              handleDrop(box, selectedElement);
+            } else {
+              const bankId = wordItem.dataset.bankId;
+              document.getElementById(bankId).appendChild(wordItem);
+            }
+          }
+        } 
+        else if (dropZone && selectedElement) {
+          handleDrop(dropZone, selectedElement);
+        }
+      });
+
+      function handleDrop(box, element) {
+        const maxItems = parseInt(box.dataset.maxItems || 100); 
+        
+        if (box.querySelectorAll('.word-item').length >= maxItems && maxItems === 1) {
+          const existingItem = box.querySelector('.word-item');
+          if (existingItem) {
+            document.getElementById(existingItem.dataset.bankId).appendChild(existingItem);
+          }
+        }
+        
+        box.appendChild(element);
+        element.classList.remove('selected-word');
+        selectedElement = null;
+      }
+
+      // CORRECCIÓN
+      document.getElementById('quiz-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        document.getElementById('submit-btn').style.display = 'none';
+        
+        const questions = document.querySelectorAll('.question');
+        let totalCounted = 0;
+        let correctCount = 0;
+
+        questions.forEach(q => {
+          const skipped = q.querySelector('.skip-checkbox')?.checked;
+          const type = q.dataset.type;
+          const explanation = q.querySelector('.explanation');
+          
+          if (skipped) {
+            q.style.opacity = '0.6';
+            return;
+          }
+          
+          totalCounted++;
+          let isCorrect = false;
+
+          if (type === 'test' || type === 'vf') {
+            const inputs = q.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => {
+              if (input.dataset.correct === "true") input.parentElement.classList.add('correct-answer');
+              if (input.checked) {
+                if (input.dataset.correct === "true") isCorrect = true;
+                else input.parentElement.classList.add('wrong-answer');
+              }
+            });
+          }
+          
+          else if (type === 'multi') {
+            const inputs = q.querySelectorAll('input[type="checkbox"]:not(.skip-checkbox)');
+            let allRight = true;
+            inputs.forEach(input => {
+              const shouldBeChecked = input.dataset.correct === "true";
+              if (shouldBeChecked) input.parentElement.classList.add('correct-answer');
+              
+              if (input.checked !== shouldBeChecked) {
+                allRight = false;
+                if (input.checked) input.parentElement.classList.add('wrong-answer');
+              }
+            });
+            isCorrect = allRight;
+          }
+          
+          else if (type === 'num') {
+            const input = q.querySelector('.num-input');
+            const expected = input.dataset.answer;
+            input.classList.add('correct-answer');
+            if (input.value.trim() === expected) {
+              isCorrect = true;
+            } else {
+              input.classList.remove('correct-answer');
+              input.classList.add('wrong-answer');
+              const span = document.createElement('span');
+              span.textContent = ` (Era ${expected})`;
+              span.style.color = 'var(--correct)';
+              span.style.fontWeight = 'bold';
+              input.after(span);
+            }
+          }
+          
+          else if (type === 'agrupar') {
+            const categories = q.querySelectorAll('.category-box');
+            let catCorrect = true;
+            categories.forEach(cat => {
+              const accepted = cat.dataset.accept.split(',');
+              const expectedCount = parseInt(cat.dataset.expected);
+              const items = cat.querySelectorAll('.word-item');
+              
+              cat.classList.add('correct-answer');
+              
+              if (items.length !== expectedCount) catCorrect = false;
+              
+              items.forEach(item => {
+                if (!accepted.includes(item.dataset.id)) {
+                  catCorrect = false;
+                  item.classList.add('wrong-answer');
+                }
+              });
+            });
+            isCorrect = catCorrect;
+          }
+          
+          else if (type === 'emparejar' || type === 'cloze') {
+            const zones = q.querySelectorAll('.drop-zone');
+            let zonesCorrect = true;
+            zones.forEach(zone => {
+              const acceptedId = zone.dataset.accept;
+              const item = zone.querySelector('.word-item');
+              
+              zone.classList.add('correct-answer');
+              
+              if (!item) {
+                zonesCorrect = false;
+              } else if (item.dataset.id !== acceptedId) {
+                zonesCorrect = false;
+                item.classList.add('wrong-answer');
+              }
+            });
+            isCorrect = zonesCorrect;
+          }
+
+          if (isCorrect) correctCount++;
+          
+          if (explanation) explanation.classList.remove('hidden');
+          
+          q.querySelectorAll('input, .word-item, .drop-zone, .category-box').forEach(el => {
+            el.style.pointerEvents = 'none';
+          });
+        });
+
+        // NOTA FINAL
+        const resultsContainer = document.getElementById('results-container');
+        resultsContainer.classList.remove('hidden');
+        
+        if (totalCounted === 0) {
+          resultsContainer.innerHTML = `<p>¡Vaya! Has marcado que no has estudiado nada todavía. Repasa un poco más arriba y vuelve a intentarlo 💪</p>`;
+          return;
+        }
+
+        const nota = (correctCount / totalCounted) * 10;
+        const notaRedondeada = nota.toFixed(1).replace('.0', '');
+        
+        let mensaje = "";
+        if (nota < 5) {
+          mensaje = "💩 Esta vez no ha salido, ¡pero repasando un poco más lo vas a bordar! Vuelve a leer el resumen de arriba y vuelve a intentarlo.";
+        } else if (nota < 7) {
+          mensaje = "👍 ¡Aprobado! Sabes bastantes cosas, pero seguro que la próxima vez puedes subir la nota.";
+        } else if (nota < 9) {
+          mensaje = "🚀 ¡Súper bien! Se nota que te has esforzado en el repaso y aguantado 30 preguntazas.";
+        } else {
+          mensaje = "🏆 ¡Excelente! Eres todo un experto en la geografía de la Tierra y Europa. ¡Felicidades, un examen perfecto!";
+        }
+
+        resultsContainer.innerHTML = `
+          <p>Tu nota final es:</p>
+          <div class="grade-text">${notaRedondeada} / 10</div>
+          <p>${mensaje}</p>
+          <p style="font-size: 0.9rem; margin-top:15px; color: #666;">(Has acertado ${correctCount} de las ${totalCounted} que has contestado)</p>
+        `;
+        
+        resultsContainer.scrollIntoView({ behavior: 'smooth' });
+      });
+
+    });
+  </script>
+</body>
+</html>
