@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Repaso y Examen: Categorías Gramaticales</title>
+  <style>
+    :root {
+      /* Paleta Lengua y Literatura (Colores vivos y claros) */
+      --primary: #4F46E5; /* Índigo */
+      --secondary: #FCD34D; /* Amarillo cálido */
+      --bg-color: #F8FAFC;
+      --text-main: #1E293B;
+      --card-bg: #FFFFFF;
+      --correct-bg: #D1FAE5;
+      --correct-border: #10B981;
+      --wrong-bg: #FEE2E2;
+      --wrong-border: #EF4444;
+      --skipped-opacity: 0.5;
+      --zone-bg: #F1F5F9;
+      
+      /* Categorías */
+      --cat-sust: #FFEDD5; /* Naranja clarito */
+      --cat-adj: #E0E7FF; /* Azul clarito */
+      --cat-verb: #DCFCE7; /* Verde clarito */
+      --cat-det: #FCE7F3; /* Rosa clarito */
+      --cat-pron: #FEF3C7; /* Amarillo clarito */
+      --cat-adv: #F3E8FF; /* Morado clarito */
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-size: 18px; /* Ideal para 10-11 años en móvil */
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 20px 10px;
+      background: var(--primary);
+      color: white;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header h1 {
+      margin: 0 0 10px 0;
+      font-size: 1.8rem;
+    }
+    .header p {
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    /* --- SECCIÓN REPASO --- */
+    .infographic {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    @media (min-width: 600px) {
+      .infographic {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-left: 6px solid var(--primary);
+    }
+
+    .info-card.sustantivo { border-color: #F97316; background: var(--cat-sust); }
+    .info-card.adjetivo { border-color: #6366F1; background: var(--cat-adj); }
+    .info-card.verbo { border-color: #22C55E; background: var(--cat-verb); }
+    .info-card.determinante { border-color: #EC4899; background: var(--cat-det); }
+    .info-card.pronombre { border-color: #EAB308; background: var(--cat-pron); }
+    .info-card.adverbio { border-color: #A855F7; background: var(--cat-adv); }
+
+    .info-card h3 {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .example-box {
+      background: rgba(255,255,255,0.6);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    .cta-exam {
+      text-align: center;
+      margin: 40px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 16px;
+      border: 2px dashed var(--primary);
+    }
+
+    .start-exam-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+      transition: transform 0.2s;
+      width: 100%;
+      max-width: 300px;
+    }
+    
+    .start-exam-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* --- SECCIÓN EXAMEN --- */
+    .hidden {
+      display: none !important;
+    }
+
+    .question {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: opacity 0.3s;
+    }
+
+    .question p {
+      font-weight: 600;
+      margin-top: 0;
+    }
+
+    /* Test (Opción múltiple) */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--zone-bg);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .options input[type="radio"] {
+      margin-right: 12px;
+      transform: scale(1.3);
+    }
+
+    /* Tap to move interactivo */
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 16px;
+      background: var(--bg-color);
+      border-radius: 12px;
+      min-height: 60px;
+      margin-bottom: 16px;
+      border: 2px dashed #CBD5E1;
+    }
+
+    .word-item {
+      padding: 8px 16px;
+      background: white;
+      border: 2px solid var(--primary);
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+
+    .word-item.selected-word {
+      background: var(--secondary);
+      border-color: #D97706;
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .drop-zones-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 600px) {
+      .drop-zones-container {
+        flex-direction: row;
+      }
+      .category-box {
+        flex: 1;
+      }
+    }
+
+    .category-box {
+      background: var(--zone-bg);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .category-box h4 {
+      margin: 0 0 10px 0;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .drop-zone {
+      min-height: 80px;
+      background: rgba(255,255,255,0.7);
+      border: 2px dashed #94A3B8;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .drop-zone.inline {
+      display: inline-flex;
+      min-height: 38px;
+      min-width: 100px;
+      vertical-align: middle;
+      margin: 0 5px;
+      padding: 2px 8px;
+    }
+
+    /* Skip & Explicación */
+    .skip-option {
+      display: block;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #E2E8F0;
+      color: #64748B;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .question.skipped {
+      opacity: var(--skipped-opacity);
+    }
+
+    .explanation {
+      margin-top: 16px;
+      padding: 12px;
+      background: #F0FDF4;
+      border-left: 4px solid #22C55E;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+
+    /* Botón Submit */
+    .submit-btn {
+      width: 100%;
+      background: #10B981;
+      color: white;
+      border: none;
+      padding: 18px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+      margin-bottom: 40px;
+    }
+
+    /* Corrección Visual */
+    .correct-answer {
+      background: var(--correct-bg) !important;
+      border-color: var(--correct-border) !important;
+    }
+    .wrong-answer {
+      background: var(--wrong-bg) !important;
+      border-color: var(--wrong-border) !important;
+    }
+    
+    .results {
+      text-align: center;
+      padding: 30px;
+      background: white;
+      border-radius: 16px;
+      margin-bottom: 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border: 4px solid var(--primary);
+    }
+
+    .main-footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    .main-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>🎓 Categorías Gramaticales</h1>
+      <p>Repasa los tipos de palabras y ponte a prueba</p>
+    </div>
+
+    <!-- SECCIÓN REPASO -->
+    <section id="review-section">
+      <div class="infographic">
+        
+        <div class="info-card sustantivo">
+          <h3>📦 Sustantivo</h3>
+          <p>Nombra personas, animales, cosas, lugares o ideas.</p>
+          <div class="example-box">
+            Ejemplos: perro, alegría, Madrid, mesa, amigo.
+          </div>
+        </div>
+
+        <div class="info-card adjetivo">
+          <h3>✨ Adjetivo</h3>
+          <p>Califica al sustantivo. Dice cómo es o cómo está.</p>
+          <div class="example-box">
+            Ejemplos: bonito, alto, rápido, cansado, azul.
+          </div>
+        </div>
+
+        <div class="info-card verbo">
+          <h3>🏃 Verbo</h3>
+          <p>Expresa una acción, movimiento o estado.</p>
+          <div class="example-box">
+            Ejemplos: correr, ser, pensar, dormimos, cantaré.
+          </div>
+        </div>
+
+        <div class="info-card determinante">
+          <h3>👉 Determinante</h3>
+          <p>Acompaña al sustantivo y lo concreta o presenta.</p>
+          <div class="example-box">
+            Ejemplos: el, la, un, mi, ese, tres, muchos.
+          </div>
+        </div>
+
+        <div class="info-card pronombre">
+          <h3>👤 Pronombre</h3>
+          <p>Sustituye al nombre para no repetirlo.</p>
+          <div class="example-box">
+            Ejemplos: yo, tú, ella, nosotros, esto, aquello.
+          </div>
+        </div>
+
+        <div class="info-card adverbio">
+          <h3>🛠️ Adverbio</h3>
+          <p>Modifica al verbo, al adjetivo o a otro adverbio.</p>
+          <div class="example-box">
+            Ejemplos: rápidamente, muy, aquí, ayer, sí, no.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cta-exam">
+        <p>¿Tienes claras las diferencias? 💪<br>¡Toca las cajas en el examen para mover las palabras!</p>
+        <button id="start-exam-btn" class="start-exam-btn">🚀 ¡Empezar el examen!</button>
+      </div>
+    </section>
+
+    <!-- SECCIÓN EXAMEN -->
+    <section id="exam-section" class="hidden">
+      <form id="quiz-form">
+        
+        <!-- PREGUNTAS 1-10: Test Simple -->
+        <div class="question" data-type="multiple-choice">
+          <p>1. "El <strong>perro</strong> corre rápido por el parque." ¿Qué categoría es la palabra destacada?</p>
+          <div class="options">
+            <label><input type="radio" name="q1" value="verbo"> Verbo</label>
+            <label><input type="radio" name="q1" value="sustantivo" data-correct="true"> Sustantivo</label>
+            <label><input type="radio" name="q1" value="adjetivo"> Adjetivo</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Perro" nombra a un animal, por lo tanto es un sustantivo.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>2. "El perro <strong>corre</strong> rápido por el parque."</p>
+          <div class="options">
+            <label><input type="radio" name="q2" value="verbo" data-correct="true"> Verbo</label>
+            <label><input type="radio" name="q2" value="adverbio"> Adverbio</label>
+            <label><input type="radio" name="q2" value="sustantivo"> Sustantivo</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Corre" indica una acción, así que es un verbo.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>3. "El perro corre <strong>rápido</strong> por el parque."</p>
+          <div class="options">
+            <label><input type="radio" name="q3" value="adjetivo"> Adjetivo</label>
+            <label><input type="radio" name="q3" value="adverbio" data-correct="true"> Adverbio</label>
+            <label><input type="radio" name="q3" value="pronombre"> Pronombre</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Rápido" nos dice <em>cómo</em> corre (modifica al verbo), es un adverbio de modo.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>4. "<strong>Mi</strong> hermana canta muy bien."</p>
+          <div class="options">
+            <label><input type="radio" name="q4" value="pronombre"> Pronombre</label>
+            <label><input type="radio" name="q4" value="adjetivo"> Adjetivo</label>
+            <label><input type="radio" name="q4" value="determinante" data-correct="true"> Determinante</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Mi" acompaña al sustantivo (hermana) para indicar posesión. Es un determinante posesivo.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>5. "<strong>Ella</strong> fue al cine ayer por la tarde."</p>
+          <div class="options">
+            <label><input type="radio" name="q5" value="pronombre" data-correct="true"> Pronombre</label>
+            <label><input type="radio" name="q5" value="sustantivo"> Sustantivo</label>
+            <label><input type="radio" name="q5" value="determinante"> Determinante</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Ella" sustituye al nombre de una persona. Es un pronombre personal.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>6. "Tengo <strong>tres</strong> gatos preciosos."</p>
+          <div class="options">
+            <label><input type="radio" name="q6" value="adjetivo"> Adjetivo</label>
+            <label><input type="radio" name="q6" value="determinante" data-correct="true"> Determinante</label>
+            <label><input type="radio" name="q6" value="pronombre"> Pronombre</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Tres" acompaña al sustantivo (gatos) indicando cantidad exacta. Es un determinante numeral.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>7. "Tengo tres gatos <strong>preciosos</strong>."</p>
+          <div class="options">
+            <label><input type="radio" name="q7" value="adjetivo" data-correct="true"> Adjetivo</label>
+            <label><input type="radio" name="q7" value="sustantivo"> Sustantivo</label>
+            <label><input type="radio" name="q7" value="adverbio"> Adverbio</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Preciosos" califica a los gatos, nos dice cómo son. Es un adjetivo.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>8. "Ayer compré pan <strong>caliente</strong>."</p>
+          <div class="options">
+            <label><input type="radio" name="q8" value="adjetivo" data-correct="true"> Adjetivo</label>
+            <label><input type="radio" name="q8" value="adverbio"> Adverbio</label>
+            <label><input type="radio" name="q8" value="sustantivo"> Sustantivo</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Caliente" dice cómo está el pan (sustantivo), por lo tanto es un adjetivo.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>9. "Ayer compré <strong>pan</strong> caliente."</p>
+          <div class="options">
+            <label><input type="radio" name="q9" value="verbo"> Verbo</label>
+            <label><input type="radio" name="q9" value="sustantivo" data-correct="true"> Sustantivo</label>
+            <label><input type="radio" name="q9" value="adjetivo"> Adjetivo</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Pan" es el nombre de una cosa (alimento), es un sustantivo.</div>
+        </div>
+
+        <div class="question" data-type="multiple-choice">
+          <p>10. "<strong>Ayer</strong> compré pan caliente."</p>
+          <div class="options">
+            <label><input type="radio" name="q10" value="adverbio" data-correct="true"> Adverbio</label>
+            <label><input type="radio" name="q10" value="pronombre"> Pronombre</label>
+            <label><input type="radio" name="q10" value="sustantivo"> Sustantivo</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Ayer" nos indica <em>cuándo</em> ocurrió la acción. Es un adverbio de tiempo.</div>
+        </div>
+
+        <!-- PREGUNTAS 11-16: Agrupar Categorías (Tap to Move) -->
+        <div class="question tap-to-move-q" data-type="grouping">
+          <p>11. Clasifica estas palabras en Sustantivos y Verbos.<br><small>👉 Toca una palabra y luego toca la caja donde quieres ponerla.</small></p>
+          <div class="word-bank">
+            <span class="word-item" id="q11-w1">coche</span>
+            <span class="word-item" id="q11-w2">saltar</span>
+            <span class="word-item" id="q11-w3">dibujar</span>
+            <span class="word-item" id="q11-w4">pizarra</span>
+          </div>
+          <div class="drop-zones-container">
+            <div class="category-box">
+              <h4>📦 Sustantivos</h4>
+              <div class="drop-zone" data-accept="q11-w1,q11-w4" data-expected="2"></div>
+            </div>
+            <div class="category-box">
+              <h4>🏃 Verbos</h4>
+              <div class="drop-zone" data-accept="q11-w2,q11-w3" data-expected="2"></div>
+            </div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Coche y pizarra nombran objetos (sustantivos). Saltar y dibujar son acciones (verbos).</div>
+        </div>
+
+        <div class="question tap-to-move-q" data-type="grouping">
+          <p>12. Clasifica en Determinantes y Adjetivos:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q12-w1">el</span>
+            <span class="word-item" id="q12-w2">gigante</span>
+            <span class="word-item" id="q12-w3">aquel</span>
+            <span class="word-item" id="q12-w4">divertido</span>
+          </div>
+          <div class="drop-zones-container">
+            <div class="category-box">
+              <h4>👉 Determinantes</h4>
+              <div class="drop-zone" data-accept="q12-w1,q12-w3" data-expected="2"></div>
+            </div>
+            <div class="category-box">
+              <h4>✨ Adjetivos</h4>
+              <div class="drop-zone" data-accept="q12-w2,q12-w4" data-expected="2"></div>
+            </div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "El" y "aquel" acompañan (determinantes). "Gigante" y "divertido" califican cómo es algo (adjetivos).</div>
+        </div>
+
+        <div class="question tap-to-move-q" data-type="grouping">
+          <p>13. Clasifica en Pronombres y Adverbios:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q13-w1">nosotros</span>
+            <span class="word-item" id="q13-w2">hoy</span>
+            <span class="word-item" id="q13-w3">tú</span>
+            <span class="word-item" id="q13-w4">muy</span>
+          </div>
+          <div class="drop-zones-container">
+            <div class="category-box">
+              <h4>👤 Pronombres</h4>
+              <div class="drop-zone" data-accept="q13-w1,q13-w3" data-expected="2"></div>
+            </div>
+            <div class="category-box">
+              <h4>🛠️ Adverbios</h4>
+              <div class="drop-zone" data-accept="q13-w2,q13-w4" data-expected="2"></div>
+            </div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Nosotros" y "tú" sustituyen a personas. "Hoy" (tiempo) y "muy" (cantidad) son adverbios.</div>
+        </div>
+
+        <div class="question tap-to-move-q" data-type="grouping">
+          <p>14. Clasifica en Sustantivos y Adjetivos:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q14-w1">cielo</span>
+            <span class="word-item" id="q14-w2">azul</span>
+            <span class="word-item" id="q14-w3">agua</span>
+            <span class="word-item" id="q14-w4">fría</span>
+          </div>
+          <div class="drop-zones-container">
+            <div class="category-box">
+              <h4>📦 Sustantivos</h4>
+              <div class="drop-zone" data-accept="q14-w1,q14-w3" data-expected="2"></div>
+            </div>
+            <div class="category-box">
+              <h4>✨ Adjetivos</h4>
+              <div class="drop-zone" data-accept="q14-w2,q14-w4" data-expected="2"></div>
+            </div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Cielo" y "agua" son las cosas. "Azul" y "fría" nos dicen cómo son esas cosas.</div>
+        </div>
+        
+        <div class="question tap-to-move-q" data-type="grouping">
+          <p>15. Clasifica en Verbos y Adverbios:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q15-w1">comeremos</span>
+            <span class="word-item" id="q15-w2">allí</span>
+            <span class="word-item" id="q15-w3">estudiar</span>
+            <span class="word-item" id="q15-w4">rápidamente</span>
+          </div>
+          <div class="drop-zones-container">
+            <div class="category-box">
+              <h4>🏃 Verbos</h4>
+              <div class="drop-zone" data-accept="q15-w1,q15-w3" data-expected="2"></div>
+            </div>
+            <div class="category-box">
+              <h4>🛠️ Adverbios</h4>
+              <div class="drop-zone" data-accept="q15-w2,q15-w4" data-expected="2"></div>
+            </div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Comeremos" y "estudiar" son acciones. "Allí" y "rápidamente" complementan al verbo.</div>
+        </div>
+
+        <div class="question tap-to-move-q" data-type="grouping">
+          <p>16. ¡Mezcla de tres! Pon cada palabra en su sitio:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q16-w1">yo</span>
+            <span class="word-item" id="q16-w2">bailar</span>
+            <span class="word-item" id="q16-w3">árbol</span>
+          </div>
+          <div class="drop-zones-container">
+            <div class="category-box">
+              <h4>📦 Sustantivo</h4>
+              <div class="drop-zone" data-accept="q16-w3" data-expected="1"></div>
+            </div>
+            <div class="category-box">
+              <h4>🏃 Verbo</h4>
+              <div class="drop-zone" data-accept="q16-w2" data-expected="1"></div>
+            </div>
+            <div class="category-box">
+              <h4>👤 Pronombre</h4>
+              <div class="drop-zone" data-accept="q16-w1" data-expected="1"></div>
+            </div>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Árbol = Sustantivo. Bailar = Verbo. Yo = Pronombre.</div>
+        </div>
+
+        <!-- PREGUNTAS 17-20: Rellenar huecos (Cloze con Tap to move) -->
+        <div class="question tap-to-move-q" data-type="cloze">
+          <p>17. Completa la frase colocando el SUSTANTIVO y el VERBO donde corresponden:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q17-w1">niño</span>
+            <span class="word-item" id="q17-w2">come</span>
+          </div>
+          <div style="font-size: 1.2rem; line-height: 2.5; padding: 10px; background: var(--zone-bg); border-radius: 8px;">
+            El <div class="drop-zone inline" data-accept="q17-w1" data-expected="1"></div> (sustantivo) <div class="drop-zone inline" data-accept="q17-w2" data-expected="1"></div> (verbo) manzanas rojas.
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Niño" es el sustantivo. "Come" es el verbo (la acción que hace el niño).</div>
+        </div>
+
+        <div class="question tap-to-move-q" data-type="cloze">
+          <p>18. Completa la frase con el PRONOMBRE y el ADVERBIO correctos:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q18-w1">Nosotros</span>
+            <span class="word-item" id="q18-w2">ayer</span>
+          </div>
+          <div style="font-size: 1.2rem; line-height: 2.5; padding: 10px; background: var(--zone-bg); border-radius: 8px;">
+            <div class="drop-zone inline" data-accept="q18-w1" data-expected="1"></div> (pronombre) fuimos al cine <div class="drop-zone inline" data-accept="q18-w2" data-expected="1"></div> (adverbio).
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Nosotros" sustituye a nuestros nombres. "Ayer" indica el tiempo de la acción.</div>
+        </div>
+
+        <div class="question tap-to-move-q" data-type="cloze">
+          <p>19. Completa la frase con el DETERMINANTE y el ADJETIVO:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q19-w1">Esos</span>
+            <span class="word-item" id="q19-w2">caros</span>
+          </div>
+          <div style="font-size: 1.2rem; line-height: 2.5; padding: 10px; background: var(--zone-bg); border-radius: 8px;">
+            <div class="drop-zone inline" data-accept="q19-w1" data-expected="1"></div> (determinante) coches son muy <div class="drop-zone inline" data-accept="q19-w2" data-expected="1"></div> (adjetivo).
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> "Esos" acompaña y señala al sustantivo coches. "Caros" dice cómo son.</div>
+        </div>
+
+        <div class="question tap-to-move-q" data-type="cloze">
+          <p>20. Completa la definición con las categorías gramaticales correctas:</p>
+          <div class="word-bank">
+            <span class="word-item" id="q20-w1">adjetivo</span>
+            <span class="word-item" id="q20-w2">pronombre</span>
+          </div>
+          <div style="font-size: 1.2rem; line-height: 2.5; padding: 10px; background: var(--zone-bg); border-radius: 8px;">
+            El <div class="drop-zone inline" data-accept="q20-w1" data-expected="1"></div> siempre califica al sustantivo, mientras que el <div class="drop-zone inline" data-accept="q20-w2" data-expected="1"></div> sirve para sustituirlo.
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No lo he estudiado todavía</label>
+          <div class="explanation hidden">💡 <strong>Explicación:</strong> Regla de oro: Adjetivo acompaña para calificar. Pronombre quita al sustantivo y se pone en su lugar.</div>
+        </div>
+
+      </form>
+      
+      <button type="submit" form="quiz-form" class="submit-btn" id="submit-btn">✅ ¡Terminar y Corregir!</button>
+      <div class="results hidden" id="results-container"></div>
+    </section>
+
+  </div>
+
+  <footer class="main-footer">
+    <a href="#">🔙 Volver al menú de materias</a>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // 1. Mostrar Examen
+      document.getElementById('start-exam-btn').addEventListener('click', () => {
+        document.getElementById('review-section').classList.add('hidden');
+        document.getElementById('exam-section').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 2. Barajar opciones de tipo test
+      document.querySelectorAll('.question[data-type="multiple-choice"] .options').forEach(opts => {
+        for (let i = opts.children.length; i >= 0; i--) {
+            opts.appendChild(opts.children[Math.random() * i | 0]);
+        }
+      });
+
+      // 3. Checkbox "No lo he estudiado" - Efecto visual
+      document.querySelectorAll('.skip-checkbox').forEach(cb => {
+        cb.addEventListener('change', function() {
+          const q = this.closest('.question');
+          if (this.checked) {
+            q.classList.add('skipped');
+          } else {
+            q.classList.remove('skipped');
+          }
+        });
+      });
+
+      // 4. Lógica Interactiva (Tap to move)
+      let selectedItem = null;
+      let examSubmitted = false;
+
+      document.addEventListener('click', (e) => {
+        if (examSubmitted) return;
+
+        const wordItem = e.target.closest('.word-item');
+        const dropZone = e.target.closest('.drop-zone');
+
+        if (selectedItem) {
+           // Hay una palabra seleccionada en la mano
+           if (dropZone) {
+               // Verifica que estemos en la misma pregunta
+               if (selectedItem.closest('.question') === dropZone.closest('.question')) {
+                   dropZone.appendChild(selectedItem);
+                   selectedItem.classList.remove('selected-word');
+                   selectedItem = null;
+               }
+           } else if (wordItem === selectedItem) {
+               // Tocar la misma palabra la deselecciona
+               selectedItem.classList.remove('selected-word');
+               selectedItem = null;
+           } else if (wordItem && wordItem !== selectedItem) {
+               // Tocar otra palabra cambia la selección
+               selectedItem.classList.remove('selected-word');
+               selectedItem = wordItem;
+               wordItem.classList.add('selected-word');
+           }
+        } else {
+           // No hay nada seleccionado, vamos a coger algo
+           if (wordItem) {
+               if (wordItem.parentElement.classList.contains('drop-zone')) {
+                   // Si ya estaba colocada, la devolvemos al banco
+                   const bank = wordItem.closest('.question').querySelector('.word-bank');
+                   bank.appendChild(wordItem);
+               } else {
+                   // Si está en el banco, la seleccionamos
+                   selectedItem = wordItem;
+                   wordItem.classList.add('selected-word');
+               }
+           }
+        }
+      });
+
+      // 5. Corregir examen
+      document.getElementById('quiz-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (examSubmitted) return;
+        examSubmitted = true;
+        
+        // Deshabilitar botón
+        const btn = document.getElementById('submit-btn');
+        btn.textContent = "Examen Corregido";
+        btn.style.background = "#64748B";
+        btn.style.cursor = "default";
+        
+        // Bloquear interacciones radio buttons
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+        document.querySelectorAll('.word-item').forEach(w => w.style.cursor = "default");
+        document.querySelectorAll('.drop-zone').forEach(d => d.style.cursor = "default");
+
+        if (selectedItem) selectedItem.classList.remove('selected-word');
+
+        let totalCounted = 0;
+        let correctCount = 0;
+
+        document.querySelectorAll('.question').forEach(q => {
+          const isSkipped = q.querySelector('.skip-checkbox').checked;
+          if (isSkipped) return;
+
+          totalCounted++;
+          const isCorrect = validateQuestion(q);
+          if (isCorrect) correctCount++;
+          
+          highlightAnswers(q);
+        });
+
+        const resContainer = document.getElementById('results-container');
+        resContainer.classList.remove('hidden');
+
+        if (totalCounted === 0) {
+          resContainer.innerHTML = "¡Vaya! Has marcado que no has estudiado nada. Repasa el esquema de arriba y vuelve a intentarlo. 💪";
+          return;
+        }
+
+        const nota = (correctCount / totalCounted) * 10;
+        const notaFmt = nota.toFixed(1).replace('.0', '');
+        
+        let msg = "";
+        if (nota === 10) msg = "¡Increíble! ¡Perfecto! Eres el rey/reina de la gramática. 🏆";
+        else if (nota >= 8) msg = "¡Genial! Lo has entendido súper bien, ¡sigue así! 🌟";
+        else if (nota >= 5) msg = "¡Aprobado! Pero seguro que con un repasito más sacas más nota. 👍";
+        else msg = "💩 Esta vez no ha salido, ¡pero repasando un poco más lo vas a bordar! Vuelve a leer el resumen de arriba.";
+
+        resContainer.innerHTML = `Nota final: ${notaFmt} / 10<br><br>${msg}`;
+        resContainer.scrollIntoView({behavior: 'smooth', block: 'center'});
+      });
+
+      function validateQuestion(q) {
+        const type = q.dataset.type;
+        
+        if (type === 'multiple-choice') {
+          const checked = q.querySelector('input[type="radio"]:checked');
+          return checked && checked.dataset.correct === "true";
+        } 
+        else if (type === 'grouping' || type === 'cloze') {
+          const dropZones = q.querySelectorAll('.drop-zone');
+          let allCorrect = true;
+          
+          dropZones.forEach(zone => {
+            const expectedIds = zone.dataset.accept.split(',');
+            const expectedCount = parseInt(zone.dataset.expected);
+            const children = Array.from(zone.children);
+            
+            if (children.length !== expectedCount) {
+              allCorrect = false;
+            } else {
+              const childrenIds = children.map(c => c.id);
+              const hasAllExpected = expectedIds.every(id => childrenIds.includes(id));
+              if (!hasAllExpected) allCorrect = false;
+            }
+          });
+          return allCorrect;
+        }
+        return false;
+      }
+
+      function highlightAnswers(q) {
+        const type = q.dataset.type;
+        
+        if (type === 'multiple-choice') {
+          q.querySelectorAll('label').forEach(lbl => {
+            const input = lbl.querySelector('input');
+            if (input.dataset.correct === "true") {
+              lbl.classList.add('correct-answer');
+            } else if (input.checked) {
+              lbl.classList.add('wrong-answer');
+            }
+          });
+        } 
+        else if (type === 'grouping' || type === 'cloze') {
+          q.querySelectorAll('.drop-zone').forEach(zone => {
+            const expectedIds = zone.dataset.accept.split(',');
+            const expectedCount = parseInt(zone.dataset.expected);
+            const children = Array.from(zone.children);
+            
+            let zoneCorrect = false;
+            if (children.length === expectedCount) {
+              const childrenIds = children.map(c => c.id);
+              zoneCorrect = expectedIds.every(id => childrenIds.includes(id));
+            }
+
+            if (zoneCorrect) {
+              zone.style.borderColor = "var(--correct-border)";
+              zone.style.backgroundColor = "var(--correct-bg)";
+            } else {
+              zone.style.borderColor = "var(--wrong-border)";
+              zone.style.backgroundColor = "var(--wrong-bg)";
+            }
+          });
+        }
+
+        // Mostrar explicación
+        const exp = q.querySelector('.explanation');
+        if (exp) exp.classList.remove('hidden');
+      }
+
+    });
+  </script>
+</body>
+</html>
