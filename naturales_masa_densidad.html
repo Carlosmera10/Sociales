@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Repaso y Examen: La Materia y la Energía</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES Y RESET (Mobile-first, paleta Ciencias de la Naturaleza)
+       ========================================================================== */
+    :root {
+      --bg-color: #f4f9f4;
+      --text-color: #333;
+      --primary-color: #2e7d32; /* Verde bosque */
+      --secondary-color: #4caf50; /* Verde brillante */
+      --accent-color: #0288d1; /* Azul agua */
+      --card-bg: #ffffff;
+      --border-radius: 12px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --correct-bg: #d4edda;
+      --wrong-bg: #f8d7da;
+      --expl-bg: #fff3cd;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      font-size: 18px; /* Tamaño legible para 10-11 años */
+      padding: var(--spacing-md);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    /* ==========================================================================
+       CABECERA Y SECCIÓN DE REPASO (Infografía)
+       ========================================================================== */
+    .header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      text-align: center;
+      padding: var(--spacing-lg);
+    }
+    
+    .header h1 { font-size: 1.5rem; margin-bottom: 5px; }
+    .header p { font-size: 1rem; opacity: 0.9; }
+
+    .review-content { padding: var(--spacing-md); }
+    
+    .info-card {
+      background: #f9fbf9;
+      border-left: 5px solid var(--accent-color);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .info-card h2 {
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .info-box {
+      background: white;
+      border: 1px solid #e0e0e0;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .emoji-big { font-size: 2rem; display: block; margin-bottom: 5px; }
+
+    .cta-exam {
+      text-align: center;
+      padding: var(--spacing-lg);
+      background: #e8f5e9;
+      margin-top: var(--spacing-lg);
+    }
+
+    .start-exam-btn {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px;
+      box-shadow: 0 4px 0 #02669c;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .start-exam-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #02669c;
+    }
+
+    /* ==========================================================================
+       SECCIÓN DE EXAMEN Y PREGUNTAS
+       ========================================================================== */
+    .hidden { display: none !important; }
+    
+    #exam-section { padding: var(--spacing-md); }
+    
+    .question {
+      background: white;
+      border: 2px solid #eee;
+      border-radius: var(--border-radius);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+      position: relative;
+    }
+
+    .question-title {
+      font-weight: bold;
+      margin-bottom: var(--spacing-md);
+      color: var(--primary-color);
+    }
+
+    /* Casilla "No lo he estudiado" */
+    .skip-option {
+      display: block;
+      margin-top: var(--spacing-md);
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #666;
+      cursor: pointer;
+    }
+    .skip-option input { margin-right: 8px; transform: scale(1.2); }
+
+    /* Explicación (Oculta hasta corregir) */
+    .explanation {
+      margin-top: var(--spacing-md);
+      padding: 12px;
+      background-color: var(--expl-bg);
+      border-left: 4px solid #ffc107;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+    }
+
+    /* Tipos de pregunta: Tests */
+    .options-container { display: flex; flex-direction: column; gap: 8px; }
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .option-label:active { background: #f0f0f0; }
+    .option-label input { margin-right: 12px; transform: scale(1.3); }
+
+    /* Tipos de pregunta: Numérica */
+    .num-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    /* Tipos de pregunta: Tap-to-place (Agrupar, Ordenar, Cloze) */
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-height: 50px;
+      padding: 10px;
+      background: #f0f4f8;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .word-item {
+      background: white;
+      border: 2px solid var(--accent-color);
+      color: var(--accent-color);
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .word-item.selected-word {
+      background: var(--accent-color);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(2, 136, 209, 0.3);
+      transform: scale(1.05);
+    }
+
+    .drop-zone {
+      min-height: 60px;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      cursor: pointer;
+    }
+    .drop-zone-inline {
+      display: inline-flex;
+      min-width: 100px;
+      min-height: 40px;
+      border: 2px dashed #999;
+      border-radius: 4px;
+      margin: 0 5px;
+      vertical-align: middle;
+      padding: 2px 5px;
+      cursor: pointer;
+      background: white;
+    }
+
+    .category-group { margin-bottom: 10px; }
+    .category-title { font-size: 0.9rem; font-weight: bold; color: #555; margin-bottom: 5px; }
+
+    /* Estilos tras corrección */
+    .correct-answer { background-color: var(--correct-bg) !important; border-color: #28a745 !important; }
+    .wrong-answer { background-color: var(--wrong-bg) !important; border-color: #dc3545 !important; }
+    
+    .submit-btn {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    #results-container {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    /* Mejora para escritorio */
+    @media (min-width: 600px) {
+      .info-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- ================= CABECERA ================= -->
+    <div class="header">
+      <h1>🎓 La Materia y la Energía</h1>
+      <p>Repasa los conceptos clave y ponte a prueba</p>
+    </div>
+
+    <!-- ================= SECCIÓN DE REPASO ================= -->
+    <section id="review-section">
+      <div class="review-content">
+        
+        <div class="info-card">
+          <h2>🧱 1. ¿Qué es la materia?</h2>
+          <p>Todo lo que nos rodea y ocupa un lugar en el espacio es materia. Tiene dos propiedades generales muy importantes:</p>
+          <div class="info-grid">
+            <div class="info-box">
+              <span class="emoji-big">⚖️</span>
+              <strong>Masa</strong><br>
+              Cantidad de materia. Se mide en <strong>kilogramos (kg)</strong> o gramos (g).
+            </div>
+            <div class="info-box">
+              <span class="emoji-big">📦</span>
+              <strong>Volumen</strong><br>
+              Espacio que ocupa. Se mide en <strong>litros (L)</strong> o mililitros (ml).
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h2>🧊 2. Densidad y Flotabilidad</h2>
+          <p>La <strong>densidad</strong> es la relación entre la masa y el volumen de un cuerpo (propiedad específica). Nos dice lo "apretada" que está la materia.</p>
+          <p>💡 <em>Regla de oro:</em> Un objeto <strong>flota</strong> en el agua si su densidad es <strong>menor</strong> que la del agua. Se <strong>hunde</strong> si es mayor.</p>
+        </div>
+
+        <div class="info-card">
+          <h2>💧 3. Los Estados de la Materia</h2>
+          <p>La materia puede presentarse en tres estados principales:</p>
+          <ul style="margin-left: 20px;">
+            <li><strong>Sólido:</strong> Forma y volumen fijos (ej. un lápiz).</li>
+            <li><strong>Líquido:</strong> Volumen fijo, pero adoptan la forma del recipiente (ej. agua).</li>
+            <li><strong>Gas:</strong> No tienen ni forma ni volumen fijos, ocupan todo el espacio (ej. oxígeno).</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h2>⚡ 4. ¿Qué es la Energía?</h2>
+          <p>La energía no tiene masa ni volumen, pero es la causante de que ocurran cambios en la materia. Sus 4 superpoderes (propiedades):</p>
+          <ul style="margin-left: 20px;">
+            <li>Se <strong>transforma</strong> (de eléctrica a luminosa en una bombilla).</li>
+            <li>Se <strong>transfiere</strong> (el calor pasa de la sopa caliente a la cuchara).</li>
+            <li>Se <strong>almacena</strong> (en las pilas o baterías).</li>
+            <li>Se <strong>transporta</strong> (por los cables eléctricos).</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h2>🌍 5. Fuentes de Energía</h2>
+          <div class="info-grid">
+            <div class="info-box" style="border-top: 4px solid #4caf50;">
+              <strong>♻️ Renovables</strong><br>
+              No se agotan y contaminan menos.<br>
+              <em>Solar (Sol), Eólica (viento), Hidráulica (agua), Biomasa, Geotérmica.</em>
+            </div>
+            <div class="info-box" style="border-top: 4px solid #f44336;">
+              <strong>🛢️ No Renovables</strong><br>
+              Se agotan y contaminan más.<br>
+              <em>Carbón, Petróleo, Gas natural, Uranio (nuclear).</em>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="cta-exam">
+        <p>¿Has refrescado la memoria? 💪</p>
+        <button id="start-exam-btn" class="start-exam-btn">🚀 ¡Empezar el examen!</button>
+      </div>
+    </section>
+
+    <!-- ================= SECCIÓN DE EXAMEN ================= -->
+    <section id="exam-section" class="hidden">
+      <form id="quiz-form">
+
+        <!-- PREGUNTA 1: Cloze (Tap-to-place) -->
+        <div class="question" data-type="cloze">
+          <p class="question-title">1. Completa las frases sobre las propiedades generales de la materia tocando primero la palabra y luego el hueco vacío.</p>
+          
+          <div class="word-bank">
+            <div class="word-item" data-id="w1-masa">Masa</div>
+            <div class="word-item" data-id="w1-volumen">Volumen</div>
+            <div class="word-item" data-id="w1-densidad">Densidad</div>
+          </div>
+          
+          <p style="line-height: 2.5;">
+            La cantidad de materia que tiene un cuerpo se llama <span class="drop-zone-inline" data-accept="w1-masa" data-expected-count="1"></span>. El espacio que ocupa ese cuerpo se llama <span class="drop-zone-inline" data-accept="w1-volumen" data-expected-count="1"></span>.
+          </p>
+
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> La masa es la cantidad de materia (se pesa en kilos) y el volumen es el espacio que ocupa (como los litros de una botella). La densidad es una propiedad específica, no general.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 2: Test 1 respuesta -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">2. ¿En qué unidades se mide normalmente el volumen de un líquido?</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q2"> Kilogramos o gramos</label>
+            <label class="option-label"><input type="radio" name="q2"> Metros o centímetros</label>
+            <label class="option-label"><input type="radio" name="q2" class="correct-radio"> Litros o mililitros</label>
+            <label class="option-label"><input type="radio" name="q2"> Grados centígrados</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> El volumen (espacio) de los líquidos se mide en Litros (L) o mililitros (ml). Los kilogramos son para la masa y los metros para la longitud.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 3: V/F -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">3. Verdadero o Falso: Un trozo de madera flota en el agua porque su densidad es MAYOR que la del agua.</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q3"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q3" class="correct-radio"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Es Falso. Para que un objeto flote, su densidad tiene que ser MENOR que la del líquido. Si fuera mayor, se hundiría como una piedra.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 4: Agrupar Categorías (Tap) -->
+        <div class="question" data-type="grouping">
+          <p class="question-title">4. Clasifica estas fuentes de energía tocando la palabra y luego su caja correspondiente.</p>
+          
+          <div class="word-bank">
+            <div class="word-item" data-id="w4-sol">Solar</div>
+            <div class="word-item" data-id="w4-car">Carbón</div>
+            <div class="word-item" data-id="w4-eol">Eólica</div>
+            <div class="word-item" data-id="w4-pet">Petróleo</div>
+          </div>
+
+          <div class="category-group">
+            <div class="category-title">♻️ Renovables (necesitas 2)</div>
+            <div class="drop-zone" data-accept="w4-sol,w4-eol" data-expected-count="2"></div>
+          </div>
+          <div class="category-group">
+            <div class="category-title">🛢️ No Renovables (necesitas 2)</div>
+            <div class="drop-zone" data-accept="w4-car,w4-pet" data-expected-count="2"></div>
+          </div>
+
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Solar (Sol) y Eólica (Viento) son renovables porque no se agotan. El Carbón y el Petróleo son no renovables porque tardan millones de años en formarse y se acabarán.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 5: Agrupar Estados (Tap) -->
+        <div class="question" data-type="grouping">
+          <p class="question-title">5. Asocia cada característica con el estado de la materia correcto.</p>
+          
+          <div class="word-bank">
+            <div class="word-item" data-id="w5-forma">Tienen forma propia y fija</div>
+            <div class="word-item" data-id="w5-todo">Ocupan todo el espacio posible</div>
+            <div class="word-item" data-id="w5-recip">Adoptan la forma del recipiente</div>
+          </div>
+
+          <div class="category-group">
+            <div class="category-title">Sólidos (necesitas 1)</div>
+            <div class="drop-zone" data-accept="w5-forma" data-expected-count="1"></div>
+          </div>
+          <div class="category-group">
+            <div class="category-title">Líquidos (necesitas 1)</div>
+            <div class="drop-zone" data-accept="w5-recip" data-expected-count="1"></div>
+          </div>
+          <div class="category-group">
+            <div class="category-title">Gases (necesitas 1)</div>
+            <div class="drop-zone" data-accept="w5-todo" data-expected-count="1"></div>
+          </div>
+
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Los sólidos mantienen su forma. Los líquidos fluyen y toman la forma del vaso. Los gases se expanden hasta llenar todo el lugar donde estén.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 6: Múltiples respuestas -->
+        <div class="question" data-type="multiple-choice">
+          <p class="question-title">6. ¿Cuáles de las siguientes afirmaciones son propiedades de la energía? (Marca todas las correctas)</p>
+          <div class="options-container">
+            <label class="option-label"><input type="checkbox" class="correct-checkbox"> Se transforma de unos tipos a otros.</label>
+            <label class="option-label"><input type="checkbox" class="wrong-checkbox"> Ocupa mucho volumen en el espacio.</label>
+            <label class="option-label"><input type="checkbox" class="correct-checkbox"> Se puede almacenar (como en las pilas).</label>
+            <label class="option-label"><input type="checkbox" class="correct-checkbox"> Se puede transferir de un cuerpo a otro.</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> La energía se transforma, se almacena, se transfiere y se transporta. NO ocupa volumen ni tiene masa, porque no es materia.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 7: Elegir la incorrecta -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">7. Encuentra el intruso. ¿Cuál de estas NO es una fuente de energía no renovable?</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q7"> El petróleo</label>
+            <label class="option-label"><input type="radio" name="q7"> El gas natural</label>
+            <label class="option-label"><input type="radio" name="q7"> El carbón</label>
+            <label class="option-label"><input type="radio" name="q7" class="correct-radio"> La geotérmica</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> La energía geotérmica (calor del interior de la Tierra) es Renovable. El carbón, petróleo y gas natural son combustibles fósiles (No renovables).
+          </div>
+        </div>
+
+        <!-- PREGUNTA 8: Numérica -->
+        <div class="question" data-type="numeric">
+          <p class="question-title">8. Si una bola de plastilina tiene una masa de 20 gramos y ocupa un volumen de 5 cm³... ¿Cuál es su densidad? <br><em>(Pista: Densidad = Masa dividida entre Volumen)</em></p>
+          <input type="number" class="num-input" data-answer="4" placeholder="Escribe el número aquí">
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Para calcular la densidad dividimos la masa (20) entre el volumen (5). 20 ÷ 5 = 4 g/cm³.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 9: Cloze Energía (Tap) -->
+        <div class="question" data-type="cloze">
+          <p class="question-title">9. Completa el ejemplo sobre la propiedad de transformación de la energía.</p>
+          
+          <div class="word-bank">
+            <div class="word-item" data-id="w9-lumi">Luminosa</div>
+            <div class="word-item" data-id="w9-elec">Eléctrica</div>
+          </div>
+          
+          <p style="line-height: 2.5;">
+            Cuando encendemos una bombilla en casa, la energía <span class="drop-zone-inline" data-accept="w9-elec" data-expected-count="1"></span> que viaja por los cables se transforma en energía <span class="drop-zone-inline" data-accept="w9-lumi" data-expected-count="1"></span> y térmica (luz y calor).
+          </p>
+
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> A la bombilla le llega electricidad (energía eléctrica) y su función es darnos luz (energía luminosa).
+          </div>
+        </div>
+
+        <!-- PREGUNTA 10: Test 1 respuesta -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">10. ¿Cómo se llama el paso del estado sólido al estado líquido? (Ej: cuando se derrite un cubito de hielo)</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q10"> Evaporación</label>
+            <label class="option-label"><input type="radio" name="q10" class="correct-radio"> Fusión</label>
+            <label class="option-label"><input type="radio" name="q10"> Condensación</label>
+            <label class="option-label"><input type="radio" name="q10"> Solidificación</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Derretirse es "fusionarse". El paso de sólido a líquido por calor se llama Fusión.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 11: V/F -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">11. Verdadero o Falso: El calor siempre se transfiere desde el cuerpo más frío hacia el cuerpo más caliente.</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q11"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q11" class="correct-radio"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> ¡Es al revés! El calor siempre viaja del cuerpo más CALIENTE al más FRÍO, hasta que ambos igualan su temperatura.
+          </div>
+        </div>
+
+        <!-- PREGUNTA 12: Ordenar Pasos (Tap) -->
+        <div class="question" data-type="ordering">
+          <p class="question-title">12. Ordena el proceso lógico si sacamos un cubito de hielo del congelador y lo ponemos al fuego en una olla. (Toca las palabras en orden para meterlas en la caja).</p>
+          
+          <div class="word-bank">
+            <div class="word-item" data-id="w12-vapor">Vapor de agua</div>
+            <div class="word-item" data-id="w12-hielo">Hielo (sólido)</div>
+            <div class="word-item" data-id="w12-agua">Agua líquida</div>
+          </div>
+
+          <div class="category-group">
+            <div class="category-title">Orden de los estados: (necesitas 3)</div>
+            <div class="drop-zone" data-accept="w12-hielo,w12-agua,w12-vapor" data-expected-count="3" data-order-matters="true"></div>
+          </div>
+
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Primero está congelado (Hielo). Al calentarse se derrite (Agua líquida). Si hierve mucho, se evapora (Vapor de agua).
+          </div>
+        </div>
+
+        <!-- PREGUNTA 13: Test 1 respuesta -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">13. Si echo arena y agua en un vaso y quiero separarlos, ¿qué método de separación de mezclas utilizaría?</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q13"> Evaporación</label>
+            <label class="option-label"><input type="radio" name="q13"> Imantación</label>
+            <label class="option-label"><input type="radio" name="q13" class="correct-radio"> Filtración</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> La filtración (usar un colador o papel de filtro) sirve para separar un sólido (arena) que no se disuelve en un líquido (agua).
+          </div>
+        </div>
+
+        <!-- PREGUNTA 14: V/F -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">14. Verdadero o Falso: El aire que respiramos también es materia, aunque no lo veamos.</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q14" class="correct-radio"> Verdadero</label>
+            <label class="option-label"><input type="radio" name="q14"> Falso</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Verdadero. El aire es un gas, ocupa espacio (como cuando hinchas un globo) y pesa. Por tanto, tiene volumen y masa = ¡Es materia!
+          </div>
+        </div>
+
+        <!-- PREGUNTA 15: Elegir incorrecta (Hábitos) -->
+        <div class="question" data-type="single-choice">
+          <p class="question-title">15. ¿Cuál de estas acciones es MALA idea si queremos ahorrar energía para cuidar el planeta?</p>
+          <div class="options-container">
+            <label class="option-label"><input type="radio" name="q15"> Usar bombillas LED de bajo consumo.</label>
+            <label class="option-label"><input type="radio" name="q15"> Apagar los aparatos cuando no los usamos.</label>
+            <label class="option-label"><input type="radio" name="q15" class="correct-radio"> Dejar la puerta de la nevera abierta mucho rato.</label>
+            <label class="option-label"><input type="radio" name="q15"> Aprovechar la luz natural abriendo las persianas.</label>
+          </div>
+          <label class="skip-option"><input type="checkbox" class="skip-checkbox"> 🤷 No he estudiado esto todavía</label>
+          <div class="explanation hidden">
+            💡 <strong>Explicación:</strong> Dejar la nevera abierta hace que el frío se escape y el motor tenga que gastar muchísima más electricidad para volver a enfriar.
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">✅ ¡Terminar y Corregir!</button>
+      </form>
+
+      <div id="results-container" class="hidden"></div>
+    </section>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // 1. NAVEGACIÓN REPASO -> EXAMEN
+      const startBtn = document.getElementById('start-exam-btn');
+      startBtn.addEventListener('click', () => {
+        document.getElementById('review-section').classList.add('hidden');
+        document.getElementById('exam-section').classList.remove('hidden');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+
+      // 2. BARAJAR OPCIONES DE TEST
+      const optionsContainers = document.querySelectorAll('.options-container');
+      optionsContainers.forEach(container => {
+        // No barajar V/F
+        if (container.children.length > 2) {
+          for (let i = container.children.length; i >= 0; i--) {
+            container.appendChild(container.children[Math.random() * i | 0]);
+          }
+        }
+      });
+
+      // 3. LÓGICA TAP-TO-PLACE (Sustituye drag & drop para móviles)
+      let selectedWord = null;
+      
+      document.body.addEventListener('click', (e) => {
+        const word = e.target.closest('.word-item');
+        const zone = e.target.closest('.drop-zone') || e.target.closest('.drop-zone-inline');
+        
+        // Clic en una palabra
+        if (word) {
+          // Si está en el banco de palabras
+          if (word.parentElement.classList.contains('word-bank')) {
+             if (selectedWord === word) {
+                word.classList.remove('selected-word'); // Deseleccionar
+                selectedWord = null;
+             } else {
+                if (selectedWord) selectedWord.classList.remove('selected-word');
+                selectedWord = word;
+                word.classList.add('selected-word'); // Seleccionar nueva
+             }
+          }
+          // Si ya está colocada en una zona
+          else if (word.closest('.drop-zone') || word.closest('.drop-zone-inline')) {
+             if (selectedWord && selectedWord !== word) {
+                // Hay otra palabra seleccionada en la mano, la soltamos en esta misma caja
+                const currentZone = word.closest('.drop-zone') || word.closest('.drop-zone-inline');
+                currentZone.appendChild(selectedWord);
+                selectedWord.classList.remove('selected-word');
+                selectedWord = null;
+             } else {
+                // No hay nada en la mano: devolvemos la palabra al banco
+                const questionContainer = word.closest('.question');
+                const bank = questionContainer.querySelector('.word-bank');
+                bank.appendChild(word);
+                if (selectedWord === word) {
+                  word.classList.remove('selected-word');
+                  selectedWord = null;
+                }
+             }
+          }
+          return; // Terminar lógica de clic si fue sobre palabra
+        }
+
+        // Clic en una zona vacía (o fondo de la zona) teniendo una palabra seleccionada
+        if (zone && selectedWord) {
+           zone.appendChild(selectedWord);
+           selectedWord.classList.remove('selected-word');
+           selectedWord = null;
+        }
+      });
+
+      // 4. CORRECCIÓN Y NOTA
+      const form = document.getElementById('quiz-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        calculateAndShowResults();
+        highlightAnswers();
+      });
+
+      function isQuestionCorrect(q) {
+        const type = q.dataset.type;
+
+        if (type === 'single-choice') {
+          const correctRadio = q.querySelector('.correct-radio');
+          return correctRadio && correctRadio.checked;
+        }
+
+        if (type === 'multiple-choice') {
+          const correctChecks = Array.from(q.querySelectorAll('.correct-checkbox'));
+          const wrongChecks = Array.from(q.querySelectorAll('.wrong-checkbox'));
+          const allCorrectChecked = correctChecks.length > 0 && correctChecks.every(cb => cb.checked);
+          const noWrongChecked = wrongChecks.every(cb => !cb.checked);
+          return allCorrectChecked && noWrongChecked;
+        }
+
+        if (type === 'numeric') {
+          const input = q.querySelector('.num-input');
+          return input && input.value.trim() === input.dataset.answer;
+        }
+
+        if (type === 'grouping' || type === 'cloze' || type === 'ordering') {
+          const zones = Array.from(q.querySelectorAll('.drop-zone, .drop-zone-inline'));
+          let isCorrect = true;
+          
+          zones.forEach(zone => {
+            const acceptedIds = zone.dataset.accept.split(',');
+            const expectedCount = parseInt(zone.dataset.expectedCount || "1", 10);
+            const orderMatters = zone.dataset.orderMatters === "true";
+            const children = Array.from(zone.children);
+            
+            // Comprobar cantidad exacta
+            if (children.length !== expectedCount) {
+              isCorrect = false;
+            }
+
+            // Comprobar contenido
+            if (orderMatters) {
+                // En orden exacto según vienen en el data-accept
+                children.forEach((child, index) => {
+                    if (acceptedIds[index] !== child.dataset.id) isCorrect = false;
+                });
+            } else {
+                // No importa el orden, solo que estén permitidos
+                children.forEach(child => {
+                    if (!acceptedIds.includes(child.dataset.id)) isCorrect = false;
+                });
+            }
+          });
+          return isCorrect;
+        }
+        return false;
+      }
+
+      function calculateAndShowResults() {
+        const questions = document.querySelectorAll('.question');
+        let totalCounted = 0;
+        let correctCount = 0;
+
+        questions.forEach(q => {
+          const skipped = q.querySelector('.skip-checkbox')?.checked;
+          if (skipped) return; 
+          
+          totalCounted++;
+          if (isQuestionCorrect(q)) {
+            correctCount++;
+          }
+        });
+
+        const resContainer = document.getElementById('results-container');
+        resContainer.classList.remove('hidden');
+
+        if (totalCounted === 0) {
+          resContainer.style.backgroundColor = '#e3f2fd';
+          resContainer.innerHTML = '🤷 ¡Vaya, has marcado que no has estudiado nada! Repasa un poco más arriba y vuelve a intentarlo 💪';
+          return;
+        }
+
+        const nota = (correctCount / totalCounted) * 10;
+        const notaRedondeada = nota.toFixed(1).replace('.0', '');
+        
+        let mensaje = '';
+        if (nota >= 9) mensaje = '¡Sobresaliente! 🌟 Lo dominas a la perfección.';
+        else if (nota >= 7) mensaje = '¡Muy bien! 👍 Tienes los conceptos muy claros.';
+        else if (nota >= 5) mensaje = '¡Aprobado! 🙂 Está bien, pero puedes mejorarlo repasando un poco.';
+        else mensaje = '💩 Esta vez no ha salido, ¡pero repasando un poco más lo vas a bordar! Vuelve a leer el resumen de arriba y vuelve a intentarlo.';
+
+        resContainer.style.backgroundColor = nota >= 5 ? '#d4edda' : '#f8d7da';
+        resContainer.innerHTML = `Tu nota: ${notaRedondeada} / 10 <br><br> (Has acertado ${correctCount} de las ${totalCounted} preguntas que intentaste)<br><br>${mensaje}`;
+        
+        resContainer.scrollIntoView({behavior: 'smooth', block: 'center'});
+      }
+
+      function highlightAnswers() {
+        const questions = document.querySelectorAll('.question');
+        
+        questions.forEach(q => {
+          const skipped = q.querySelector('.skip-checkbox')?.checked;
+          
+          // Mostrar explicación SIEMPRE que no se haya saltado (o incluso si se ha saltado para que aprenda)
+          const explanation = q.querySelector('.explanation');
+          if (explanation) explanation.classList.remove('hidden');
+
+          if (skipped) {
+            q.style.opacity = '0.6';
+            return;
+          }
+
+          const type = q.dataset.type;
+
+          // Colorear Tests
+          if (type === 'single-choice' || type === 'multiple-choice') {
+             const options = q.querySelectorAll('.option-label');
+             options.forEach(opt => {
+                const input = opt.querySelector('input');
+                
+                // Marcar de verde la correcta SIEMPRE para que sepa cuál era
+                if (input.classList.contains('correct-radio') || input.classList.contains('correct-checkbox')) {
+                    opt.classList.add('correct-answer');
+                }
+                
+                // Si el usuario marcó una incorrecta, pintarla de rojo
+                if (input.checked && (input.classList.contains('wrong-checkbox') || (!input.classList.contains('correct-radio') && !input.classList.contains('correct-checkbox')))) {
+                    opt.classList.add('wrong-answer');
+                }
+             });
+          }
+
+          // Colorear Numérica
+          if (type === 'numeric') {
+             const input = q.querySelector('.num-input');
+             if (input.value.trim() === input.dataset.answer) {
+                 input.classList.add('correct-answer');
+             } else {
+                 input.classList.add('wrong-answer');
+             }
+          }
+
+          // Colorear Cajas (Tap-to-place)
+          if (type === 'grouping' || type === 'cloze' || type === 'ordering') {
+             const zones = q.querySelectorAll('.drop-zone, .drop-zone-inline');
+             let allPerfect = true;
+             
+             zones.forEach(zone => {
+                const acceptedIds = zone.dataset.accept.split(',');
+                const expectedCount = parseInt(zone.dataset.expectedCount || "1", 10);
+                const orderMatters = zone.dataset.orderMatters === "true";
+                const children = Array.from(zone.children);
+                
+                let zoneOk = children.length === expectedCount;
+                if (zoneOk) {
+                    if(orderMatters) {
+                        children.forEach((c, i) => { if(acceptedIds[i] !== c.dataset.id) zoneOk = false; });
+                    } else {
+                        children.forEach(c => { if(!acceptedIds.includes(c.dataset.id)) zoneOk = false; });
+                    }
+                }
+
+                if (zoneOk) {
+                    zone.classList.add('correct-answer');
+                } else {
+                    zone.classList.add('wrong-answer');
+                    allPerfect = false;
+                }
+             });
+          }
+        });
+        
+        // Deshabilitar botón para evitar múltiples envíos
+        const btn = document.querySelector('.submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Resultados mostrados abajo 👇';
+        btn.style.opacity = '0.7';
+      }
+
+    });
+  </script>
+</body>
+</html>
