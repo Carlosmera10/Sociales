@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Cronoverbo · Tarjetas de evaluación</title>
+<style>
+  :root{
+    --bg:#EEF3F7;
+    --card:#FFFFFF;
+    --ink:#1E2A4A;
+    --ink-soft:#5A6478;
+    --line:#DCE3EC;
+
+    --imperfecto:#8C5A1F; --imperfecto-tint:#F3E4D0;
+    --indefinido:#8B3A3A; --indefinido-tint:#F3DEDE;
+    --presente:#178A66;  --presente-tint:#DCF3EA;
+    --futuro:#5B3E9E;    --futuro-tint:#E7E1F7;
+    --condicional:#9E3E72; --condicional-tint:#F6E1EC;
+    --subjuntivo:#1F7A8C; --subjuntivo-tint:#DCF0F3;
+
+    --gold:#E3A62F;
+    --error:#D65C4A;
+
+    --radius-lg:24px;
+    --radius-md:14px;
+    --radius-pill:999px;
+
+    --font-display: ui-rounded, 'SF Pro Rounded', 'Segoe UI', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+    --shadow-card: 0 8px 24px rgba(30,42,74,.08);
+  }
+
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; background:var(--bg); }
+  body{
+    font-family:var(--font-body);
+    color:var(--ink);
+    overscroll-behavior:none;
+    touch-action:manipulation;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .starfield{
+    position:fixed; inset:0; z-index:-1;
+    background-image: radial-gradient(circle, rgba(91,62,158,.14) 1px, transparent 1.6px);
+    background-size: 26px 26px;
+  }
+
+  .app{
+    max-width:560px; margin:0 auto;
+    min-height:100dvh;
+    padding:22px 20px 44px;
+    position:relative;
+  }
+
+  button{ font-family:inherit; }
+  select{ font-family:inherit; }
+
+  :focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+
+  /* ---------- screens ---------- */
+  .screen{ display:none; flex-direction:column; gap:16px; }
+  .screen[data-active="true"]{ display:flex; animation: fadeSlide .35s ease; }
+  @keyframes fadeSlide{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion: reduce){
+    .screen[data-active="true"]{ animation:none; }
+  }
+
+  /* ---------- era color mapping ---------- */
+  .era-imperfecto{ --era-color:var(--imperfecto); --era-tint:var(--imperfecto-tint); }
+  .era-indefinido{ --era-color:var(--indefinido); --era-tint:var(--indefinido-tint); }
+  .era-presente{   --era-color:var(--presente);   --era-tint:var(--presente-tint); }
+  .era-futuro{      --era-color:var(--futuro);      --era-tint:var(--futuro-tint); }
+  .era-condicional{ --era-color:var(--condicional); --era-tint:var(--condicional-tint); }
+  .era-pluscuamperfecto{ --era-color:var(--imperfecto); --era-tint:var(--imperfecto-tint); }
+  .era-perfectocompuesto{ --era-color:var(--presente); --era-tint:var(--presente-tint); }
+  .era-futurocompuesto{ --era-color:var(--futuro); --era-tint:var(--futuro-tint); }
+  .era-condicionalcompuesto{ --era-color:var(--condicional); --era-tint:var(--condicional-tint); }
+  .era-presentesubj{ --era-color:var(--subjuntivo); --era-tint:var(--subjuntivo-tint); }
+  .era-imperfectosubj{ --era-color:var(--subjuntivo); --era-tint:var(--subjuntivo-tint); }
+  .era-perfectosubj{ --era-color:var(--subjuntivo); --era-tint:var(--subjuntivo-tint); }
+  .era-pluscuamperfectosubj{ --era-color:var(--subjuntivo); --era-tint:var(--subjuntivo-tint); }
+
+  /* ---------- home ---------- */
+  .brand{ text-align:center; margin-top:4px; }
+  .eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--futuro); margin:0;
+  }
+  .logo{
+    font-family:var(--font-display); font-weight:800;
+    font-size:clamp(32px,9vw,44px); letter-spacing:-.02em; margin:6px 0 0;
+  }
+  .logo span{ color:var(--futuro); }
+  .tagline{ color:var(--ink-soft); font-size:14px; margin:2px 0 0; }
+
+  .sound-toggle{
+    position:absolute; top:22px; right:20px;
+    width:38px; height:38px; border-radius:50%; border:none;
+    background:var(--card); box-shadow:var(--shadow-card); font-size:16px; cursor:pointer;
+  }
+
+  .porthole{ position:relative; width:176px; height:176px; margin:10px auto 4px; }
+  .porthole-glass{
+    position:absolute; inset:16px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--futuro-tint) 42%, var(--futuro) 145%);
+    display:flex; align-items:center; justify-content:center; font-size:52px;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.6), 0 10px 28px rgba(91,62,158,.28);
+  }
+  .porthole-ring{
+    position:absolute; inset:0; border-radius:50%;
+    box-shadow:0 0 0 5px var(--card), 0 0 0 8px var(--futuro), 0 16px 32px rgba(30,42,74,.14);
+  }
+  .porthole::after{
+    content:''; position:absolute; inset:-9px; border-radius:50%;
+    border:2px dashed var(--futuro); opacity:.35;
+    animation: spin 44s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce){ .porthole::after{ animation:none; } }
+
+  .stat-row{ display:flex; gap:12px; justify-content:center; }
+  .stat-chip{
+    background:var(--card); border-radius:var(--radius-pill); padding:10px 18px;
+    box-shadow:var(--shadow-card); display:flex; flex-direction:column; align-items:center; min-width:98px; flex:1;
+  }
+  .stat-num{ font-family:var(--font-mono); font-weight:700; font-size:20px; }
+  .stat-label{ font-size:11px; color:var(--ink-soft); }
+
+  .button-stack{ display:flex; flex-direction:column; gap:12px; }
+  .btn{
+    font-family:var(--font-display); font-weight:700; font-size:16px;
+    border:none; border-radius:var(--radius-pill); padding:16px 22px; cursor:pointer;
+    transition: transform .12s ease;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--futuro),#7856c9); color:#fff;
+    box-shadow:0 10px 22px rgba(91,62,158,.35);
+  }
+  .btn-secondary{ background:var(--card); color:var(--ink); box-shadow:var(--shadow-card); }
+  .btn-block{ width:100%; }
+  .btn:disabled{ opacity:.5; cursor:default; }
+
+  .hint-line{ text-align:center; font-size:12px; color:var(--ink-soft); line-height:1.5; margin:0; }
+
+  /* ---------- topbar (sub screens) ---------- */
+  .topbar{ display:flex; align-items:center; gap:12px; }
+  .icon-btn{
+    width:40px; height:40px; border-radius:50%; border:none; background:var(--card);
+    box-shadow:var(--shadow-card); font-size:18px; cursor:pointer; flex-shrink:0;
+  }
+  .topbar h2{ font-family:var(--font-display); font-size:19px; margin:0; }
+
+  /* ---------- config ---------- */
+  .config-block{ background:var(--card); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-card); }
+  .config-title{ margin:0 0 3px; font-size:15px; font-family:var(--font-display); }
+  .config-desc{ margin:0 0 12px; font-size:13px; color:var(--ink-soft); }
+
+  .timeline{ display:flex; flex-direction:column; }
+  .timeline-stop{
+    position:relative; display:flex; align-items:center; gap:12px;
+    padding:9px 4px; background:none; border:none; width:100%; text-align:left; cursor:pointer;
+  }
+  .timeline-stop::before{
+    content:''; position:absolute; left:22px; top:-3px; width:2px; height:calc(100% + 6px);
+    background:var(--era-color,#ccc); opacity:.3; z-index:0;
+  }
+  .timeline-stop.branch::before{ border-left:2px dashed var(--era-color,#ccc); background:none; opacity:.5; }
+  .timeline-stop:first-child::before{ top:50%; }
+  .timeline-stop:last-child::before{ height:52%; }
+  .stop-dot{
+    position:relative; z-index:1; flex-shrink:0;
+    width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:19px; background:var(--era-tint,#eee); border:3px solid var(--era-color,#999);
+    transition: transform .15s ease, box-shadow .15s ease; opacity:.55;
+  }
+  .timeline-stop.selected .stop-dot{ opacity:1; transform:scale(1.07); box-shadow:0 0 0 4px var(--era-tint,#eee); }
+  .timeline-stop.sub-stop{ padding-left:20px; }
+  .timeline-stop.sub-stop .stop-dot{ width:36px; height:36px; font-size:15px; }
+  .timeline-stop.sub-stop .stop-name{ font-size:13.5px; }
+  .stop-body{ flex:1; min-width:0; }
+  .stop-name{ font-weight:700; font-family:var(--font-display); font-size:14.5px; color:var(--ink); }
+  .stop-note{ font-size:11px; color:var(--ink-soft); font-family:var(--font-mono); }
+
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-weight:600; font-size:13px; padding:10px 16px; border-radius:var(--radius-pill);
+    border:2px solid var(--line); background:#fff; color:var(--ink-soft); cursor:pointer;
+  }
+  .chip.selected{ border-color:var(--futuro); background:var(--futuro-tint); color:var(--futuro); }
+
+  .mood-row{ display:flex; gap:10px; }
+  .mood-btn{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:14px 8px; border-radius:var(--radius-md); border:2px solid var(--line);
+    background:#fff; cursor:pointer;
+  }
+  .mood-btn .mood-icon{ font-size:26px; }
+  .mood-btn .mood-name{ font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink); }
+  .mood-btn .mood-sub{ font-size:11px; color:var(--ink-soft); text-align:center; }
+  .mood-btn[data-mood="indicativo"].selected{ border-color:var(--futuro); background:var(--futuro-tint); }
+  .mood-btn[data-mood="indicativo"].selected .mood-name{ color:var(--futuro); }
+  .mood-btn[data-mood="subjuntivo"].selected{ border-color:var(--subjuntivo); background:var(--subjuntivo-tint); }
+  .mood-btn[data-mood="subjuntivo"].selected .mood-name{ color:var(--subjuntivo); }
+  .mood-btn[data-child="nico"].selected{ border-color:var(--futuro); background:var(--futuro-tint); }
+  .mood-btn[data-child="nico"].selected .mood-name{ color:var(--futuro); }
+  .mood-btn[data-child="carlota"].selected{ border-color:var(--condicional); background:var(--condicional-tint); }
+  .mood-btn[data-child="carlota"].selected .mood-name{ color:var(--condicional); }
+
+  .error-msg{ color:var(--error); font-size:13px; text-align:center; margin:0; }
+
+  /* ---------- study ---------- */
+  .select{
+    width:100%; padding:13px; border-radius:var(--radius-md); border:2px solid var(--line);
+    font-size:15px; background:#fff; color:var(--ink);
+  }
+  .study-card{ background:var(--card); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-card); }
+  .study-group-title{
+    font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.14em;
+    color:var(--ink-soft); margin:20px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line);
+  }
+  .study-group-title:first-child{ margin-top:0; }
+  .study-tense-block{ margin-bottom:14px; }
+  .study-tense-block:last-child{ margin-bottom:0; }
+  .study-tense-title{
+    font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    padding:4px 10px; border-radius:var(--radius-pill); display:inline-block; margin-bottom:6px;
+    background:var(--era-tint); color:var(--era-color); border:1px solid var(--era-color);
+  }
+  .study-tip{ font-size:12px; color:var(--ink-soft); margin:0 0 8px; }
+  .study-row{ display:flex; justify-content:space-between; gap:10px; padding:6px 4px; border-bottom:1px dashed var(--line); font-size:14px; }
+  .study-row:last-child{ border-bottom:none; }
+  .study-pron{ color:var(--ink-soft); }
+  .study-form{ font-weight:700; font-family:var(--font-display); }
+
+  /* ---------- game header ---------- */
+  .game-header{ display:flex; align-items:center; gap:10px; }
+  .mini-porthole{
+    width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:17px; background:var(--era-tint,#eee); border:2px solid var(--era-color,#999); flex-shrink:0;
+  }
+  .game-stats{ margin-left:auto; display:flex; gap:12px; align-items:center; font-family:var(--font-mono); font-size:13px; color:var(--ink-soft); }
+  .game-child-pill{
+    font-family:var(--font-body); font-weight:700; font-size:12px; padding:4px 10px; border-radius:var(--radius-pill);
+    background:var(--futuro-tint); color:var(--futuro);
+  }
+
+  .progress-track{ height:8px; border-radius:var(--radius-pill); background:#E2E8F0; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--futuro),var(--presente)); transition:width .3s ease; }
+
+  .era-badge{
+    align-self:center; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    padding:6px 16px; border-radius:var(--radius-pill); background:var(--era-tint,#eee); color:var(--era-color,#555);
+    border:1px solid var(--era-color,#999);
+  }
+
+  /* ---------- flashcard ---------- */
+  .card-stage{ position:relative; min-height:330px; display:flex; align-items:center; justify-content:center; }
+  .flash-card{
+    position:relative; width:100%; max-width:480px; min-height:300px;
+    background:var(--card); border-radius:var(--radius-lg); box-shadow:0 16px 34px rgba(30,42,74,.16);
+    border:3px solid var(--era-color,var(--line));
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:30px 22px; text-align:center; touch-action:pan-y; cursor:grab; user-select:none;
+    animation:cardIn .22s ease; overflow:hidden;
+  }
+  .flash-card:active{ cursor:grabbing; }
+  @keyframes cardIn{ from{opacity:0; transform:scale(.95);} to{opacity:1; transform:scale(1);} }
+  @media (prefers-reduced-motion: reduce){ .flash-card{ animation:none; } }
+
+  .flash-wash{ position:absolute; inset:0; border-radius:inherit; opacity:0; pointer-events:none; }
+  .flash-wash-yes{ background:var(--presente-tint); }
+  .flash-wash-no{ background:#FBEAE7; }
+
+  .flash-stamp{
+    position:absolute; top:14px; font-family:var(--font-display); font-weight:800; font-size:36px;
+    border:4px solid; border-radius:14px; padding:0 10px; opacity:0; pointer-events:none; line-height:1.5;
+  }
+  .flash-stamp-yes{ left:12px; color:var(--presente); border-color:var(--presente); transform:rotate(-12deg); }
+  .flash-stamp-no{ right:12px; color:var(--error); border-color:var(--error); transform:rotate(12deg); }
+
+  .flash-kicker{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--era-color,var(--ink-soft)); margin:0 0 12px; position:relative; z-index:1;
+  }
+  .flash-prompt{ font-family:var(--font-display); font-weight:800; font-size:clamp(24px,7.5vw,32px); margin:0; position:relative; z-index:1; line-height:1.3; }
+  .flash-prompt-sub{ display:block; font-size:16px; font-weight:700; color:var(--era-color,var(--ink)); margin-top:8px; }
+  .flash-divider{ width:56%; height:1px; background:var(--line); margin:18px 0; position:relative; z-index:1; }
+  .flash-answer-label{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 6px; position:relative; z-index:1; }
+  .flash-answer{ font-family:var(--font-display); font-weight:800; font-size:clamp(22px,6.5vw,27px); color:var(--era-color,var(--futuro)); margin:0; position:relative; z-index:1; }
+  .flash-meta{ font-size:12px; color:var(--ink-soft); margin:10px 0 0; position:relative; z-index:1; }
+
+  .swipe-hint{ text-align:center; font-size:12px; color:var(--ink-soft); margin:0; }
+  .swipe-actions{ display:flex; justify-content:center; align-items:center; gap:28px; }
+  .swipe-btn{
+    width:60px; height:60px; border-radius:50%; border:none; font-size:24px; cursor:pointer;
+    box-shadow:var(--shadow-card); font-weight:800;
+  }
+  .swipe-no{ background:#FBEAE7; color:var(--error); }
+  .swipe-yes{ background:var(--presente-tint); color:var(--presente); }
+  .swipe-btn:active{ transform:scale(.92); }
+
+  /* ---------- summary ---------- */
+  .summary-child{ text-align:center; font-family:var(--font-mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0; }
+  .score-badge{
+    width:150px; height:150px; border-radius:50%; margin:6px auto 0; display:flex; align-items:baseline; justify-content:center;
+    font-family:var(--font-display); font-weight:800; font-size:42px; color:#fff;
+    background:linear-gradient(135deg,var(--presente),#0e6a4f); box-shadow:0 14px 28px rgba(23,138,102,.32);
+  }
+  .score-badge span{ font-size:17px; font-weight:700; margin-left:3px; opacity:.85; }
+  .score-badge.tier-mid{ background:linear-gradient(135deg,var(--imperfecto),#6b4013); box-shadow:0 14px 28px rgba(140,90,31,.32); }
+  .score-badge.tier-low{ background:linear-gradient(135deg,var(--error),#a83f2e); box-shadow:0 14px 28px rgba(214,92,74,.32); }
+  .summary-headline{ text-align:center; font-family:var(--font-display); font-size:18px; margin:0; }
+  .summary-stats{ display:flex; justify-content:space-around; background:var(--card); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-card); }
+  .summary-stats div{ display:flex; flex-direction:column; align-items:center; }
+  .summary-stats span{ font-family:var(--font-mono); font-weight:700; font-size:22px; }
+  .summary-stats label{ font-size:11px; color:var(--ink-soft); }
+
+  /* ---------- progress screen ---------- */
+  .bar-row{ margin-bottom:12px; }
+  .bar-row:last-child{ margin-bottom:0; }
+  .bar-label{ display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px; }
+  .bar-label b{ font-family:var(--font-display); }
+  .bar-track{ height:10px; border-radius:var(--radius-pill); background:#E2E8F0; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:var(--radius-pill); background:var(--era-color,var(--futuro)); }
+
+  .session-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px dashed var(--line); font-size:13px; gap:10px; }
+  .session-row:last-child{ border-bottom:none; }
+  .session-left{ display:flex; flex-direction:column; }
+  .session-date{ color:var(--ink-soft); font-size:11px; }
+  .session-mode{ font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); }
+  .session-score{ font-family:var(--font-display); font-weight:800; font-size:16px; }
+  .empty-note{ font-size:13px; color:var(--ink-soft); text-align:center; padding:8px 0; }
+</style>
+</head>
+<body>
+<div class="starfield" aria-hidden="true"></div>
+<div class="app" id="app">
+
+  <!-- ============ HOME ============ -->
+  <section class="screen" id="screen-home" data-active="true">
+    <button class="sound-toggle" id="btn-sound" aria-label="Activar o desactivar el sonido">🔊</button>
+    <header class="brand">
+      <p class="eyebrow">✦ tarjetas de evaluación ✦</p>
+      <h1 class="logo">Crono<span>verbo</span></h1>
+      <p class="tagline">pregunta tú, marca el acierto</p>
+    </header>
+
+    <div class="porthole" aria-hidden="true">
+      <div class="porthole-ring"></div>
+      <div class="porthole-glass"><span>🧭</span></div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-chip"><span class="stat-num" id="home-score-nico">—</span><span class="stat-label">Nico · última nota</span></div>
+      <div class="stat-chip"><span class="stat-num" id="home-score-carlota">—</span><span class="stat-label">Carlota · última nota</span></div>
+    </div>
+
+    <div class="button-stack">
+      <button class="btn btn-primary" id="btn-go-config">🎴 Preparar tarjetas</button>
+      <button class="btn btn-secondary" id="btn-go-study">📖 Sala de consulta</button>
+      <button class="btn btn-secondary" id="btn-go-progress">🗂️ Mi diario de viaje</button>
+    </div>
+
+    <p class="hint-line">Tú preguntas en voz alta, ves la respuesta en pantalla y deslizas la tarjeta: a la derecha si aciertan, a la izquierda si no.</p>
+  </section>
+
+  <!-- ============ CONFIG ============ -->
+  <section class="screen" id="screen-config">
+    <header class="topbar">
+      <button class="icon-btn" data-back="screen-home" aria-label="Volver">←</button>
+      <h2>Prepara las tarjetas</h2>
+    </header>
+
+    <div class="config-block">
+      <h3 class="config-title">1 · ¿A quién evalúas?</h3>
+      <div class="mood-row" id="child-select-row">
+        <button type="button" class="mood-btn selected" data-child="nico">
+          <span class="mood-icon">🦊</span><span class="mood-name">Nico</span>
+        </button>
+        <button type="button" class="mood-btn" data-child="carlota">
+          <span class="mood-icon">🦉</span><span class="mood-name">Carlota</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">2 · ¿Qué modo verbal?</h3>
+      <p class="config-desc">Elige la dimensión de las tarjetas.</p>
+      <div class="mood-row" id="mood-select-row">
+        <button type="button" class="mood-btn selected" data-mood="indicativo">
+          <span class="mood-icon">🌍</span><span class="mood-name">Indicativo</span><span class="mood-sub">el mundo real</span>
+        </button>
+        <button type="button" class="mood-btn" data-mood="subjuntivo">
+          <span class="mood-icon">🌌</span><span class="mood-name">Subjuntivo</span><span class="mood-sub">el mundo posible</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">3 · ¿A qué tiempos viajamos?</h3>
+      <p class="config-desc">Toca una o varias paradas de la línea del tiempo.</p>
+      <div class="timeline" id="tense-timeline"></div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">4 · ¿Qué verbos quieres practicar?</h3>
+      <div class="chip-row" id="verb-group-row"></div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">5 · ¿Cómo preguntas?</h3>
+      <div class="chip-row" id="quizmode-row">
+        <button class="chip" data-quizmode="conjugar">🗣️ Yo digo el tiempo, ellos conjugan</button>
+        <button class="chip" data-quizmode="reconocer">🔍 Yo digo la forma, ellos adivinan el tiempo</button>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">6 · ¿Cuántas tarjetas?</h3>
+      <div class="chip-row" id="count-row">
+        <button class="chip" data-count="10">10</button>
+        <button class="chip" data-count="15">15</button>
+        <button class="chip" data-count="20">20</button>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="btn-start-game">Empezar la evaluación ✨</button>
+    <p class="error-msg" id="config-error" hidden>Elige al menos un tiempo y un tipo de verbo para poder empezar.</p>
+  </section>
+
+  <!-- ============ STUDY ============ -->
+  <section class="screen" id="screen-study">
+    <header class="topbar">
+      <button class="icon-btn" data-back="screen-home" aria-label="Volver">←</button>
+      <h2>Sala de consulta</h2>
+    </header>
+    <p class="config-desc">Elige un verbo y repasa su ficha completa antes de evaluar.</p>
+    <select class="select" id="study-verb-select"></select>
+    <div class="study-card" id="study-table"></div>
+  </section>
+
+  <!-- ============ GAME (flashcards) ============ -->
+  <section class="screen" id="screen-game">
+    <header class="game-header">
+      <button class="icon-btn" data-back="screen-home" aria-label="Salir">←</button>
+      <div class="mini-porthole" id="mini-porthole"><span id="mini-porthole-icon">☀️</span></div>
+      <div class="game-stats">
+        <span id="game-progress-label">1 / 10</span>
+        <span class="game-child-pill" id="game-child-pill">Nico</span>
+      </div>
+    </header>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="era-badge" id="era-badge">Presente</div>
+
+    <div class="card-stage" id="card-stage">
+      <div class="flash-card" id="flash-card">
+        <div class="flash-wash flash-wash-yes" id="wash-yes"></div>
+        <div class="flash-wash flash-wash-no" id="wash-no"></div>
+        <div class="flash-stamp flash-stamp-yes" id="stamp-yes">✓</div>
+        <div class="flash-stamp flash-stamp-no" id="stamp-no">✗</div>
+        <p class="flash-kicker" id="flash-kicker">Pregunta en voz alta</p>
+        <p class="flash-prompt" id="flash-prompt"></p>
+        <div class="flash-divider"></div>
+        <p class="flash-answer-label" id="flash-answer-label">Respuesta</p>
+        <p class="flash-answer" id="flash-answer"></p>
+        <p class="flash-meta" id="flash-meta"></p>
+      </div>
+    </div>
+
+    <p class="swipe-hint">Desliza la tarjeta o toca ✗ / ✓</p>
+    <div class="swipe-actions">
+      <button class="swipe-btn swipe-no" id="btn-mark-wrong" aria-label="Incorrecto">✗</button>
+      <button class="swipe-btn swipe-yes" id="btn-mark-correct" aria-label="Correcto">✓</button>
+    </div>
+  </section>
+
+  <!-- ============ SUMMARY ============ -->
+  <section class="screen" id="screen-summary">
+    <header class="topbar"><h2>Resultado de la evaluación</h2></header>
+    <p class="summary-child" id="summary-child">Nico</p>
+    <div class="score-badge" id="score-badge">8,5<span>/10</span></div>
+    <p class="summary-headline" id="summary-headline"></p>
+    <div class="summary-stats">
+      <div><span id="summary-correct">0</span><label>aciertos</label></div>
+      <div><span id="summary-total">0</span><label>tarjetas</label></div>
+    </div>
+    <div class="button-stack">
+      <button class="btn btn-primary" id="btn-again">Otra ronda</button>
+      <button class="btn btn-secondary" data-back="screen-home">Volver a la base</button>
+    </div>
+  </section>
+
+  <!-- ============ PROGRESS ============ -->
+  <section class="screen" id="screen-progress">
+    <header class="topbar">
+      <button class="icon-btn" data-back="screen-home" aria-label="Volver">←</button>
+      <h2>Mi diario de viaje</h2>
+    </header>
+    <div class="chip-row" id="progress-child-row">
+      <button class="chip" data-child="nico">Nico</button>
+      <button class="chip" data-child="carlota">Carlota</button>
+    </div>
+    <div id="progress-content"></div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   DATOS: pronombres, tiempos y verbos
+   ============================================================ */
+const PRONOUNS = ['yo','tú','él/ella/usted','nosotros/nosotras','vosotros/vosotras','ellos/ellas/ustedes'];
+
+const INDICATIVO_ORDER = ['imperfecto','pluscuamperfecto','indefinido','presente','perfectocompuesto','futuro','futurocompuesto','condicional','condicionalcompuesto'];
+const SUBJUNTIVO_ORDER = ['presentesubj','imperfectosubj','perfectosubj','pluscuamperfectosubj'];
+const ALL_TENSES_ORDER = INDICATIVO_ORDER.concat(SUBJUNTIVO_ORDER);
+
+// tiempos que se muestran como "reto extra" (desmarcados por defecto)
+const EXTRA_TENSES = new Set(['pluscuamperfecto','futurocompuesto','condicional','condicionalcompuesto','perfectosubj','pluscuamperfectosubj']);
+
+const TENSES = {
+  imperfecto: {
+    label:'Pretérito imperfecto', short:'Imperfecto', icon:'🌙', note:'pasado que se repetía',
+    tip:'El pretérito imperfecto describe acciones que se repetían en el pasado, sin un momento exacto. Pistas: "antes", "siempre", "de pequeño/a".',
+    build:(pron,comp)=>({prefix:`Antes, ${pron}`, suffix:`${comp} muy a menudo.`})
+  },
+  pluscuamperfecto: {
+    label:'Pretérito pluscuamperfecto', short:'Pluscuamperfecto', icon:'🕰️', note:'reto extra · antes de otro pasado', compound:true, auxTense:'imperfecto',
+    tip:'El pretérito pluscuamperfecto (había + participio) señala una acción ya terminada antes de otra acción pasada. Pista: "cuando llegó, ya…".',
+    build:(pron,comp)=>({prefix:`Cuando llegó, ${pron} ya`, suffix:`${comp}.`})
+  },
+  indefinido: {
+    label:'Pretérito indefinido', short:'Indefinido', icon:'📜', note:'pasado de un momento',
+    tip:'El pretérito indefinido señala una acción ya terminada en un momento concreto del pasado. Pistas: "ayer", "el año pasado", "de repente".',
+    build:(pron,comp)=>({prefix:`Ayer, ${pron}`, suffix:`${comp}.`})
+  },
+  presente: {
+    label:'Presente', short:'Presente', icon:'☀️', note:'ahora mismo',
+    tip:'El presente sirve para acciones habituales o que ocurren ahora mismo. Pistas: "ahora", "siempre", "los lunes".',
+    build:(pron,comp)=>({prefix:`Normalmente, ${pron}`, suffix:`${comp}.`})
+  },
+  perfectocompuesto: {
+    label:'Pretérito perfecto compuesto', short:'Perfecto compuesto', icon:'✅', note:'ya ha pasado, muy cerca de ahora', compound:true, auxTense:'presente',
+    tip:'El pretérito perfecto compuesto (he + participio) une el pasado con el presente: algo ya ha ocurrido en un tiempo que todavía no ha terminado. Pistas: "hoy", "ya", "todavía no".',
+    build:(pron,comp)=>({prefix:`Hoy, ${pron} ya`, suffix:`${comp}.`})
+  },
+  futuro: {
+    label:'Futuro simple', short:'Futuro', icon:'🚀', note:'todavía no ha pasado',
+    tip:'El futuro simple expresa acciones que aún no han sucedido. Pistas: "mañana", "el año que viene", "pronto".',
+    build:(pron,comp)=>({prefix:`El año que viene, ${pron}`, suffix:`${comp}.`})
+  },
+  futurocompuesto: {
+    label:'Futuro compuesto', short:'Futuro compuesto', icon:'📅', note:'reto extra · habrá terminado', compound:true, auxTense:'futuro',
+    tip:'El futuro compuesto (habré + participio) indica que una acción estará terminada antes de un momento futuro. Pista: "para entonces, ya…".',
+    build:(pron,comp)=>({prefix:`Para mañana, ${pron} ya`, suffix:`${comp}.`})
+  },
+  condicional: {
+    label:'Condicional simple', short:'Condicional', icon:'🔮', note:'reto extra · posible',
+    tip:'El condicional simple expresa acciones posibles, hipotéticas o deseos. Pistas: "si…", "me gustaría".',
+    build:(pron,comp)=>({prefix:`Si tuviera tiempo, ${pron}`, suffix:`${comp}.`})
+  },
+  condicionalcompuesto: {
+    label:'Condicional compuesto', short:'Condicional compuesto', icon:'💭', note:'reto extra · hipotético y terminado', compound:true, auxTense:'condicional',
+    tip:'El condicional compuesto (habría + participio) expresa algo que podría haber pasado pero no pasó. Pista: "si hubiera…, habría…".',
+    build:(pron,comp)=>({prefix:`Si hubiera tenido tiempo, ${pron}`, suffix:`${comp}.`})
+  },
+  presentesubj: {
+    label:'Presente de subjuntivo', short:'Subj. presente', icon:'🌌', note:'deseos y posibilidades, ahora', mood:'subjuntivo',
+    tip:'El presente de subjuntivo no cuenta hechos: expresa deseos, dudas o peticiones, casi siempre después de "que". Pistas: "espero que…", "quiero que…", "ojalá…".',
+    build:(pron,comp)=>({prefix:`Espero que ${pron}`, suffix:`${comp}.`})
+  },
+  imperfectosubj: {
+    label:'Pretérito imperfecto de subjuntivo', short:'Subj. imperfecto', icon:'✨', note:'deseos y posibilidades, en el pasado', mood:'subjuntivo',
+    tip:'El pretérito imperfecto de subjuntivo (forma en -ra) expresa deseos, dudas o peticiones del pasado, o cosas poco probables. Pistas: "quería que…", "ojalá…", "si yo…".',
+    build:(pron,comp)=>({prefix:`Mis padres querían que ${pron}`, suffix:`${comp}.`})
+  },
+  perfectosubj: {
+    label:'Pretérito perfecto de subjuntivo', short:'Subj. perfecto', icon:'🌠', note:'reto extra · un deseo ya cumplido', mood:'subjuntivo', compound:true, auxTense:'presentesubj',
+    tip:'El pretérito perfecto de subjuntivo (haya + participio) expresa una duda o un deseo sobre algo que puede que ya haya pasado. Pista: "espero que ya…".',
+    build:(pron,comp)=>({prefix:`Espero que ${pron} ya`, suffix:`${comp}.`})
+  },
+  pluscuamperfectosubj: {
+    label:'Pretérito pluscuamperfecto de subjuntivo', short:'Subj. pluscuamperfecto', icon:'🕳️', note:'reto extra · un pasado que pudo ser', mood:'subjuntivo', compound:true, auxTense:'imperfectosubj',
+    tip:'El pretérito pluscuamperfecto de subjuntivo (hubiera + participio) expresa algo que podría haber pasado, pero no sabemos si pasó. Pista: "ojalá hubiera…".',
+    build:(pron,comp)=>({prefix:`Ojalá ${pron} ya`, suffix:`${comp} antes de la fiesta.`})
+  }
+};
+
+// orden de la Sala de consulta y del diario: presente, después pasado, por último futuro, y el subjuntivo aparte
+const STUDY_GROUPS = [
+  {label:'Presente', tenses:['presente','perfectocompuesto']},
+  {label:'Pasado', tenses:['imperfecto','indefinido','pluscuamperfecto']},
+  {label:'Futuro', tenses:['futuro','futurocompuesto','condicional','condicionalcompuesto']},
+  {label:'Subjuntivo', tenses:['presentesubj','imperfectosubj','perfectosubj','pluscuamperfectosubj']}
+];
+
+const GROUP_LABEL = {ar:'-AR', er:'-ER', ir:'-IR', irregular:'Irregulares'};
+
+const VERB_LIST = [
+  // -AR regulares
+  {inf:'hablar', group:'ar', comp:'con sus amigos por teléfono'},
+  {inf:'cantar', group:'ar', comp:'una canción en el escenario'},
+  {inf:'saltar', group:'ar', comp:'a la comba en el recreo'},
+  {inf:'mirar', group:'ar', comp:'las estrellas por la noche'},
+  {inf:'estudiar', group:'ar', comp:'para el examen de mates'},
+  {inf:'caminar', group:'ar', comp:'por el parque después de comer'},
+  {inf:'dibujar', group:'ar', comp:'un dragón en su cuaderno'},
+  {inf:'cocinar', group:'ar', comp:'una tarta de chocolate'},
+  {inf:'escuchar', group:'ar', comp:'música mientras hace los deberes'},
+  {inf:'bailar', group:'ar', comp:'en la fiesta del colegio'},
+  {inf:'nadar', group:'ar', comp:'en la piscina municipal'},
+  {inf:'pintar', group:'ar', comp:'un cuadro muy colorido'},
+  {inf:'comprar', group:'ar', comp:'el pan en la panadería'},
+  {inf:'trabajar', group:'ar', comp:'en un proyecto de ciencias'},
+  {inf:'lavar', group:'ar', comp:'los platos después de cenar'},
+  {inf:'tomar', group:'ar', comp:'un zumo de naranja'},
+  {inf:'saludar', group:'ar', comp:'a la profesora al entrar'},
+  {inf:'preguntar', group:'ar', comp:'la hora a un compañero'},
+  // -ER regulares
+  {inf:'comer', group:'er', comp:'verdura en el comedor'},
+  {inf:'beber', group:'er', comp:'agua después de hacer deporte'},
+  {inf:'correr', group:'er', comp:'una carrera en el patio'},
+  {inf:'aprender', group:'er', comp:'una palabra nueva cada día'},
+  {inf:'vender', group:'er', comp:'pulseras en el mercadillo'},
+  {inf:'comprender', group:'er', comp:'el problema de matemáticas'},
+  {inf:'meter', group:'er', comp:'los libros en la mochila'},
+  {inf:'temer', group:'er', comp:'a las tormentas de verano'},
+  {inf:'romper', group:'er', comp:'un plato sin querer'},
+  {inf:'prometer', group:'er', comp:'portarse muy bien'},
+  // -IR regulares
+  {inf:'vivir', group:'ir', comp:'en un piso cerca del colegio'},
+  {inf:'escribir', group:'ir', comp:'una carta a su prima'},
+  {inf:'subir', group:'ir', comp:'las escaleras corriendo'},
+  {inf:'decidir', group:'ir', comp:'el destino de las vacaciones'},
+  {inf:'partir', group:'ir', comp:'hacia la montaña muy temprano'},
+  {inf:'recibir', group:'ir', comp:'un regalo sorpresa'},
+  {inf:'abrir', group:'ir', comp:'la ventana de la clase'},
+  {inf:'describir', group:'ir', comp:'su animal favorito'},
+  {inf:'permitir', group:'ir', comp:'que su hermano juegue'},
+  {inf:'discutir', group:'ir', comp:'sobre qué película ver'},
+  // irregulares
+  {inf:'ser', group:'irregular', comp:'muy simpático/a con todos'},
+  {inf:'estar', group:'irregular', comp:'muy contento/a hoy'},
+  {inf:'ir', group:'irregular', comp:'al colegio en autobús'},
+  {inf:'tener', group:'irregular', comp:'muchos deberes esta semana'},
+  {inf:'hacer', group:'irregular', comp:'la cama por las mañanas'},
+  {inf:'poder', group:'irregular', comp:'resolver el acertijo'},
+  {inf:'querer', group:'irregular', comp:'un helado de fresa'},
+  {inf:'decir', group:'irregular', comp:'la verdad siempre'},
+  {inf:'venir', group:'irregular', comp:'a la fiesta de cumpleaños'},
+  {inf:'poner', group:'irregular', comp:'la mesa antes de cenar'},
+  {inf:'dar', group:'irregular', comp:'las gracias a su abuela'},
+  {inf:'ver', group:'irregular', comp:'una película de aventuras'},
+  {inf:'saber', group:'irregular', comp:'la respuesta correcta'},
+  {inf:'salir', group:'irregular', comp:'al recreo muy contento/a'}
+];
+
+const IRREGULARS = {
+  ser:{ presente:['soy','eres','es','somos','sois','son'], indefinido:['fui','fuiste','fue','fuimos','fuisteis','fueron'], imperfecto:['era','eras','era','éramos','erais','eran'], futuro:['seré','serás','será','seremos','seréis','serán'], condicional:['sería','serías','sería','seríamos','seríais','serían'] },
+  estar:{ presente:['estoy','estás','está','estamos','estáis','están'], indefinido:['estuve','estuviste','estuvo','estuvimos','estuvisteis','estuvieron'], imperfecto:['estaba','estabas','estaba','estábamos','estabais','estaban'], futuro:['estaré','estarás','estará','estaremos','estaréis','estarán'], condicional:['estaría','estarías','estaría','estaríamos','estaríais','estarían'] },
+  ir:{ presente:['voy','vas','va','vamos','vais','van'], indefinido:['fui','fuiste','fue','fuimos','fuisteis','fueron'], imperfecto:['iba','ibas','iba','íbamos','ibais','iban'], futuro:['iré','irás','irá','iremos','iréis','irán'], condicional:['iría','irías','iría','iríamos','iríais','irían'] },
+  tener:{ presente:['tengo','tienes','tiene','tenemos','tenéis','tienen'], indefinido:['tuve','tuviste','tuvo','tuvimos','tuvisteis','tuvieron'], imperfecto:['tenía','tenías','tenía','teníamos','teníais','tenían'], futuro:['tendré','tendrás','tendrá','tendremos','tendréis','tendrán'], condicional:['tendría','tendrías','tendría','tendríamos','tendríais','tendrían'] },
+  hacer:{ presente:['hago','haces','hace','hacemos','hacéis','hacen'], indefinido:['hice','hiciste','hizo','hicimos','hicisteis','hicieron'], imperfecto:['hacía','hacías','hacía','hacíamos','hacíais','hacían'], futuro:['haré','harás','hará','haremos','haréis','harán'], condicional:['haría','harías','haría','haríamos','haríais','harían'] },
+  poder:{ presente:['puedo','puedes','puede','podemos','podéis','pueden'], indefinido:['pude','pudiste','pudo','pudimos','pudisteis','pudieron'], imperfecto:['podía','podías','podía','podíamos','podíais','podían'], futuro:['podré','podrás','podrá','podremos','podréis','podrán'], condicional:['podría','podrías','podría','podríamos','podríais','podrían'] },
+  querer:{ presente:['quiero','quieres','quiere','queremos','queréis','quieren'], indefinido:['quise','quisiste','quiso','quisimos','quisisteis','quisieron'], imperfecto:['quería','querías','quería','queríamos','queríais','querían'], futuro:['querré','querrás','querrá','querremos','querréis','querrán'], condicional:['querría','querrías','querría','querríamos','querríais','querrían'] },
+  decir:{ presente:['digo','dices','dice','decimos','decís','dicen'], indefinido:['dije','dijiste','dijo','dijimos','dijisteis','dijeron'], imperfecto:['decía','decías','decía','decíamos','decíais','decían'], futuro:['diré','dirás','dirá','diremos','diréis','dirán'], condicional:['diría','dirías','diría','diríamos','diríais','dirían'] },
+  venir:{ presente:['vengo','vienes','viene','venimos','venís','vienen'], indefinido:['vine','viniste','vino','vinimos','vinisteis','vinieron'], imperfecto:['venía','venías','venía','veníamos','veníais','venían'], futuro:['vendré','vendrás','vendrá','vendremos','vendréis','vendrán'], condicional:['vendría','vendrías','vendría','vendríamos','vendríais','vendrían'] },
+  poner:{ presente:['pongo','pones','pone','ponemos','ponéis','ponen'], indefinido:['puse','pusiste','puso','pusimos','pusisteis','pusieron'], imperfecto:['ponía','ponías','ponía','poníamos','poníais','ponían'], futuro:['pondré','pondrás','pondrá','pondremos','pondréis','pondrán'], condicional:['pondría','pondrías','pondría','pondríamos','pondríais','pondrían'] },
+  dar:{ presente:['doy','das','da','damos','dais','dan'], indefinido:['di','diste','dio','dimos','disteis','dieron'], imperfecto:['daba','dabas','daba','dábamos','dabais','daban'], futuro:['daré','darás','dará','daremos','daréis','darán'], condicional:['daría','darías','daría','daríamos','daríais','darían'] },
+  ver:{ presente:['veo','ves','ve','vemos','veis','ven'], indefinido:['vi','viste','vio','vimos','visteis','vieron'], imperfecto:['veía','veías','veía','veíamos','veíais','veían'], futuro:['veré','verás','verá','veremos','veréis','verán'], condicional:['vería','verías','vería','veríamos','veríais','verían'] },
+  saber:{ presente:['sé','sabes','sabe','sabemos','sabéis','saben'], indefinido:['supe','supiste','supo','supimos','supisteis','supieron'], imperfecto:['sabía','sabías','sabía','sabíamos','sabíais','sabían'], futuro:['sabré','sabrás','sabrá','sabremos','sabréis','sabrán'], condicional:['sabría','sabrías','sabría','sabríamos','sabríais','sabrían'] },
+  salir:{ presente:['salgo','sales','sale','salimos','salís','salen'], indefinido:['salí','saliste','salió','salimos','salisteis','salieron'], imperfecto:['salía','salías','salía','salíamos','salíais','salían'], futuro:['saldré','saldrás','saldrá','saldremos','saldréis','saldrán'], condicional:['saldría','saldrías','saldría','saldríamos','saldríais','saldrían'] }
+};
+
+// auxiliar HABER, para formar los tiempos compuestos (he/había/habré/habría + participio)
+const HABER = {
+  presente:['he','has','ha','hemos','habéis','han'],
+  imperfecto:['había','habías','había','habíamos','habíais','habían'],
+  futuro:['habré','habrás','habrá','habremos','habréis','habrán'],
+  condicional:['habría','habrías','habría','habríamos','habríais','habrían'],
+  presentesubj:['haya','hayas','haya','hayamos','hayáis','hayan'],
+  imperfectosubj:['hubiera','hubieras','hubiera','hubiéramos','hubierais','hubieran']
+};
+
+// presente de subjuntivo de los 14 verbos irregulares (no sigue una regla única)
+const SUBJ_PRESENTE_IRREGULARES = {
+  ser:['sea','seas','sea','seamos','seáis','sean'],
+  estar:['esté','estés','esté','estemos','estéis','estén'],
+  ir:['vaya','vayas','vaya','vayamos','vayáis','vayan'],
+  tener:['tenga','tengas','tenga','tengamos','tengáis','tengan'],
+  hacer:['haga','hagas','haga','hagamos','hagáis','hagan'],
+  poder:['pueda','puedas','pueda','podamos','podáis','puedan'],
+  querer:['quiera','quieras','quiera','queramos','queráis','quieran'],
+  decir:['diga','digas','diga','digamos','digáis','digan'],
+  venir:['venga','vengas','venga','vengamos','vengáis','vengan'],
+  poner:['ponga','pongas','ponga','pongamos','pongáis','pongan'],
+  dar:['dé','des','dé','demos','deis','den'],
+  ver:['vea','veas','vea','veamos','veáis','vean'],
+  saber:['sepa','sepas','sepa','sepamos','sepáis','sepan'],
+  salir:['salga','salgas','salga','salgamos','salgáis','salgan']
+};
+
+// participios irregulares de los verbos de la lista (el resto se forma con la regla -ado / -ido)
+const PARTICIPIOS_IRREGULARES = {
+  hacer:'hecho', decir:'dicho', ver:'visto', poner:'puesto',
+  escribir:'escrito', describir:'descrito', abrir:'abierto', romper:'roto'
+};
+
+function getParticiple(verb){
+  if(PARTICIPIOS_IRREGULARES[verb.inf]) return PARTICIPIOS_IRREGULARES[verb.inf];
+  const stem = verb.inf.slice(0,-2);
+  return verb.inf.slice(-2)==='ar' ? stem+'ado' : stem+'ido';
+}
+
+function compoundForms(verb, auxTense){
+  const part = getParticiple(verb);
+  return HABER[auxTense].map(aux => aux+' '+part);
+}
+
+// presente de subjuntivo: -AR -> e,es,e,emos,éis,en · -ER/-IR -> a,as,a,amos,áis,an
+function presenteSubjForms(verb){
+  if(SUBJ_PRESENTE_IRREGULARES[verb.inf]) return SUBJ_PRESENTE_IRREGULARES[verb.inf];
+  const stem = verb.inf.slice(0,-2);
+  const endings = verb.inf.slice(-2)==='ar' ? ['e','es','e','emos','éis','en'] : ['a','as','a','amos','áis','an'];
+  return endings.map(e=>stem+e);
+}
+
+// pretérito imperfecto de subjuntivo: se construye siempre a partir de la 3ª persona del
+// plural del pretérito indefinido (ya validado, incluidos los irregulares), quitando "-ron"
+function addAccentToLastVowel(s){
+  const map={a:'á',e:'é',i:'í',o:'ó',u:'ú'};
+  const last=s.slice(-1);
+  return map[last] ? s.slice(0,-1)+map[last] : s;
+}
+function imperfectoSubjForms(verb){
+  const pret3pl = allForms(verb,'indefinido')[5];
+  const stem = pret3pl.slice(0,-3);
+  return [stem+'ra', stem+'ras', stem+'ra', addAccentToLastVowel(stem)+'ramos', stem+'rais', stem+'ran'];
+}
+
+function conjugateRegular(infinitive, group, tense){
+  const stem = infinitive.slice(0,-2);
+  const endings = {
+    ar:{ presente:['o','as','a','amos','áis','an'], indefinido:['é','aste','ó','amos','asteis','aron'], imperfecto:['aba','abas','aba','ábamos','abais','aban'] },
+    er:{ presente:['o','es','e','emos','éis','en'], indefinido:['í','iste','ió','imos','isteis','ieron'], imperfecto:['ía','ías','ía','íamos','íais','ían'] },
+    ir:{ presente:['o','es','e','imos','ís','en'], indefinido:['í','iste','ió','imos','isteis','ieron'], imperfecto:['ía','ías','ía','íamos','íais','ían'] }
+  };
+  const futCond = { futuro:['é','ás','á','emos','éis','án'], condicional:['ía','ías','ía','íamos','íais','ían'] };
+  if(tense==='futuro' || tense==='condicional') return futCond[tense].map(e=>infinitive+e);
+  return endings[group][tense].map(e=>stem+e);
+}
+
+function allForms(verb, tense){
+  const meta=TENSES[tense];
+  if(meta.compound) return compoundForms(verb, meta.auxTense);
+  if(tense==='presentesubj') return presenteSubjForms(verb);
+  if(tense==='imperfectosubj') return imperfectoSubjForms(verb);
+  return verb.group==='irregular' ? IRREGULARS[verb.inf][tense] : conjugateRegular(verb.inf, verb.group, tense);
+}
+function getForm(verb, tense, personIndex){ return allForms(verb, tense)[personIndex]; }
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const state = {
+  config:{
+    child:'nico',
+    mood:'indicativo',
+    tensesByMood:{
+      indicativo: new Set(INDICATIVO_ORDER.filter(t=>!EXTRA_TENSES.has(t))),
+      subjuntivo: new Set(SUBJUNTIVO_ORDER.filter(t=>!EXTRA_TENSES.has(t)))
+    },
+    groups:new Set(['ar','er','ir','irregular']),
+    quizMode:'conjugar',
+    count:10
+  },
+  game:{ questions:[], index:0, correct:0, phase:'answering', tenseStats:{}, tenseSet:null, mood:'indicativo', child:'nico', locked:false },
+  ui:{ progressChild:'nico' },
+  progreso:null,
+  soundOn:true
+};
+
+function defaultChildProgreso(){
+  const porTiempo={};
+  ALL_TENSES_ORDER.forEach(t=>{ porTiempo[t]={correctas:0,total:0}; });
+  return { porTiempo, sesiones:[] };
+}
+function defaultProgreso(){
+  return { nico: defaultChildProgreso(), carlota: defaultChildProgreso() };
+}
+
+/* ============================================================
+   SONIDO
+   ============================================================ */
+let audioCtx=null;
+function tone(freq, start, dur, type){
+  if(!state.soundOn) return;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+    osc.type=type||'sine'; osc.frequency.value=freq;
+    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime+start);
+    gain.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime+start+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+start+dur);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(audioCtx.currentTime+start); osc.stop(audioCtx.currentTime+start+dur+0.02);
+  }catch(e){ /* audio no disponible */ }
+}
+function playCorrect(){ tone(523,0,.14,'sine'); tone(784,.12,.18,'sine'); }
+function playWrong(){ tone(220,0,.22,'sine'); }
+
+/* ============================================================
+   NAVEGACIÓN
+   ============================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.removeAttribute('data-active'));
+  document.getElementById(id).setAttribute('data-active','true');
+  window.scrollTo(0,0);
+  if(id==='screen-study') renderStudyTable();
+  if(id==='screen-progress') renderProgressScreen();
+  if(id==='screen-home') renderHomeStats();
+}
+document.querySelectorAll('[data-back]').forEach(btn=>{
+  btn.addEventListener('click', ()=> showScreen(btn.getAttribute('data-back')));
+});
+
+/* ============================================================
+   CONFIG UI
+   ============================================================ */
+function buildChildSelector(){
+  const wrap=document.getElementById('child-select-row');
+  wrap.querySelectorAll('.mood-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      wrap.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.config.child = btn.getAttribute('data-child');
+    });
+  });
+}
+
+function buildMoodSelector(){
+  const wrap=document.getElementById('mood-select-row');
+  wrap.querySelectorAll('.mood-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      wrap.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.config.mood = btn.getAttribute('data-mood');
+      buildTimeline();
+    });
+  });
+}
+
+function buildTimeline(){
+  const wrap=document.getElementById('tense-timeline');
+  wrap.innerHTML='';
+  const order = state.config.mood==='indicativo' ? INDICATIVO_ORDER : SUBJUNTIVO_ORDER;
+  const tenseSet = state.config.tensesByMood[state.config.mood];
+  order.forEach(t=>{
+    const meta=TENSES[t];
+    const stop=document.createElement('button');
+    stop.type='button';
+    stop.className='timeline-stop era-'+t+(meta.compound ? ' sub-stop' : '')+(EXTRA_TENSES.has(t) ? ' branch' : '')+(tenseSet.has(t) ? ' selected' : '');
+    stop.innerHTML = '<span class="stop-dot">'+meta.icon+'</span>'+
+      '<span class="stop-body"><span class="stop-name">'+(meta.compound ? '↳ ' : '')+meta.label+'</span><br>'+
+      '<span class="stop-note">'+meta.note+'</span></span>';
+    stop.addEventListener('click', ()=>{
+      if(tenseSet.has(t)) tenseSet.delete(t); else tenseSet.add(t);
+      stop.classList.toggle('selected');
+    });
+    wrap.appendChild(stop);
+  });
+}
+
+function buildVerbGroupChips(){
+  const wrap=document.getElementById('verb-group-row');
+  wrap.innerHTML='';
+  Object.keys(GROUP_LABEL).forEach(g=>{
+    const chip=document.createElement('button');
+    chip.type='button'; chip.className='chip'+(state.config.groups.has(g)?' selected':'');
+    chip.textContent=GROUP_LABEL[g];
+    chip.addEventListener('click', ()=>{
+      if(state.config.groups.has(g)) state.config.groups.delete(g); else state.config.groups.add(g);
+      chip.classList.toggle('selected');
+    });
+    wrap.appendChild(chip);
+  });
+}
+
+function buildSingleSelectRow(rowId, attr, currentValueGetter, onPick){
+  const wrap=document.getElementById(rowId);
+  const chips=wrap.querySelectorAll('.chip');
+  chips.forEach(chip=>{
+    const val=chip.getAttribute(attr);
+    if(val===String(currentValueGetter())) chip.classList.add('selected');
+    chip.addEventListener('click', ()=>{
+      chips.forEach(c=>c.classList.remove('selected'));
+      chip.classList.add('selected');
+      onPick(val);
+    });
+  });
+}
+
+document.getElementById('btn-go-config').addEventListener('click', ()=> showScreen('screen-config'));
+document.getElementById('btn-go-study').addEventListener('click', ()=> showScreen('screen-study'));
+document.getElementById('btn-go-progress').addEventListener('click', ()=> showScreen('screen-progress'));
+
+document.getElementById('btn-start-game').addEventListener('click', ()=>{
+  const err=document.getElementById('config-error');
+  if(state.config.tensesByMood[state.config.mood].size===0 || state.config.groups.size===0){ err.hidden=false; return; }
+  err.hidden=true;
+  startGame();
+});
+
+document.getElementById('btn-sound').addEventListener('click', function(){
+  state.soundOn=!state.soundOn;
+  this.textContent = state.soundOn ? '🔊' : '🔇';
+});
+
+/* ============================================================
+   TARJETAS (flashcards)
+   ============================================================ */
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function buildPool(){
+  const pool=[];
+  const tenseSet=state.config.tensesByMood[state.config.mood];
+  VERB_LIST.filter(v=>state.config.groups.has(v.group)).forEach(v=>{
+    tenseSet.forEach(t=>{
+      for(let p=0;p<6;p++) pool.push({verb:v, tense:t, person:p});
+    });
+  });
+  return pool;
+}
+
+const CHILD_NAME = {nico:'Nico', carlota:'Carlota'};
+
+function startGame(){
+  state.game.mood = state.config.mood;
+  state.game.child = state.config.child;
+  state.game.tenseSet = new Set(state.config.tensesByMood[state.config.mood]);
+  const pool=shuffle(buildPool());
+  const n=Math.min(state.config.count, pool.length);
+  state.game.questions=pool.slice(0,n);
+  state.game.index=0; state.game.correct=0; state.game.locked=false;
+  state.game.tenseStats={};
+  ALL_TENSES_ORDER.forEach(t=>{ state.game.tenseStats[t]={correctas:0,total:0}; });
+  document.getElementById('game-child-pill').textContent=CHILD_NAME[state.game.child];
+  showScreen('screen-game');
+  renderFlashCard();
+}
+
+function currentQuestion(){ return state.game.questions[state.game.index]; }
+
+function setEraClass(el, tense){
+  ALL_TENSES_ORDER.forEach(t=> el.classList.remove('era-'+t));
+  el.classList.add('era-'+tense);
+}
+
+function resetCardPosition(){
+  const card=document.getElementById('flash-card');
+  card.style.transition='none';
+  card.style.transform='translateX(0) rotate(0)';
+  document.getElementById('wash-yes').style.opacity=0;
+  document.getElementById('wash-no').style.opacity=0;
+  document.getElementById('stamp-yes').style.opacity=0;
+  document.getElementById('stamp-no').style.opacity=0;
+  // forzar reflujo para poder reactivar la transición después
+  void card.offsetWidth;
+  card.style.transition='';
+}
+
+function renderFlashCard(){
+  const q=currentQuestion();
+  const total=state.game.questions.length;
+  state.game.phase='answering';
+  state.game.locked=false;
+
+  const eraBadge=document.getElementById('era-badge');
+  setEraClass(eraBadge, q.tense);
+  eraBadge.textContent=TENSES[q.tense].label;
+
+  const miniPorthole=document.getElementById('mini-porthole');
+  setEraClass(miniPorthole, q.tense);
+  document.getElementById('mini-porthole-icon').textContent=TENSES[q.tense].icon;
+
+  document.getElementById('game-progress-label').textContent=(state.game.index+1)+' / '+total;
+  document.getElementById('progress-fill').style.width=Math.round((state.game.index/total)*100)+'%';
+
+  const card=document.getElementById('flash-card');
+  setEraClass(card, q.tense);
+
+  const pron=PRONOUNS[q.person];
+  const form=getForm(q.verb, q.tense, q.person);
+  const kicker=document.getElementById('flash-kicker');
+  const prompt=document.getElementById('flash-prompt');
+  const answerLabel=document.getElementById('flash-answer-label');
+  const answer=document.getElementById('flash-answer');
+  const meta=document.getElementById('flash-meta');
+
+  if(state.config.quizMode==='conjugar'){
+    kicker.textContent='Pregunta en voz alta';
+    prompt.innerHTML = q.verb.inf.toUpperCase()+'<span class="flash-prompt-sub">'+TENSES[q.tense].label+' · '+pron.toUpperCase()+'</span>';
+    answerLabel.textContent='Respuesta';
+    answer.textContent=form;
+    meta.textContent='';
+  } else {
+    kicker.textContent='Di esta forma en voz alta';
+    prompt.innerHTML = pron.toUpperCase()+'<span class="flash-prompt-sub">'+form+'</span>';
+    answerLabel.textContent='Tiempo verbal';
+    answer.textContent=TENSES[q.tense].label;
+    meta.textContent='Verbo: '+q.verb.inf;
+  }
+
+  resetCardPosition();
+}
+
+/* -------- arrastre (pointer events) -------- */
+const flashCard=document.getElementById('flash-card');
+const washYes=document.getElementById('wash-yes');
+const washNo=document.getElementById('wash-no');
+const stampYes=document.getElementById('stamp-yes');
+const stampNo=document.getElementById('stamp-no');
+const SWIPE_THRESHOLD=100;
+let drag={active:false, startX:0, dx:0};
+
+flashCard.addEventListener('pointerdown', (e)=>{
+  if(state.game.locked) return;
+  drag.active=true; drag.startX=e.clientX; drag.dx=0;
+  flashCard.style.transition='none';
+  try{ flashCard.setPointerCapture(e.pointerId); }catch(err){}
+});
+flashCard.addEventListener('pointermove', (e)=>{
+  if(!drag.active) return;
+  drag.dx=e.clientX-drag.startX;
+  const rot=Math.max(-15,Math.min(15,drag.dx/12));
+  flashCard.style.transform='translateX('+drag.dx+'px) rotate('+rot+'deg)';
+  const progress=Math.min(Math.abs(drag.dx)/120,1);
+  if(drag.dx>4){ washYes.style.opacity=progress*0.9; washNo.style.opacity=0; stampYes.style.opacity=progress; stampNo.style.opacity=0; }
+  else if(drag.dx<-4){ washNo.style.opacity=progress*0.9; washYes.style.opacity=0; stampNo.style.opacity=progress; stampYes.style.opacity=0; }
+  else { washYes.style.opacity=0; washNo.style.opacity=0; stampYes.style.opacity=0; stampNo.style.opacity=0; }
+});
+function endDrag(e){
+  if(!drag.active) return;
+  drag.active=false;
+  flashCard.style.transition='transform .25s ease';
+  if(Math.abs(drag.dx) > SWIPE_THRESHOLD){
+    commitSwipe(drag.dx>0);
+  } else {
+    flashCard.style.transform='translateX(0) rotate(0)';
+    washYes.style.opacity=0; washNo.style.opacity=0; stampYes.style.opacity=0; stampNo.style.opacity=0;
+  }
+}
+flashCard.addEventListener('pointerup', endDrag);
+flashCard.addEventListener('pointercancel', endDrag);
+
+function commitSwipe(isCorrect){
+  if(state.game.locked) return;
+  state.game.locked=true;
+  flashCard.style.transition='transform .28s ease';
+  flashCard.style.transform='translateX('+(isCorrect?620:-620)+'px) rotate('+(isCorrect?26:-26)+'deg)';
+  if(isCorrect){ washYes.style.opacity=0.9; stampYes.style.opacity=1; playCorrect(); }
+  else{ washNo.style.opacity=0.9; stampNo.style.opacity=1; playWrong(); }
+  registerFlashAnswer(isCorrect);
+  setTimeout(advanceCard, 260);
+}
+
+document.getElementById('btn-mark-correct').addEventListener('click', ()=> commitSwipe(true));
+document.getElementById('btn-mark-wrong').addEventListener('click', ()=> commitSwipe(false));
+
+function registerFlashAnswer(isCorrect){
+  const q=currentQuestion();
+  if(isCorrect) state.game.correct++;
+  const stats=state.game.tenseStats[q.tense];
+  stats.total++;
+  if(isCorrect) stats.correctas++;
+}
+
+function advanceCard(){
+  state.game.index++;
+  if(state.game.index>=state.game.questions.length){ endFlashSession(); }
+  else { renderFlashCard(); }
+}
+
+/* ============================================================
+   RESUMEN (nota sobre 10)
+   ============================================================ */
+function fmtScore(n){ return n==null ? '—' : n.toFixed(1).replace('.',','); }
+
+function endFlashSession(){
+  const total=state.game.questions.length;
+  const correct=state.game.correct;
+  const score10 = total ? Math.round((correct/total)*100)/10 : 0;
+
+  let tier, headline;
+  if(score10>=9){ tier='tier-high'; headline='¡Excelente! 🌟'; }
+  else if(score10>=7){ tier='tier-high'; headline='¡Muy bien! 👍'; }
+  else if(score10>=5){ tier='tier-mid'; headline='Bien, a seguir practicando 💪'; }
+  else{ tier='tier-low'; headline='Toca repasar con calma 📖'; }
+
+  const badge=document.getElementById('score-badge');
+  badge.className='score-badge'+(tier==='tier-mid' ? ' tier-mid' : tier==='tier-low' ? ' tier-low' : '');
+  badge.innerHTML=fmtScore(score10)+'<span>/10</span>';
+  document.getElementById('summary-child').textContent=CHILD_NAME[state.game.child];
+  document.getElementById('summary-headline').textContent=headline;
+  document.getElementById('summary-correct').textContent=correct;
+  document.getElementById('summary-total').textContent=total;
+
+  const childProgreso=state.progreso[state.game.child];
+  ALL_TENSES_ORDER.forEach(t=>{
+    const s=state.game.tenseStats[t];
+    if(s && s.total){ childProgreso.porTiempo[t].correctas += s.correctas; childProgreso.porTiempo[t].total += s.total; }
+  });
+  childProgreso.sesiones.push({
+    fecha:new Date().toISOString(),
+    mood:state.game.mood,
+    quizMode:state.config.quizMode,
+    correct, total, score10
+  });
+  if(childProgreso.sesiones.length>50) childProgreso.sesiones=childProgreso.sesiones.slice(-50);
+  saveProgress();
+
+  showScreen('screen-summary');
+}
+
+document.getElementById('btn-again').addEventListener('click', startGame);
+
+/* ============================================================
+   SALA DE CONSULTA
+   ============================================================ */
+function buildStudySelect(){
+  const sel=document.getElementById('study-verb-select');
+  sel.innerHTML='';
+  ['ar','er','ir','irregular'].forEach(g=>{
+    const og=document.createElement('optgroup');
+    og.label='Verbos '+ (g==='irregular' ? 'irregulares' : 'en '+GROUP_LABEL[g]);
+    VERB_LIST.filter(v=>v.group===g).forEach(v=>{
+      const opt=document.createElement('option');
+      opt.value=v.inf; opt.textContent=v.inf;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+  sel.addEventListener('change', renderStudyTable);
+}
+
+function renderStudyTable(){
+  const sel=document.getElementById('study-verb-select');
+  const verb=VERB_LIST.find(v=>v.inf===sel.value) || VERB_LIST[0];
+  const wrap=document.getElementById('study-table');
+  wrap.innerHTML='';
+  STUDY_GROUPS.forEach(group=>{
+    const groupTitle=document.createElement('p');
+    groupTitle.className='study-group-title';
+    groupTitle.textContent=group.label;
+    wrap.appendChild(groupTitle);
+    group.tenses.forEach(t=>{
+      const forms=allForms(verb,t);
+      const block=document.createElement('div');
+      block.className='study-tense-block';
+      const title=document.createElement('span');
+      title.className='study-tense-title era-'+t;
+      title.textContent=TENSES[t].icon+' '+TENSES[t].label;
+      block.appendChild(title);
+      const tip=document.createElement('p');
+      tip.className='study-tip';
+      tip.textContent=TENSES[t].tip;
+      block.appendChild(tip);
+      PRONOUNS.forEach((pron,i)=>{
+        const row=document.createElement('div');
+        row.className='study-row';
+        row.innerHTML='<span class="study-pron">'+pron+'</span><span class="study-form">'+forms[i]+'</span>';
+        block.appendChild(row);
+      });
+      wrap.appendChild(block);
+    });
+  });
+}
+
+/* ============================================================
+   PROGRESO / PERSISTENCIA (por hijo/a)
+   Versión independiente: usa localStorage (memoria del propio
+   navegador) en vez del almacenamiento de Claude, para poder
+   abrirse como archivo suelto o alojarse en GitHub Pages.
+   ============================================================ */
+const STORAGE_KEY='cronoverbo_progreso';
+
+async function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    state.progreso = (parsed && parsed.nico && parsed.carlota) ? parsed : defaultProgreso();
+  }catch(e){
+    // localStorage no disponible (modo privado, cuota llena, navegador antiguo…)
+    state.progreso = defaultProgreso();
+  }
+  ['nico','carlota'].forEach(c=>{
+    ALL_TENSES_ORDER.forEach(t=>{ if(!state.progreso[c].porTiempo[t]) state.progreso[c].porTiempo[t]={correctas:0,total:0}; });
+    if(!Array.isArray(state.progreso[c].sesiones)) state.progreso[c].sesiones=[];
+  });
+}
+
+async function saveProgress(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progreso));
+  }catch(e){ /* si falla, seguimos sin bloquear la app */ }
+}
+
+function lastScore(child){
+  const arr=state.progreso[child].sesiones;
+  return arr.length ? arr[arr.length-1].score10 : null;
+}
+function avgScore(child){
+  const arr=state.progreso[child].sesiones;
+  if(!arr.length) return null;
+  return arr.reduce((a,s)=>a+s.score10,0)/arr.length;
+}
+function bestScore(child){
+  const arr=state.progreso[child].sesiones;
+  if(!arr.length) return null;
+  return Math.max(...arr.map(s=>s.score10));
+}
+
+function renderHomeStats(){
+  if(!state.progreso) return;
+  document.getElementById('home-score-nico').textContent=fmtScore(lastScore('nico'));
+  document.getElementById('home-score-carlota').textContent=fmtScore(lastScore('carlota'));
+}
+
+const MOOD_ICON={indicativo:'🌍', subjuntivo:'🌌'};
+const QUIZMODE_ICON={conjugar:'🗣️', reconocer:'🔍'};
+
+function renderProgressScreen(){
+  document.querySelectorAll('#progress-child-row .chip').forEach(chip=>{
+    chip.classList.toggle('selected', chip.getAttribute('data-child')===state.ui.progressChild);
+  });
+
+  const child=state.ui.progressChild;
+  const p=state.progreso ? state.progreso[child] : defaultChildProgreso();
+  const wrap=document.getElementById('progress-content');
+  wrap.innerHTML='';
+
+  const statsBlock=document.createElement('div');
+  statsBlock.className='stat-row';
+  statsBlock.innerHTML =
+    '<div class="stat-chip"><span class="stat-num">'+p.sesiones.length+'</span><span class="stat-label">🎴 sesiones</span></div>'+
+    '<div class="stat-chip"><span class="stat-num">'+fmtScore(avgScore(child))+'</span><span class="stat-label">media /10</span></div>'+
+    '<div class="stat-chip"><span class="stat-num">'+fmtScore(bestScore(child))+'</span><span class="stat-label">mejor nota</span></div>';
+  wrap.appendChild(statsBlock);
+
+  const barsCard=document.createElement('div');
+  barsCard.className='study-card';
+  const h=document.createElement('h3');
+  h.className='config-title';
+  h.textContent='Precisión por tiempo verbal';
+  barsCard.appendChild(h);
+  STUDY_GROUPS.forEach(group=>{
+    const groupTitle=document.createElement('p');
+    groupTitle.className='study-group-title';
+    groupTitle.textContent=group.label;
+    barsCard.appendChild(groupTitle);
+    group.tenses.forEach(t=>{
+      const d=p.porTiempo[t] || {correctas:0,total:0};
+      const pct = d.total ? Math.round((d.correctas/d.total)*100) : 0;
+      const row=document.createElement('div');
+      row.className='bar-row era-'+t;
+      row.innerHTML =
+        '<div class="bar-label"><span>'+TENSES[t].icon+' '+TENSES[t].label+'</span><b>'+(d.total? pct+'%' : 'sin datos')+'</b></div>'+
+        '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%"></div></div>';
+      barsCard.appendChild(row);
+    });
+  });
+  wrap.appendChild(barsCard);
+
+  const sessionsCard=document.createElement('div');
+  sessionsCard.className='study-card';
+  const h2=document.createElement('h3');
+  h2.className='config-title';
+  h2.textContent='Últimas sesiones';
+  sessionsCard.appendChild(h2);
+  const recent=p.sesiones.slice(-8).reverse();
+  if(!recent.length){
+    const empty=document.createElement('p');
+    empty.className='empty-note';
+    empty.textContent='Todavía no hay sesiones registradas.';
+    sessionsCard.appendChild(empty);
+  } else {
+    recent.forEach(s=>{
+      const d=new Date(s.fecha);
+      const dateStr=isNaN(d) ? '' : d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'});
+      const row=document.createElement('div');
+      row.className='session-row';
+      row.innerHTML =
+        '<div class="session-left"><span class="session-date">'+dateStr+'</span>'+
+        '<span class="session-mode">'+MOOD_ICON[s.mood]+' '+QUIZMODE_ICON[s.quizMode]+' · '+s.correct+'/'+s.total+'</span></div>'+
+        '<span class="session-score">'+fmtScore(s.score10)+'/10</span>';
+      sessionsCard.appendChild(row);
+    });
+  }
+  wrap.appendChild(sessionsCard);
+}
+
+document.querySelectorAll('#progress-child-row .chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    state.ui.progressChild=chip.getAttribute('data-child');
+    renderProgressScreen();
+  });
+});
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+function initConfigDefaults(){
+  buildChildSelector();
+  buildMoodSelector();
+  buildTimeline();
+  buildVerbGroupChips();
+  buildSingleSelectRow('quizmode-row','data-quizmode', ()=>state.config.quizMode, v=>{ state.config.quizMode=v; });
+  buildSingleSelectRow('count-row','data-count', ()=>state.config.count, v=>{ state.config.count=parseInt(v,10); });
+}
+
+(async function init(){
+  initConfigDefaults();
+  buildStudySelect();
+  await loadProgress();
+  renderHomeStats();
+})();
+
+})();
+</script>
+</body>
+</html>
