@@ -76,6 +76,7 @@
   .era-futuro{      --era-color:var(--futuro);      --era-tint:var(--futuro-tint); }
   .era-condicional{ --era-color:var(--condicional); --era-tint:var(--condicional-tint); }
   .era-pluscuamperfecto{ --era-color:var(--imperfecto); --era-tint:var(--imperfecto-tint); }
+  .era-preteritoanterior{ --era-color:var(--indefinido); --era-tint:var(--indefinido-tint); }
   .era-perfectocompuesto{ --era-color:var(--presente); --era-tint:var(--presente-tint); }
   .era-futurocompuesto{ --era-color:var(--futuro); --era-tint:var(--futuro-tint); }
   .era-condicionalcompuesto{ --era-color:var(--condicional); --era-tint:var(--condicional-tint); }
@@ -519,12 +520,12 @@
    ============================================================ */
 const PRONOUNS = ['yo','tú','él/ella/usted','nosotros/nosotras','vosotros/vosotras','ellos/ellas/ustedes'];
 
-const INDICATIVO_ORDER = ['imperfecto','pluscuamperfecto','indefinido','presente','perfectocompuesto','futuro','futurocompuesto','condicional','condicionalcompuesto'];
+const INDICATIVO_ORDER = ['imperfecto','pluscuamperfecto','indefinido','preteritoanterior','presente','perfectocompuesto','futuro','futurocompuesto','condicional','condicionalcompuesto'];
 const SUBJUNTIVO_ORDER = ['presentesubj','imperfectosubj','perfectosubj','pluscuamperfectosubj'];
 const ALL_TENSES_ORDER = INDICATIVO_ORDER.concat(SUBJUNTIVO_ORDER);
 
 // tiempos que se muestran como "reto extra" (desmarcados por defecto)
-const EXTRA_TENSES = new Set(['pluscuamperfecto','futurocompuesto','condicional','condicionalcompuesto','perfectosubj','pluscuamperfectosubj']);
+const EXTRA_TENSES = new Set(['pluscuamperfecto','preteritoanterior','futurocompuesto','condicional','condicionalcompuesto','perfectosubj','pluscuamperfectosubj']);
 
 const TENSES = {
   imperfecto: {
@@ -541,6 +542,11 @@ const TENSES = {
     label:'Pretérito indefinido', short:'Indefinido', icon:'📜', note:'pasado de un momento',
     tip:'El pretérito indefinido señala una acción ya terminada en un momento concreto del pasado. Pistas: "ayer", "el año pasado", "de repente".',
     build:(pron,comp)=>({prefix:`Ayer, ${pron}`, suffix:`${comp}.`})
+  },
+  preteritoanterior: {
+    label:'Pretérito anterior', short:'Anterior', icon:'⌛', note:'reto extra · justo antes de otro pasado', compound:true, auxTense:'indefinido',
+    tip:'El pretérito anterior (hube + participio) señala una acción terminada justo antes de otra acción pasada. Es un tiempo raro y literario, casi siempre con "en cuanto" o "cuando". Pista: "en cuanto…, entonces…".',
+    build:(pron,comp)=>({prefix:`En cuanto ${pron}`, suffix:`${comp}, empezó la fiesta.`})
   },
   presente: {
     label:'Presente', short:'Presente', icon:'☀️', note:'ahora mismo',
@@ -597,7 +603,7 @@ const TENSES = {
 // orden de la Sala de consulta y del diario: presente, después pasado, por último futuro, y el subjuntivo aparte
 const STUDY_GROUPS = [
   {label:'Presente', tenses:['presente','perfectocompuesto']},
-  {label:'Pasado', tenses:['imperfecto','indefinido','pluscuamperfecto']},
+  {label:'Pasado', tenses:['imperfecto','indefinido','preteritoanterior','pluscuamperfecto']},
   {label:'Futuro', tenses:['futuro','futurocompuesto','condicional','condicionalcompuesto']},
   {label:'Subjuntivo', tenses:['presentesubj','imperfectosubj','perfectosubj','pluscuamperfectosubj']}
 ];
@@ -684,6 +690,7 @@ const IRREGULARS = {
 const HABER = {
   presente:['he','has','ha','hemos','habéis','han'],
   imperfecto:['había','habías','había','habíamos','habíais','habían'],
+  indefinido:['hube','hubiste','hubo','hubimos','hubisteis','hubieron'],
   futuro:['habré','habrás','habrá','habremos','habréis','habrán'],
   condicional:['habría','habrías','habría','habríamos','habríais','habrían'],
   presentesubj:['haya','hayas','haya','hayamos','hayáis','hayan'],
