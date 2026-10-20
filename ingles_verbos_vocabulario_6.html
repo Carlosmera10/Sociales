@@ -230,8 +230,24 @@
   }
   .speak-btn[hidden]{ display:none; }
 
+  /* ---------- autoevaluación: respuesta oculta hasta girar ---------- */
+  .answer-zone{ display:flex; flex-direction:column; align-items:center; width:100%; position:relative; z-index:1; }
+  .answer-zone[hidden]{ display:none; }
+  .answer-zone.revealing{ animation:reveal .35s ease; }
+  @keyframes reveal{ from{opacity:0; transform:rotateX(70deg);} to{opacity:1; transform:rotateX(0);} }
+  @media (prefers-reduced-motion: reduce){ .answer-zone.revealing{ animation:none; } }
+  .flip-hint{
+    position:relative; z-index:1; margin:22px 0 0; font-size:13px; color:var(--ink-soft);
+    border:2px dashed var(--line); border-radius:var(--radius-md); padding:14px 18px;
+  }
+  .flip-hint[hidden]{ display:none; }
+  .reveal-btn[hidden], .swipe-actions[hidden], .swipe-hint[hidden]{ display:none; }
+
   .swipe-hint{ text-align:center; font-size:12px; color:var(--ink-soft); margin:0; }
-  .swipe-actions{ display:flex; justify-content:center; align-items:center; gap:28px; }
+  .swipe-actions{ display:flex; justify-content:center; align-items:flex-start; gap:28px; }
+  .swipe-col{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .swipe-caption{ font-size:12.5px; font-weight:700; color:var(--ink-soft); }
+  .swipe-caption[hidden]{ display:none; }
   .swipe-btn{ width:60px; height:60px; border-radius:50%; border:none; font-size:24px; cursor:pointer; box-shadow:var(--shadow-card); font-weight:800; }
   .swipe-no{ background:#FBEAE7; color:var(--error); }
   .swipe-yes{ background:var(--ok-tint); color:var(--ok); }
@@ -304,7 +320,7 @@
       <button class="btn btn-secondary" id="btn-go-progress">🗂️ Mi diario de viaje</button>
     </div>
 
-    <p class="hint-line">Tú lees la tarjeta en voz alta, ellos contestan y tú deslizas: a la derecha si aciertan, a la izquierda si no.</p>
+    <p class="hint-line">Dos formas de jugar: tú preguntas en voz alta y corriges, o el niño repasa solo, gira cada tarjeta y marca si se la sabía.</p>
   </section>
 
   <!-- ============ CONFIG ============ -->
@@ -315,7 +331,7 @@
     </header>
 
     <div class="config-block">
-      <h3 class="config-title">1 · ¿A quién evalúas?</h3>
+      <h3 class="config-title">1 · ¿Quién repasa?</h3>
       <div class="mood-row" id="child-select-row">
         <button type="button" class="mood-btn selected" data-child="nico">
           <span class="mood-icon">🦊</span><span class="mood-name">Nico</span>
@@ -327,7 +343,19 @@
     </div>
 
     <div class="config-block">
-      <h3 class="config-title">2 · ¿Qué quieres repasar?</h3>
+      <h3 class="config-title">2 · ¿Quién corrige?</h3>
+      <div class="mood-row" id="who-row">
+        <button type="button" class="mood-btn selected" data-who="adult">
+          <span class="mood-icon">🗣️</span><span class="mood-name">Un adulto</span><span class="mood-sub">pregunta en voz alta y marca ✓ / ✗</span>
+        </button>
+        <button type="button" class="mood-btn" data-who="self">
+          <span class="mood-icon">🙋</span><span class="mood-name">Autoevaluación</span><span class="mood-sub">el niño gira la tarjeta y marca si se la sabía</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">3 · ¿Qué quieres repasar?</h3>
       <p class="config-desc">Toca uno o varios bloques. Se pueden mezclar verbos y vocabulario.</p>
       <div class="quick-row">
         <button type="button" class="link-btn" data-quick="all">Todo</button>
@@ -342,7 +370,7 @@
     </div>
 
     <div class="config-block">
-      <h3 class="config-title">3 · ¿Cómo preguntas los verbos?</h3>
+      <h3 class="config-title">4 · ¿Cómo se preguntan los verbos?</h3>
       <div class="mood-row" id="vmode-row">
         <button type="button" class="mood-btn selected" data-vmode="forms">
           <span class="mood-icon">🇪🇸→🇬🇧</span><span class="mood-name">Tres formas</span><span class="mood-sub">ir → go, went, gone</span>
@@ -357,7 +385,7 @@
     </div>
 
     <div class="config-block">
-      <h3 class="config-title">4 · ¿Y el vocabulario?</h3>
+      <h3 class="config-title">5 · ¿Y el vocabulario?</h3>
       <div class="mood-row" id="wdir-row">
         <button type="button" class="mood-btn selected" data-wdir="en-es">
           <span class="mood-icon">🇬🇧→🇪🇸</span><span class="mood-name">Inglés→Español</span>
@@ -372,7 +400,7 @@
     </div>
 
     <div class="config-block">
-      <h3 class="config-title">5 · ¿Cuántas tarjetas?</h3>
+      <h3 class="config-title">6 · ¿Cuántas tarjetas?</h3>
       <div class="chip-row" id="count-row">
         <button class="chip" data-count="10">10</button>
         <button class="chip" data-count="15">15</button>
@@ -423,18 +451,28 @@
         <div class="flash-stamp flash-stamp-no" id="stamp-no">✗</div>
         <p class="flash-kicker" id="flash-kicker"></p>
         <p class="flash-prompt" id="flash-prompt"></p>
-        <div class="flash-divider"></div>
-        <p class="flash-answer-label" id="flash-answer-label"></p>
-        <div class="flash-answer" id="flash-answer"></div>
-        <p class="flash-meta" id="flash-meta"></p>
-        <button type="button" class="speak-btn" id="btn-speak">🔈 Escuchar en inglés</button>
+        <p class="flash-hint flip-hint" id="flip-hint" hidden>Piensa la respuesta y toca la tarjeta para girarla 🔄</p>
+        <div class="answer-zone" id="answer-zone">
+          <div class="flash-divider"></div>
+          <p class="flash-answer-label" id="flash-answer-label"></p>
+          <div class="flash-answer" id="flash-answer"></div>
+          <p class="flash-meta" id="flash-meta"></p>
+          <button type="button" class="speak-btn" id="btn-speak">🔈 Escuchar en inglés</button>
+        </div>
       </div>
     </div>
 
-    <p class="swipe-hint">Desliza la tarjeta o toca ✗ / ✓</p>
-    <div class="swipe-actions">
-      <button class="swipe-btn swipe-no" id="btn-mark-wrong" aria-label="Incorrecto">✗</button>
-      <button class="swipe-btn swipe-yes" id="btn-mark-correct" aria-label="Correcto">✓</button>
+    <button class="btn btn-primary btn-block reveal-btn" id="btn-reveal" hidden>Girar tarjeta 🔄</button>
+    <p class="swipe-hint" id="swipe-hint">Desliza la tarjeta o toca ✗ / ✓</p>
+    <div class="swipe-actions" id="swipe-actions">
+      <div class="swipe-col">
+        <button class="swipe-btn swipe-no" id="btn-mark-wrong" aria-label="Incorrecto">✗</button>
+        <span class="swipe-caption" id="cap-wrong" hidden>No me la sé</span>
+      </div>
+      <div class="swipe-col">
+        <button class="swipe-btn swipe-yes" id="btn-mark-correct" aria-label="Correcto">✓</button>
+        <span class="swipe-caption" id="cap-correct" hidden>¡Me la sé!</span>
+      </div>
     </div>
   </section>
 
@@ -647,13 +685,14 @@ const CHILD_NAME = {nico:'Nico', carlota:'Carlota'};
 const state = {
   config:{
     child:'nico',
+    who:'adult',
     blocks:new Set(BLOCKS.map(b=>b.id)),
     vmode:'forms',
     wdir:'en-es',
     count:10,
     weak:false
   },
-  game:{ questions:[], index:0, correct:0, misses:[], blockStats:{}, child:'nico', locked:false, modeLabel:'' },
+  game:{ questions:[], index:0, correct:0, misses:[], blockStats:{}, child:'nico', locked:false, modeLabel:'', self:false, revealed:true },
   ui:{ progressChild:'nico' },
   progreso:null,
   soundOn:true
@@ -855,6 +894,7 @@ function modeLabel(){
   const v={forms:'3 formas', meaning:'significado', mix:'verbos mezcla'}[state.config.vmode];
   const w={'en-es':'🇬🇧→🇪🇸', 'es-en':'🇪🇸→🇬🇧', mix:'🔀'}[state.config.wdir];
   const parts=[];
+  if(state.config.who==='self') parts.push('🙋 Autoevaluación');
   if(hasVerbs) parts.push('Verbos: '+v);
   if(hasWords) parts.push('Vocab '+w);
   return parts.join(' · ');
@@ -862,6 +902,7 @@ function modeLabel(){
 
 function startGame(fromItems){
   state.game.child = state.config.child;
+  state.game.self = state.config.who==='self';
   const items = fromItems || ITEMS.filter(it=>state.config.blocks.has(it.blockId));
   state.game.questions = fromItems
     ? shuffle(fromItems).map(it=>({item:it, mode:pickMode(it)}))
@@ -869,7 +910,9 @@ function startGame(fromItems){
   state.game.index=0; state.game.correct=0; state.game.misses=[]; state.game.locked=false;
   state.game.blockStats={};
   BLOCKS.forEach(b=>{ state.game.blockStats[b.id]={correctas:0,total:0}; });
-  state.game.modeLabel = fromItems ? 'Repaso de falladas' : modeLabel();
+  state.game.modeLabel = fromItems ? (state.game.self ? '🙋 Autoevaluación · ' : '')+'Repaso de falladas' : modeLabel();
+  document.getElementById('cap-wrong').hidden = !state.game.self;
+  document.getElementById('cap-correct').hidden = !state.game.self;
   document.getElementById('game-child-pill').textContent=CHILD_NAME[state.game.child];
   showScreen('screen-game');
   renderFlashCard();
@@ -958,8 +1001,31 @@ function renderFlashCard(){
   document.getElementById('mini-porthole-icon').textContent = it.kind==='verb' ? '🔤' : block.icon;
   document.getElementById('btn-speak').hidden = !canSpeak;
 
+  setRevealed(!state.game.self);
   resetCardPosition();
 }
+
+/* -------- autoevaluación: girar la tarjeta -------- */
+function setRevealed(on){
+  state.game.revealed = on;
+  const zone=document.getElementById('answer-zone');
+  zone.hidden = !on;
+  document.getElementById('flip-hint').hidden = on;
+  document.getElementById('btn-reveal').hidden = on;
+  document.getElementById('swipe-actions').hidden = !on;
+  document.getElementById('swipe-hint').hidden = !on;
+  document.getElementById('swipe-hint').textContent = state.game.self
+    ? 'Sé sincero: desliza o toca ¡Me la sé! / No me la sé'
+    : 'Desliza la tarjeta o toca ✗ / ✓';
+}
+function revealCard(){
+  if(state.game.revealed || state.game.locked) return;
+  setRevealed(true);
+  const zone=document.getElementById('answer-zone');
+  zone.classList.remove('revealing'); void zone.offsetWidth; zone.classList.add('revealing');
+  tone(660,0,.08,'triangle');
+}
+document.getElementById('btn-reveal').addEventListener('click', revealCard);
 
 /* -------- botón de pronunciación (no inicia el arrastre) -------- */
 const speakBtn=document.getElementById('btn-speak');
@@ -981,8 +1047,9 @@ let drag={active:false, startX:0, dx:0};
 
 function clearFeedback(){ washYes.style.opacity=0; washNo.style.opacity=0; stampYes.style.opacity=0; stampNo.style.opacity=0; }
 
+flashCard.addEventListener('click', ()=>{ if(!state.game.revealed) revealCard(); });
 flashCard.addEventListener('pointerdown', (e)=>{
-  if(state.game.locked) return;
+  if(state.game.locked || !state.game.revealed) return;
   drag.active=true; drag.startX=e.clientX; drag.dx=0;
   flashCard.style.transition='none';
   try{ flashCard.setPointerCapture(e.pointerId); }catch(err){}
@@ -1008,7 +1075,7 @@ flashCard.addEventListener('pointerup', endDrag);
 flashCard.addEventListener('pointercancel', endDrag);
 
 function commitSwipe(isCorrect){
-  if(state.game.locked) return;
+  if(state.game.locked || !state.game.revealed) return;
   state.game.locked=true;
   flashCard.style.transition='transform .28s ease';
   flashCard.style.transform='translateX('+(isCorrect?620:-620)+'px) rotate('+(isCorrect?26:-26)+'deg)';
@@ -1285,6 +1352,7 @@ document.getElementById('btn-reset').addEventListener('click', ()=>{
    INICIO
    ============================================================ */
 bindMoodRow('child-select-row','data-child', v=>{ state.config.child=v; });
+bindMoodRow('who-row','data-who', v=>{ state.config.who=v; });
 bindMoodRow('vmode-row','data-vmode', v=>{ state.config.vmode=v; });
 bindMoodRow('wdir-row','data-wdir', v=>{ state.config.wdir=v; });
 buildBlockChips();
