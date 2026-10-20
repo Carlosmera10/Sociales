@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Verbs & Words · Inglés 6º</title>
+<style>
+  :root{
+    --bg:#EEF3F7;
+    --card:#FFFFFF;
+    --ink:#1E2A4A;
+    --ink-soft:#5A6478;
+    --line:#DCE3EC;
+
+    --c1:#178A66; --c1-tint:#DCF3EA;
+    --c2:#5B3E9E; --c2-tint:#E7E1F7;
+    --c3:#9E3E72; --c3-tint:#F6E1EC;
+    --c4:#1F7A8C; --c4-tint:#DCF0F3;
+    --c5:#8C5A1F; --c5-tint:#F3E4D0;
+    --c6:#8B3A3A; --c6-tint:#F3DEDE;
+
+    --accent:#5B3E9E; --accent-tint:#E7E1F7;
+    --ok:#178A66; --ok-tint:#DCF3EA;
+    --gold:#E3A62F;
+    --error:#D65C4A;
+
+    --radius-lg:24px;
+    --radius-md:14px;
+    --radius-pill:999px;
+
+    --font-display: ui-rounded, 'SF Pro Rounded', 'Segoe UI', system-ui, sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+    --shadow-card: 0 8px 24px rgba(30,42,74,.08);
+  }
+
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; background:var(--bg); }
+  body{
+    font-family:var(--font-body); color:var(--ink);
+    overscroll-behavior:none; touch-action:manipulation; -webkit-font-smoothing:antialiased;
+  }
+  .starfield{
+    position:fixed; inset:0; z-index:-1;
+    background-image: radial-gradient(circle, rgba(91,62,158,.14) 1px, transparent 1.6px);
+    background-size: 26px 26px;
+  }
+  .app{ max-width:560px; margin:0 auto; min-height:100dvh; padding:22px 20px 44px; position:relative; }
+  button, select{ font-family:inherit; }
+  :focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+
+  /* ---------- screens ---------- */
+  .screen{ display:none; flex-direction:column; gap:16px; }
+  .screen[data-active="true"]{ display:flex; animation: fadeSlide .35s ease; }
+  @keyframes fadeSlide{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion: reduce){ .screen[data-active="true"]{ animation:none; } }
+
+  /* ---------- block colours ---------- */
+  .blk-v1{ --era-color:var(--c1); --era-tint:var(--c1-tint); }
+  .blk-v2{ --era-color:var(--c4); --era-tint:var(--c4-tint); }
+  .blk-v3{ --era-color:var(--c2); --era-tint:var(--c2-tint); }
+  .blk-v4{ --era-color:var(--c6); --era-tint:var(--c6-tint); }
+  .blk-w1{ --era-color:var(--c3); --era-tint:var(--c3-tint); }
+  .blk-w2{ --era-color:var(--c5); --era-tint:var(--c5-tint); }
+  .blk-w3{ --era-color:var(--c1); --era-tint:var(--c1-tint); }
+  .blk-w4{ --era-color:var(--c4); --era-tint:var(--c4-tint); }
+
+  /* ---------- home ---------- */
+  .brand{ text-align:center; margin-top:4px; }
+  .eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin:0; }
+  .logo{ font-family:var(--font-display); font-weight:800; font-size:clamp(32px,9vw,44px); letter-spacing:-.02em; margin:6px 0 0; }
+  .logo span{ color:var(--accent); }
+  .tagline{ color:var(--ink-soft); font-size:14px; margin:2px 0 0; }
+
+  .sound-toggle{
+    position:absolute; top:22px; right:20px; width:38px; height:38px; border-radius:50%; border:none;
+    background:var(--card); box-shadow:var(--shadow-card); font-size:16px; cursor:pointer;
+  }
+
+  .porthole{ position:relative; width:176px; height:176px; margin:10px auto 4px; }
+  .porthole-glass{
+    position:absolute; inset:16px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--accent-tint) 42%, var(--accent) 145%);
+    display:flex; align-items:center; justify-content:center; font-size:52px;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.6), 0 10px 28px rgba(91,62,158,.28);
+  }
+  .porthole-ring{ position:absolute; inset:0; border-radius:50%; box-shadow:0 0 0 5px var(--card), 0 0 0 8px var(--accent), 0 16px 32px rgba(30,42,74,.14); }
+  .porthole::after{ content:''; position:absolute; inset:-9px; border-radius:50%; border:2px dashed var(--accent); opacity:.35; animation: spin 44s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce){ .porthole::after{ animation:none; } }
+
+  .stat-row{ display:flex; gap:12px; justify-content:center; }
+  .stat-chip{
+    background:var(--card); border-radius:var(--radius-pill); padding:10px 18px; box-shadow:var(--shadow-card);
+    display:flex; flex-direction:column; align-items:center; min-width:90px; flex:1;
+  }
+  .stat-num{ font-family:var(--font-mono); font-weight:700; font-size:20px; }
+  .stat-label{ font-size:11px; color:var(--ink-soft); text-align:center; }
+
+  .button-stack{ display:flex; flex-direction:column; gap:12px; }
+  .btn{
+    font-family:var(--font-display); font-weight:700; font-size:16px; border:none; border-radius:var(--radius-pill);
+    padding:16px 22px; cursor:pointer; transition: transform .12s ease;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn-primary{ background:linear-gradient(135deg,var(--accent),#7856c9); color:#fff; box-shadow:0 10px 22px rgba(91,62,158,.35); }
+  .btn-secondary{ background:var(--card); color:var(--ink); box-shadow:var(--shadow-card); }
+  .btn-block{ width:100%; }
+
+  .hint-line{ text-align:center; font-size:12px; color:var(--ink-soft); line-height:1.5; margin:0; }
+
+  /* ---------- topbar ---------- */
+  .topbar{ display:flex; align-items:center; gap:12px; }
+  .icon-btn{ width:40px; height:40px; border-radius:50%; border:none; background:var(--card); box-shadow:var(--shadow-card); font-size:18px; cursor:pointer; flex-shrink:0; }
+  .topbar h2{ font-family:var(--font-display); font-size:19px; margin:0; }
+
+  /* ---------- config ---------- */
+  .config-block{ background:var(--card); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-card); }
+  .config-title{ margin:0 0 3px; font-size:15px; font-family:var(--font-display); }
+  .config-desc{ margin:0 0 12px; font-size:13px; color:var(--ink-soft); }
+  .config-sub{ font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:14px 0 8px; }
+  .config-sub:first-of-type{ margin-top:4px; }
+  .quick-row{ display:flex; gap:8px; margin-bottom:10px; }
+  .link-btn{ border:none; background:none; color:var(--accent); font-weight:700; font-size:12.5px; cursor:pointer; padding:4px 2px; }
+
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-weight:600; font-size:13px; padding:10px 16px; border-radius:var(--radius-pill);
+    border:2px solid var(--line); background:#fff; color:var(--ink-soft); cursor:pointer;
+  }
+  .chip.selected{ border-color:var(--era-color,var(--accent)); background:var(--era-tint,var(--accent-tint)); color:var(--era-color,var(--accent)); }
+  .chip-icon{ margin-right:5px; }
+  .chip-count{ font-family:var(--font-mono); font-size:11px; opacity:.75; margin-left:5px; }
+
+  .mood-row{ display:flex; gap:10px; }
+  .mood-btn{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:14px 6px;
+    border-radius:var(--radius-md); border:2px solid var(--line); background:#fff; cursor:pointer; min-width:0;
+  }
+  .mood-btn .mood-icon{ font-size:22px; }
+  .mood-btn .mood-name{ font-family:var(--font-display); font-weight:700; font-size:13.5px; color:var(--ink); text-align:center; }
+  .mood-btn .mood-sub{ font-size:11px; color:var(--ink-soft); text-align:center; }
+  .mood-btn.selected{ border-color:var(--accent); background:var(--accent-tint); }
+  .mood-btn.selected .mood-name{ color:var(--accent); }
+  .mood-btn[data-child="carlota"].selected{ border-color:var(--c3); background:var(--c3-tint); }
+  .mood-btn[data-child="carlota"].selected .mood-name{ color:var(--c3); }
+
+  .toggle-row{ display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .toggle-row input{ width:22px; height:22px; accent-color:var(--accent); flex-shrink:0; }
+  .toggle-row span{ font-size:14px; }
+  .toggle-row small{ display:block; color:var(--ink-soft); font-size:12px; margin-top:2px; }
+
+  .error-msg{ color:var(--error); font-size:13px; text-align:center; margin:0; }
+
+  /* ---------- study ---------- */
+  .select{ width:100%; padding:13px; border-radius:var(--radius-md); border:2px solid var(--line); font-size:15px; background:#fff; color:var(--ink); }
+  .study-card{ background:var(--card); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-card); }
+  .study-head, .study-row{ display:grid; gap:8px; align-items:center; padding:9px 4px; font-size:14px; }
+  .study-verbs .study-head, .study-verbs .study-row{ grid-template-columns: 26px 1fr 1fr 1fr; }
+  .study-words .study-head, .study-words .study-row{ grid-template-columns: 1fr 1fr; }
+  .study-head{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); border-bottom:2px solid var(--line); }
+  .study-row{ border-bottom:1px dashed var(--line); cursor:pointer; }
+  .study-row:last-child{ border-bottom:none; }
+  .study-row:active{ background:var(--accent-tint); }
+  .study-num{ font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); }
+  .study-en{ font-weight:700; font-family:var(--font-display); overflow-wrap:anywhere; }
+  .study-es{ color:var(--ink-soft); font-size:12.5px; grid-column: 2 / -1; margin-top:-6px; }
+  .study-words .study-es{ grid-column:auto; margin-top:0; font-size:14px; text-align:right; }
+  .study-tip{ font-size:12px; color:var(--ink-soft); text-align:center; margin:0; }
+
+  /* ---------- game header ---------- */
+  .game-header{ display:flex; align-items:center; gap:10px; }
+  .mini-porthole{
+    width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:15px; background:var(--era-tint,#eee); border:2px solid var(--era-color,#999); flex-shrink:0;
+  }
+  .game-stats{ margin-left:auto; display:flex; gap:12px; align-items:center; font-family:var(--font-mono); font-size:13px; color:var(--ink-soft); }
+  .game-child-pill{ font-family:var(--font-body); font-weight:700; font-size:12px; padding:4px 10px; border-radius:var(--radius-pill); background:var(--accent-tint); color:var(--accent); }
+
+  .progress-track{ height:8px; border-radius:var(--radius-pill); background:#E2E8F0; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--ok)); transition:width .3s ease; }
+
+  .era-badge{
+    align-self:center; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    padding:6px 16px; border-radius:var(--radius-pill); background:var(--era-tint,#eee); color:var(--era-color,#555); border:1px solid var(--era-color,#999);
+  }
+
+  /* ---------- flashcard ---------- */
+  .card-stage{ position:relative; min-height:340px; display:flex; align-items:center; justify-content:center; }
+  .flash-card{
+    position:relative; width:100%; max-width:480px; min-height:320px;
+    background:var(--card); border-radius:var(--radius-lg); box-shadow:0 16px 34px rgba(30,42,74,.16);
+    border:3px solid var(--era-color,var(--line));
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:30px 18px 24px; text-align:center; touch-action:pan-y; cursor:grab; user-select:none;
+    animation:cardIn .22s ease; overflow:hidden;
+  }
+  .flash-card:active{ cursor:grabbing; }
+  @keyframes cardIn{ from{opacity:0; transform:scale(.95);} to{opacity:1; transform:scale(1);} }
+  @media (prefers-reduced-motion: reduce){ .flash-card{ animation:none; } }
+
+  .flash-wash{ position:absolute; inset:0; border-radius:inherit; opacity:0; pointer-events:none; }
+  .flash-wash-yes{ background:var(--ok-tint); }
+  .flash-wash-no{ background:#FBEAE7; }
+  .flash-stamp{
+    position:absolute; top:14px; font-family:var(--font-display); font-weight:800; font-size:36px;
+    border:4px solid; border-radius:14px; padding:0 10px; opacity:0; pointer-events:none; line-height:1.5;
+  }
+  .flash-stamp-yes{ left:12px; color:var(--ok); border-color:var(--ok); transform:rotate(-12deg); }
+  .flash-stamp-no{ right:12px; color:var(--error); border-color:var(--error); transform:rotate(12deg); }
+
+  .flash-kicker{ font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--era-color,var(--ink-soft)); margin:0 0 12px; position:relative; z-index:1; }
+  .flash-prompt{ font-family:var(--font-display); font-weight:800; font-size:clamp(24px,7.5vw,32px); margin:0; position:relative; z-index:1; line-height:1.25; }
+  .flash-prompt-sub{ display:block; font-size:14px; font-weight:700; color:var(--era-color,var(--ink)); margin-top:8px; }
+  .flash-divider{ width:56%; height:1px; background:var(--line); margin:18px 0; position:relative; z-index:1; }
+  .flash-answer-label{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 8px; position:relative; z-index:1; }
+  .flash-answer{ font-family:var(--font-display); font-weight:800; font-size:clamp(22px,6.5vw,27px); color:var(--era-color,var(--accent)); margin:0; position:relative; z-index:1; width:100%; }
+  .flash-meta{ font-size:12.5px; color:var(--ink-soft); margin:12px 0 0; position:relative; z-index:1; }
+
+  .forms-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; width:100%; }
+  .forms-grid div{ background:var(--era-tint,#f3f3f3); border-radius:12px; padding:8px 4px; display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .forms-grid small{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); font-weight:400; }
+  .forms-grid b{ font-size:clamp(15px,4.6vw,20px); overflow-wrap:anywhere; line-height:1.2; }
+
+  .speak-btn{
+    position:relative; z-index:2; margin-top:14px; border:none; border-radius:var(--radius-pill);
+    background:var(--era-tint,var(--accent-tint)); color:var(--era-color,var(--accent));
+    font-weight:700; font-size:13px; padding:8px 16px; cursor:pointer;
+  }
+  .speak-btn[hidden]{ display:none; }
+
+  .swipe-hint{ text-align:center; font-size:12px; color:var(--ink-soft); margin:0; }
+  .swipe-actions{ display:flex; justify-content:center; align-items:center; gap:28px; }
+  .swipe-btn{ width:60px; height:60px; border-radius:50%; border:none; font-size:24px; cursor:pointer; box-shadow:var(--shadow-card); font-weight:800; }
+  .swipe-no{ background:#FBEAE7; color:var(--error); }
+  .swipe-yes{ background:var(--ok-tint); color:var(--ok); }
+  .swipe-btn:active{ transform:scale(.92); }
+
+  /* ---------- summary ---------- */
+  .summary-child{ text-align:center; font-family:var(--font-mono); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0; }
+  .score-badge{
+    width:150px; height:150px; border-radius:50%; margin:6px auto 0; display:flex; align-items:baseline; justify-content:center; padding-top:46px;
+    font-family:var(--font-display); font-weight:800; font-size:42px; color:#fff;
+    background:linear-gradient(135deg,var(--ok),#0e6a4f); box-shadow:0 14px 28px rgba(23,138,102,.32);
+  }
+  .score-badge span{ font-size:17px; font-weight:700; margin-left:3px; opacity:.85; }
+  .score-badge.tier-mid{ background:linear-gradient(135deg,var(--c5),#6b4013); box-shadow:0 14px 28px rgba(140,90,31,.32); }
+  .score-badge.tier-low{ background:linear-gradient(135deg,var(--error),#a83f2e); box-shadow:0 14px 28px rgba(214,92,74,.32); }
+  .summary-headline{ text-align:center; font-family:var(--font-display); font-size:18px; margin:0; }
+  .summary-stats{ display:flex; justify-content:space-around; background:var(--card); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-card); }
+  .summary-stats div{ display:flex; flex-direction:column; align-items:center; }
+  .summary-stats span{ font-family:var(--font-mono); font-weight:700; font-size:22px; }
+  .summary-stats label{ font-size:11px; color:var(--ink-soft); }
+  .miss-list{ margin:0; padding:0; list-style:none; }
+  .miss-list li{ display:flex; justify-content:space-between; gap:10px; padding:8px 2px; border-bottom:1px dashed var(--line); font-size:13.5px; }
+  .miss-list li:last-child{ border-bottom:none; }
+  .miss-list b{ font-family:var(--font-display); }
+  .miss-list span{ color:var(--ink-soft); text-align:right; }
+
+  /* ---------- progress ---------- */
+  .bar-row{ margin-bottom:12px; }
+  .bar-row:last-child{ margin-bottom:0; }
+  .bar-label{ display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px; gap:8px; }
+  .bar-label b{ font-family:var(--font-display); white-space:nowrap; }
+  .bar-track{ height:10px; border-radius:var(--radius-pill); background:#E2E8F0; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:var(--radius-pill); background:var(--era-color,var(--accent)); }
+  .session-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px dashed var(--line); font-size:13px; gap:10px; }
+  .session-row:last-child{ border-bottom:none; }
+  .session-left{ display:flex; flex-direction:column; }
+  .session-date{ color:var(--ink-soft); font-size:11px; }
+  .session-mode{ font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); }
+  .session-score{ font-family:var(--font-display); font-weight:800; font-size:16px; }
+  .empty-note{ color:var(--ink-soft); font-size:13px; text-align:center; margin:12px 0; }
+  .reset-btn{ align-self:center; border:none; background:none; color:var(--error); font-size:12.5px; font-weight:700; cursor:pointer; padding:6px; }
+</style>
+</head>
+<body>
+<div class="starfield"></div>
+<div class="app">
+
+  <!-- ============ HOME ============ -->
+  <section class="screen" id="screen-home" data-active="true">
+    <button class="sound-toggle" id="btn-sound" aria-label="Activar o desactivar el sonido">🔊</button>
+    <div class="brand">
+      <p class="eyebrow">Inglés · 6º de Primaria</p>
+      <h1 class="logo">Verbs <span>&amp; Words</span></h1>
+      <p class="tagline">82 verbos irregulares y vocabulario de las unidades 2 y 3</p>
+    </div>
+
+    <div class="porthole">
+      <div class="porthole-glass">🇬🇧</div>
+      <div class="porthole-ring"></div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-chip"><span class="stat-num" id="home-score-nico">—</span><span class="stat-label">Nico · última nota</span></div>
+      <div class="stat-chip"><span class="stat-num" id="home-score-carlota">—</span><span class="stat-label">Carlota · última nota</span></div>
+    </div>
+
+    <div class="button-stack">
+      <button class="btn btn-primary" id="btn-go-config">🎴 Preparar tarjetas</button>
+      <button class="btn btn-secondary" id="btn-go-study">📖 Sala de consulta</button>
+      <button class="btn btn-secondary" id="btn-go-progress">🗂️ Mi diario de viaje</button>
+    </div>
+
+    <p class="hint-line">Tú lees la tarjeta en voz alta, ellos contestan y tú deslizas: a la derecha si aciertan, a la izquierda si no.</p>
+  </section>
+
+  <!-- ============ CONFIG ============ -->
+  <section class="screen" id="screen-config">
+    <header class="topbar">
+      <button class="icon-btn" data-back="screen-home" aria-label="Volver">←</button>
+      <h2>Prepara las tarjetas</h2>
+    </header>
+
+    <div class="config-block">
+      <h3 class="config-title">1 · ¿A quién evalúas?</h3>
+      <div class="mood-row" id="child-select-row">
+        <button type="button" class="mood-btn selected" data-child="nico">
+          <span class="mood-icon">🦊</span><span class="mood-name">Nico</span>
+        </button>
+        <button type="button" class="mood-btn" data-child="carlota">
+          <span class="mood-icon">🦉</span><span class="mood-name">Carlota</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">2 · ¿Qué quieres repasar?</h3>
+      <p class="config-desc">Toca uno o varios bloques. Se pueden mezclar verbos y vocabulario.</p>
+      <div class="quick-row">
+        <button type="button" class="link-btn" data-quick="all">Todo</button>
+        <button type="button" class="link-btn" data-quick="verbs">Solo verbos</button>
+        <button type="button" class="link-btn" data-quick="words">Solo vocabulario</button>
+        <button type="button" class="link-btn" data-quick="none">Ninguno</button>
+      </div>
+      <p class="config-sub">Irregular verbs</p>
+      <div class="chip-row" id="verb-chip-row"></div>
+      <p class="config-sub">Vocabulary</p>
+      <div class="chip-row" id="word-chip-row"></div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">3 · ¿Cómo preguntas los verbos?</h3>
+      <div class="mood-row" id="vmode-row">
+        <button type="button" class="mood-btn selected" data-vmode="forms">
+          <span class="mood-icon">🇪🇸→🇬🇧</span><span class="mood-name">Tres formas</span><span class="mood-sub">ir → go, went, gone</span>
+        </button>
+        <button type="button" class="mood-btn" data-vmode="meaning">
+          <span class="mood-icon">🇬🇧→🇪🇸</span><span class="mood-name">Significado</span><span class="mood-sub">steal → robar</span>
+        </button>
+        <button type="button" class="mood-btn" data-vmode="mix">
+          <span class="mood-icon">🔀</span><span class="mood-name">Mezcla</span><span class="mood-sub">un poco de cada</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">4 · ¿Y el vocabulario?</h3>
+      <div class="mood-row" id="wdir-row">
+        <button type="button" class="mood-btn selected" data-wdir="en-es">
+          <span class="mood-icon">🇬🇧→🇪🇸</span><span class="mood-name">Inglés→Español</span>
+        </button>
+        <button type="button" class="mood-btn" data-wdir="es-en">
+          <span class="mood-icon">🇪🇸→🇬🇧</span><span class="mood-name">Español→Inglés</span>
+        </button>
+        <button type="button" class="mood-btn" data-wdir="mix">
+          <span class="mood-icon">🔀</span><span class="mood-name">Mixta</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <h3 class="config-title">5 · ¿Cuántas tarjetas?</h3>
+      <div class="chip-row" id="count-row">
+        <button class="chip" data-count="10">10</button>
+        <button class="chip" data-count="15">15</button>
+        <button class="chip" data-count="20">20</button>
+        <button class="chip" data-count="30">30</button>
+        <button class="chip" data-count="0">Todas</button>
+      </div>
+      <p class="config-sub">Extra</p>
+      <label class="toggle-row">
+        <input type="checkbox" id="opt-weak">
+        <span>🎯 Priorizar las que más falla<small>Primero salen las tarjetas que ese niño ha fallado más veces.</small></span>
+      </label>
+    </div>
+
+    <button class="btn btn-primary btn-block" id="btn-start-game">Empezar la evaluación ✨</button>
+    <p class="error-msg" id="config-error" hidden>Elige al menos un bloque para poder empezar.</p>
+  </section>
+
+  <!-- ============ STUDY ============ -->
+  <section class="screen" id="screen-study">
+    <header class="topbar">
+      <button class="icon-btn" data-back="screen-home" aria-label="Volver">←</button>
+      <h2>Sala de consulta</h2>
+    </header>
+    <select class="select" id="study-block-select" aria-label="Bloque a consultar"></select>
+    <p class="study-tip">Toca una fila para escuchar la pronunciación 🔈</p>
+    <div class="study-card" id="study-table"></div>
+  </section>
+
+  <!-- ============ GAME ============ -->
+  <section class="screen" id="screen-game">
+    <header class="game-header">
+      <button class="icon-btn" data-back="screen-home" aria-label="Salir">←</button>
+      <div class="mini-porthole" id="mini-porthole"><span id="mini-porthole-icon">🇬🇧</span></div>
+      <div class="game-stats">
+        <span id="game-progress-label">1 / 10</span>
+        <span class="game-child-pill" id="game-child-pill">Nico</span>
+      </div>
+    </header>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="era-badge" id="era-badge"></div>
+
+    <div class="card-stage">
+      <div class="flash-card" id="flash-card">
+        <div class="flash-wash flash-wash-yes" id="wash-yes"></div>
+        <div class="flash-wash flash-wash-no" id="wash-no"></div>
+        <div class="flash-stamp flash-stamp-yes" id="stamp-yes">✓</div>
+        <div class="flash-stamp flash-stamp-no" id="stamp-no">✗</div>
+        <p class="flash-kicker" id="flash-kicker"></p>
+        <p class="flash-prompt" id="flash-prompt"></p>
+        <div class="flash-divider"></div>
+        <p class="flash-answer-label" id="flash-answer-label"></p>
+        <div class="flash-answer" id="flash-answer"></div>
+        <p class="flash-meta" id="flash-meta"></p>
+        <button type="button" class="speak-btn" id="btn-speak">🔈 Escuchar en inglés</button>
+      </div>
+    </div>
+
+    <p class="swipe-hint">Desliza la tarjeta o toca ✗ / ✓</p>
+    <div class="swipe-actions">
+      <button class="swipe-btn swipe-no" id="btn-mark-wrong" aria-label="Incorrecto">✗</button>
+      <button class="swipe-btn swipe-yes" id="btn-mark-correct" aria-label="Correcto">✓</button>
+    </div>
+  </section>
+
+  <!-- ============ SUMMARY ============ -->
+  <section class="screen" id="screen-summary">
+    <header class="topbar"><h2>Resultado de la evaluación</h2></header>
+    <p class="summary-child" id="summary-child"></p>
+    <div class="score-badge" id="score-badge"></div>
+    <p class="summary-headline" id="summary-headline"></p>
+    <div class="summary-stats">
+      <div><span id="summary-correct">0</span><label>aciertos</label></div>
+      <div><span id="summary-total">0</span><label>tarjetas</label></div>
+    </div>
+    <div class="study-card" id="summary-misses"></div>
+    <div class="button-stack">
+      <button class="btn btn-primary" id="btn-again">Otra ronda</button>
+      <button class="btn btn-secondary" id="btn-retry-misses">🔁 Repetir solo las falladas</button>
+      <button class="btn btn-secondary" data-back="screen-home">Volver a la base</button>
+    </div>
+  </section>
+
+  <!-- ============ PROGRESS ============ -->
+  <section class="screen" id="screen-progress">
+    <header class="topbar">
+      <button class="icon-btn" data-back="screen-home" aria-label="Volver">←</button>
+      <h2>Mi diario de viaje</h2>
+    </header>
+    <div class="chip-row" id="progress-child-row">
+      <button class="chip" data-child="nico">Nico</button>
+      <button class="chip" data-child="carlota">Carlota</button>
+    </div>
+    <div id="progress-content" style="display:flex;flex-direction:column;gap:16px;"></div>
+    <button class="reset-btn" id="btn-reset">Borrar el progreso de este niño</button>
+  </section>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   DATOS
+   ============================================================ */
+const BLOCKS = [
+  {id:'v1', type:'verb', label:'Verbos 1–20',   icon:'🔤'},
+  {id:'v2', type:'verb', label:'Verbos 21–41',  icon:'🔤'},
+  {id:'v3', type:'verb', label:'Verbos 42–62',  icon:'🔤'},
+  {id:'v4', type:'verb', label:'Verbos 63–82',  icon:'🔤'},
+  {id:'w1', type:'word', label:'Fun places to go', icon:'🎳', unit:'Unit 2'},
+  {id:'w2', type:'word', label:'TV programmes',    icon:'📺', unit:'Unit 2'},
+  {id:'w3', type:'word', label:'Hobbies',          icon:'🎨', unit:'Unit 3.1'},
+  {id:'w4', type:'word', label:'Collections',      icon:'🗂️', unit:'Unit 3.1'}
+];
+const BLOCK_MAP = {};
+BLOCKS.forEach(b=> BLOCK_MAP[b.id]=b);
+
+// [nº, infinitive, past simple, past participle, significado]
+const VERBS_RAW = [
+  [1,'be','was / were','been','ser / estar'],
+  [2,'become','became','become','llegar a ser'],
+  [3,'begin','began','begun','empezar, comenzar'],
+  [4,'bite','bit','bitten','morder'],
+  [5,'break','broke','broken','romper'],
+  [6,'bring','brought','brought','traer / llevar'],
+  [7,'build','built','built','construir'],
+  [8,'burn','burnt, burned','burnt, burned','quemar / arder'],
+  [9,'buy','bought','bought','comprar'],
+  [10,'can','could','—','poder'],
+  [11,'catch','caught','caught','coger, atrapar'],
+  [12,'choose','chose','chosen','elegir, escoger'],
+  [13,'come','came','come','venir, llegar'],
+  [14,'cost','cost','cost','costar'],
+  [15,'cut','cut','cut','cortar'],
+  [16,'do','did','done','hacer'],
+  [17,'draw','drew','drawn','dibujar'],
+  [18,'dream','dreamt','dreamt','soñar'],
+  [19,'drink','drank','drunk','beber'],
+  [20,'drive','drove','driven','conducir'],
+  [21,'eat','ate','eaten','comer'],
+  [22,'fall','fell','fallen','caerse'],
+  [23,'feed','fed','fed','alimentar'],
+  [24,'feel','felt','felt','sentir'],
+  [25,'fight','fought','fought','luchar'],
+  [26,'find','found','found','encontrar'],
+  [27,'fly','flew','flown','volar'],
+  [28,'forget','forgot','forgotten','olvidar'],
+  [29,'freeze','froze','frozen','helar, congelar'],
+  [30,'get','got','got','conseguir, obtener'],
+  [31,'give','gave','given','dar'],
+  [32,'go','went','gone','ir'],
+  [33,'grow','grew','grown','crecer / cultivar'],
+  [34,'have','had','had','tener / haber'],
+  [35,'hear','heard','heard','oír'],
+  [36,'hide','hid','hidden','esconder'],
+  [37,'hit','hit','hit','golpear / chocar'],
+  [38,'hold','held','held','sostener / aguantar'],
+  [39,'hurt','hurt','hurt','herir / doler'],
+  [40,'keep','kept','kept','conservar / mantener'],
+  [41,'know','knew','known','saber, conocer'],
+  [42,'learn','learnt, learned','learnt, learned','aprender'],
+  [43,'leave','left','left','dejar (abandonar)'],
+  [44,'lend','lent','lent','prestar'],
+  [45,'let','let','let','dejar (permitir)'],
+  [46,'lose','lost','lost','perder'],
+  [47,'make','made','made','hacer, fabricar'],
+  [48,'mean','meant','meant','significar'],
+  [49,'meet','met','met','encontrarse / quedar con'],
+  [50,'pay','paid','paid','pagar'],
+  [51,'put','put','put','poner, colocar'],
+  [52,'read','read','read','leer'],
+  [53,'ride','rode','ridden','montar'],
+  [54,'ring','rang','rung','sonar'],
+  [55,'run','ran','run','correr'],
+  [56,'say','said','said','decir'],
+  [57,'see','saw','seen','ver'],
+  [58,'sell','sold','sold','vender'],
+  [59,'send','sent','sent','enviar'],
+  [60,'shine','shone','shone','brillar'],
+  [61,'shoot','shot','shot','disparar'],
+  [62,'shut','shut','shut','cerrar (fuertemente)'],
+  [63,'sing','sang','sung','cantar'],
+  [64,'sit','sat','sat','sentarse'],
+  [65,'sleep','slept','slept','dormir'],
+  [66,'speak','spoke','spoken','hablar'],
+  [67,'spell','spelt','spelt','deletrear'],
+  [68,'spend','spent','spent','gastar'],
+  [69,'stand','stood','stood','estar de pie / colocar'],
+  [70,'steal','stole','stolen','robar'],
+  [71,'swim','swam','swum','nadar'],
+  [72,'swing','swung','swung','balancearse'],
+  [73,'take','took','taken','llevarse / coger'],
+  [74,'teach','taught','taught','enseñar'],
+  [75,'tell','told','told','decir (contar)'],
+  [76,'think','thought','thought','pensar'],
+  [77,'throw','threw','thrown','arrojar, lanzar'],
+  [78,'understand','understood','understood','entender, comprender'],
+  [79,'wake','woke','woken','despertar'],
+  [80,'wear','wore','worn','llevar puesto'],
+  [81,'win','won','won','ganar'],
+  [82,'write','wrote','written','escribir']
+];
+function verbBlock(n){ return n<=20 ? 'v1' : n<=41 ? 'v2' : n<=62 ? 'v3' : 'v4'; }
+const VERBS = VERBS_RAW.map(r=>({
+  key:'v'+r[0], kind:'verb', num:r[0], inf:r[1], past:r[2], pp:r[3], es:r[4], blockId:verbBlock(r[0])
+}));
+
+// [inglés, español, bloque]
+const WORDS_RAW = [
+  ['Bowling alley','bolera','w1'],
+  ['Planetarium','planetario','w1'],
+  ['Adventure park','parque de aventuras','w1'],
+  ['BMX track','pista para bicis BMX','w1'],
+  ['Skating rink','pista de patinaje','w1'],
+  ['Basketball court','pista de baloncesto','w1'],
+  ['Riding school','escuela de hípica','w1'],
+  ['Indoor skydiving centre','túnel de viento','w1'],
+  ['Photo booth','fotomatón','w1'],
+  ['Snack bar','cafetería','w1'],
+  ['Running track','pista de atletismo','w1'],
+  ['Football pitch','campo de fútbol','w1'],
+  ['Field','campo (de críquet, béisbol…)','w1'],
+
+  ['Drama series','serie de drama','w2'],
+  ['Nature documentary','documental de naturaleza','w2'],
+  ['Quiz / game show','concurso (de preguntas)','w2'],
+  ['Reality TV show','programa reality','w2'],
+  ['Chat show','programa de entrevistas','w2'],
+  ['Talent show','concurso de talentos','w2'],
+  ['The news','noticiario','w2'],
+  ['The weather forecast','pronóstico del tiempo','w2'],
+  ['Sitcom','comedia de situación','w2'],
+  ['Live sport','deporte en directo','w2'],
+  ['Soap opera','culebrón, telenovela','w2'],
+  ['Cartoons','dibujos animados','w2'],
+
+  ['Do aquarobics','hacer aquarobics','w3'],
+  ['Do street dancing','hacer bailes callejeros','w3'],
+  ['Go go-karting','hacer karting','w3'],
+  ['Make collages','hacer collages','w3'],
+  ['Make jewellery','fabricar joyas','w3'],
+  ['Grow bonsai trees','cultivar bonsáis','w3'],
+  ['Study astronomy','estudiar astronomía','w3'],
+  ['Decorate cakes','decorar tartas','w3'],
+  ['Go caving','hacer espeleología','w3'],
+  ['Do crafts','hacer manualidades','w3'],
+  ['Do parkour','hacer parkour','w3'],
+  ['Pottery','alfarería','w3'],
+
+  ['Key rings','llaveros','w4'],
+  ['Fossils','fósiles','w4'],
+  ['Football cards','cromos de fútbol','w4'],
+  ['Fridge magnets','imanes de nevera','w4'],
+  ['Autographs','autógrafos','w4'],
+  ['Comics','cómics','w4'],
+  ['Stamps','sellos','w4'],
+  ['Stickers','pegatinas','w4']
+];
+const WORDS = WORDS_RAW.map((r,i)=>({ key:'w'+(i+1), kind:'word', en:r[0], es:r[1], blockId:r[2] }));
+
+const ITEMS = VERBS.concat(WORDS);
+const ITEM_MAP = {};
+ITEMS.forEach(it=> ITEM_MAP[it.key]=it);
+
+const CHILD_NAME = {nico:'Nico', carlota:'Carlota'};
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const state = {
+  config:{
+    child:'nico',
+    blocks:new Set(BLOCKS.map(b=>b.id)),
+    vmode:'forms',
+    wdir:'en-es',
+    count:10,
+    weak:false
+  },
+  game:{ questions:[], index:0, correct:0, misses:[], blockStats:{}, child:'nico', locked:false, modeLabel:'' },
+  ui:{ progressChild:'nico' },
+  progreso:null,
+  soundOn:true
+};
+
+function defaultChildProgreso(){
+  const porBloque={};
+  BLOCKS.forEach(b=>{ porBloque[b.id]={correctas:0,total:0}; });
+  return { porBloque, porItem:{}, sesiones:[] };
+}
+function defaultProgreso(){
+  return { nico: defaultChildProgreso(), carlota: defaultChildProgreso() };
+}
+
+/* ============================================================
+   SONIDO Y VOZ
+   ============================================================ */
+let audioCtx=null;
+function tone(freq, start, dur, type){
+  if(!state.soundOn) return;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+    osc.type=type||'sine'; osc.frequency.value=freq;
+    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime+start);
+    gain.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime+start+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+start+dur);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(audioCtx.currentTime+start); osc.stop(audioCtx.currentTime+start+dur+0.02);
+  }catch(e){ /* audio no disponible */ }
+}
+function playCorrect(){ tone(523,0,.14,'sine'); tone(784,.12,.18,'sine'); }
+function playWrong(){ tone(220,0,.22,'sine'); }
+
+const canSpeak = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
+let enVoice=null;
+function pickVoice(){
+  if(!canSpeak) return;
+  try{
+    const voices=window.speechSynthesis.getVoices();
+    enVoice = voices.find(v=>/en[-_]GB/i.test(v.lang)) || voices.find(v=>/^en/i.test(v.lang)) || null;
+  }catch(e){ enVoice=null; }
+}
+if(canSpeak){
+  pickVoice();
+  try{ window.speechSynthesis.onvoiceschanged = pickVoice; }catch(e){}
+}
+function speakText(text){
+  if(!canSpeak || !text) return;
+  try{
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang = enVoice ? enVoice.lang : 'en-GB';
+    if(enVoice) u.voice=enVoice;
+    u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }catch(e){ /* sin voz */ }
+}
+function cleanForSpeech(s){ return s.replace(/\s*\/\s*/g,', ').replace(/—/g,''); }
+function speechForItem(it){
+  if(it.kind==='verb'){
+    const parts=[it.inf, it.past, it.pp].filter(p=>p && p!=='—').map(cleanForSpeech);
+    return parts.join('. ');
+  }
+  return cleanForSpeech(it.en);
+}
+
+/* ============================================================
+   NAVEGACIÓN
+   ============================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.removeAttribute('data-active'));
+  document.getElementById(id).setAttribute('data-active','true');
+  window.scrollTo(0,0);
+  if(id==='screen-study') renderStudyTable();
+  if(id==='screen-progress') renderProgressScreen();
+  if(id==='screen-home') renderHomeStats();
+  if(id!=='screen-game' && canSpeak){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+}
+document.querySelectorAll('[data-back]').forEach(btn=>{
+  btn.addEventListener('click', ()=> showScreen(btn.getAttribute('data-back')));
+});
+
+/* ============================================================
+   CONFIG UI
+   ============================================================ */
+function bindMoodRow(rowId, attr, onPick){
+  const wrap=document.getElementById(rowId);
+  wrap.querySelectorAll('.mood-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      wrap.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      onPick(btn.getAttribute(attr));
+    });
+  });
+}
+
+function blockSize(blockId){ return ITEMS.filter(it=>it.blockId===blockId).length; }
+
+function buildBlockChips(){
+  const verbRow=document.getElementById('verb-chip-row');
+  const wordRow=document.getElementById('word-chip-row');
+  verbRow.innerHTML=''; wordRow.innerHTML='';
+  BLOCKS.forEach(b=>{
+    const chip=document.createElement('button');
+    chip.type='button';
+    chip.className='chip blk-'+b.id+(state.config.blocks.has(b.id)?' selected':'');
+    chip.setAttribute('data-block', b.id);
+    chip.innerHTML='<span class="chip-icon">'+b.icon+'</span>'+b.label+'<span class="chip-count">'+blockSize(b.id)+'</span>';
+    chip.addEventListener('click', ()=>{
+      if(state.config.blocks.has(b.id)) state.config.blocks.delete(b.id); else state.config.blocks.add(b.id);
+      chip.classList.toggle('selected', state.config.blocks.has(b.id));
+    });
+    (b.type==='verb' ? verbRow : wordRow).appendChild(chip);
+  });
+}
+
+document.querySelectorAll('[data-quick]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const q=btn.getAttribute('data-quick');
+    state.config.blocks = new Set(BLOCKS.filter(b=>
+      q==='all' || (q==='verbs' && b.type==='verb') || (q==='words' && b.type==='word')
+    ).map(b=>b.id));
+    buildBlockChips();
+  });
+});
+
+function buildCountRow(){
+  const chips=document.querySelectorAll('#count-row .chip');
+  chips.forEach(chip=>{
+    const val=parseInt(chip.getAttribute('data-count'),10);
+    if(val===state.config.count) chip.classList.add('selected');
+    chip.addEventListener('click', ()=>{
+      chips.forEach(c=>c.classList.remove('selected'));
+      chip.classList.add('selected');
+      state.config.count=val;
+    });
+  });
+}
+
+document.getElementById('opt-weak').addEventListener('change', function(){ state.config.weak=this.checked; });
+
+document.getElementById('btn-go-config').addEventListener('click', ()=> showScreen('screen-config'));
+document.getElementById('btn-go-study').addEventListener('click', ()=> showScreen('screen-study'));
+document.getElementById('btn-go-progress').addEventListener('click', ()=> showScreen('screen-progress'));
+
+document.getElementById('btn-start-game').addEventListener('click', ()=>{
+  const err=document.getElementById('config-error');
+  if(state.config.blocks.size===0){ err.hidden=false; return; }
+  err.hidden=true;
+  startGame();
+});
+
+document.getElementById('btn-sound').addEventListener('click', function(){
+  state.soundOn=!state.soundOn;
+  this.textContent = state.soundOn ? '🔊' : '🔇';
+});
+
+/* ============================================================
+   TARJETAS
+   ============================================================ */
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function pickMode(it){
+  if(it.kind==='verb'){
+    const m=state.config.vmode;
+    return m==='mix' ? (Math.random()<0.5 ? 'forms' : 'meaning') : m;
+  }
+  const d=state.config.wdir;
+  return d==='mix' ? (Math.random()<0.5 ? 'en-es' : 'es-en') : d;
+}
+
+function weaknessScore(child, key){
+  const s=state.progreso[child].porItem[key];
+  if(!s || !s.t) return 0.35;               // nunca vista: prioridad media
+  return (s.t - s.c) / s.t;                 // proporción de fallos
+}
+
+function buildQuestions(items){
+  let list = shuffle(items);
+  if(state.config.weak){
+    const child=state.config.child;
+    list = list
+      .map(it=>({it, w:weaknessScore(child,it.key) + Math.random()*0.15}))
+      .sort((a,b)=>b.w-a.w)
+      .map(x=>x.it);
+  }
+  const n = state.config.count>0 ? Math.min(state.config.count, list.length) : list.length;
+  return shuffle(list.slice(0,n)).map(it=>({item:it, mode:pickMode(it)}));
+}
+
+function modeLabel(){
+  const hasVerbs = BLOCKS.some(b=>b.type==='verb' && state.config.blocks.has(b.id));
+  const hasWords = BLOCKS.some(b=>b.type==='word' && state.config.blocks.has(b.id));
+  const v={forms:'3 formas', meaning:'significado', mix:'verbos mezcla'}[state.config.vmode];
+  const w={'en-es':'🇬🇧→🇪🇸', 'es-en':'🇪🇸→🇬🇧', mix:'🔀'}[state.config.wdir];
+  const parts=[];
+  if(hasVerbs) parts.push('Verbos: '+v);
+  if(hasWords) parts.push('Vocab '+w);
+  return parts.join(' · ');
+}
+
+function startGame(fromItems){
+  state.game.child = state.config.child;
+  const items = fromItems || ITEMS.filter(it=>state.config.blocks.has(it.blockId));
+  state.game.questions = fromItems
+    ? shuffle(fromItems).map(it=>({item:it, mode:pickMode(it)}))
+    : buildQuestions(items);
+  state.game.index=0; state.game.correct=0; state.game.misses=[]; state.game.locked=false;
+  state.game.blockStats={};
+  BLOCKS.forEach(b=>{ state.game.blockStats[b.id]={correctas:0,total:0}; });
+  state.game.modeLabel = fromItems ? 'Repaso de falladas' : modeLabel();
+  document.getElementById('game-child-pill').textContent=CHILD_NAME[state.game.child];
+  showScreen('screen-game');
+  renderFlashCard();
+}
+
+function currentQuestion(){ return state.game.questions[state.game.index]; }
+
+function setBlockClass(el, blockId){
+  BLOCKS.forEach(b=> el.classList.remove('blk-'+b.id));
+  el.classList.add('blk-'+blockId);
+}
+
+function resetCardPosition(){
+  const card=document.getElementById('flash-card');
+  card.style.transition='none';
+  card.style.transform='translateX(0) rotate(0)';
+  ['wash-yes','wash-no','stamp-yes','stamp-no'].forEach(id=> document.getElementById(id).style.opacity=0);
+  void card.offsetWidth;
+  card.style.transition='';
+}
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function formsGrid(it){
+  return '<div class="forms-grid">'+
+    '<div><small>Infinitive</small><b>'+esc(it.inf)+'</b></div>'+
+    '<div><small>Past simple</small><b>'+esc(it.past)+'</b></div>'+
+    '<div><small>Past participle</small><b>'+esc(it.pp)+'</b></div>'+
+  '</div>';
+}
+
+function renderFlashCard(){
+  const q=currentQuestion();
+  const it=q.item;
+  const total=state.game.questions.length;
+  state.game.locked=false;
+
+  const block=BLOCK_MAP[it.blockId];
+  const eraBadge=document.getElementById('era-badge');
+  setBlockClass(eraBadge, block.id);
+  eraBadge.textContent = block.icon+' '+(block.type==='verb' ? 'Irregular verbs' : block.label);
+
+  const mini=document.getElementById('mini-porthole');
+  setBlockClass(mini, block.id);
+  setBlockClass(document.getElementById('flash-card'), block.id);
+
+  document.getElementById('game-progress-label').textContent=(state.game.index+1)+' / '+total;
+  document.getElementById('progress-fill').style.width=Math.round((state.game.index/total)*100)+'%';
+
+  const kicker=document.getElementById('flash-kicker');
+  const prompt=document.getElementById('flash-prompt');
+  const ansLabel=document.getElementById('flash-answer-label');
+  const answer=document.getElementById('flash-answer');
+  const meta=document.getElementById('flash-meta');
+  let icon;
+
+  if(it.kind==='verb' && q.mode==='forms'){
+    icon='🇪🇸→🇬🇧';
+    kicker.textContent='Di las tres formas en inglés';
+    prompt.innerHTML=esc(it.es)+'<span class="flash-prompt-sub">'+icon+'</span>';
+    ansLabel.textContent='Respuesta';
+    answer.innerHTML=formsGrid(it);
+    meta.textContent = 'Verbo nº '+it.num + (it.pp==='—' ? ' · no tiene participio' : '');
+  } else if(it.kind==='verb'){
+    icon='🇬🇧→🇪🇸';
+    kicker.textContent='¿Qué significa?';
+    prompt.innerHTML=esc(it.inf)+'<span class="flash-prompt-sub">'+icon+'</span>';
+    ansLabel.textContent='En español';
+    answer.textContent=it.es;
+    meta.textContent = it.inf+' · '+it.past+' · '+it.pp;
+  } else if(q.mode==='en-es'){
+    icon='🇬🇧→🇪🇸';
+    kicker.textContent='Traduce en voz alta';
+    prompt.innerHTML=esc(it.en)+'<span class="flash-prompt-sub">'+icon+'</span>';
+    ansLabel.textContent='En español';
+    answer.textContent=it.es;
+    meta.textContent = block.unit || '';
+  } else {
+    icon='🇪🇸→🇬🇧';
+    kicker.textContent='Traduce en voz alta';
+    prompt.innerHTML=esc(it.es)+'<span class="flash-prompt-sub">'+icon+'</span>';
+    ansLabel.textContent='In English';
+    answer.textContent=it.en;
+    meta.textContent = block.unit || '';
+  }
+  document.getElementById('mini-porthole-icon').textContent = it.kind==='verb' ? '🔤' : block.icon;
+  document.getElementById('btn-speak').hidden = !canSpeak;
+
+  resetCardPosition();
+}
+
+/* -------- botón de pronunciación (no inicia el arrastre) -------- */
+const speakBtn=document.getElementById('btn-speak');
+speakBtn.addEventListener('pointerdown', e=> e.stopPropagation());
+speakBtn.addEventListener('click', e=>{
+  e.stopPropagation();
+  const q=currentQuestion();
+  if(q) speakText(speechForItem(q.item));
+});
+
+/* -------- arrastre -------- */
+const flashCard=document.getElementById('flash-card');
+const washYes=document.getElementById('wash-yes');
+const washNo=document.getElementById('wash-no');
+const stampYes=document.getElementById('stamp-yes');
+const stampNo=document.getElementById('stamp-no');
+const SWIPE_THRESHOLD=100;
+let drag={active:false, startX:0, dx:0};
+
+function clearFeedback(){ washYes.style.opacity=0; washNo.style.opacity=0; stampYes.style.opacity=0; stampNo.style.opacity=0; }
+
+flashCard.addEventListener('pointerdown', (e)=>{
+  if(state.game.locked) return;
+  drag.active=true; drag.startX=e.clientX; drag.dx=0;
+  flashCard.style.transition='none';
+  try{ flashCard.setPointerCapture(e.pointerId); }catch(err){}
+});
+flashCard.addEventListener('pointermove', (e)=>{
+  if(!drag.active) return;
+  drag.dx=e.clientX-drag.startX;
+  const rot=Math.max(-15,Math.min(15,drag.dx/12));
+  flashCard.style.transform='translateX('+drag.dx+'px) rotate('+rot+'deg)';
+  const p=Math.min(Math.abs(drag.dx)/120,1);
+  if(drag.dx>4){ washYes.style.opacity=p*0.9; washNo.style.opacity=0; stampYes.style.opacity=p; stampNo.style.opacity=0; }
+  else if(drag.dx<-4){ washNo.style.opacity=p*0.9; washYes.style.opacity=0; stampNo.style.opacity=p; stampYes.style.opacity=0; }
+  else clearFeedback();
+});
+function endDrag(){
+  if(!drag.active) return;
+  drag.active=false;
+  flashCard.style.transition='transform .25s ease';
+  if(Math.abs(drag.dx) > SWIPE_THRESHOLD){ commitSwipe(drag.dx>0); }
+  else { flashCard.style.transform='translateX(0) rotate(0)'; clearFeedback(); }
+}
+flashCard.addEventListener('pointerup', endDrag);
+flashCard.addEventListener('pointercancel', endDrag);
+
+function commitSwipe(isCorrect){
+  if(state.game.locked) return;
+  state.game.locked=true;
+  flashCard.style.transition='transform .28s ease';
+  flashCard.style.transform='translateX('+(isCorrect?620:-620)+'px) rotate('+(isCorrect?26:-26)+'deg)';
+  if(isCorrect){ washYes.style.opacity=0.9; stampYes.style.opacity=1; playCorrect(); }
+  else{ washNo.style.opacity=0.9; stampNo.style.opacity=1; playWrong(); }
+  registerAnswer(isCorrect);
+  setTimeout(advanceCard, 260);
+}
+
+document.getElementById('btn-mark-correct').addEventListener('click', ()=> commitSwipe(true));
+document.getElementById('btn-mark-wrong').addEventListener('click', ()=> commitSwipe(false));
+
+function registerAnswer(isCorrect){
+  const q=currentQuestion();
+  const it=q.item;
+  if(isCorrect) state.game.correct++;
+  else state.game.misses.push(q);
+  const s=state.game.blockStats[it.blockId];
+  s.total++; if(isCorrect) s.correctas++;
+  const per=state.progreso[state.game.child].porItem;
+  if(!per[it.key]) per[it.key]={c:0,t:0};
+  per[it.key].t++; if(isCorrect) per[it.key].c++;
+}
+
+function advanceCard(){
+  state.game.index++;
+  if(state.game.index>=state.game.questions.length) endSession();
+  else renderFlashCard();
+}
+
+/* ============================================================
+   RESUMEN
+   ============================================================ */
+function fmtScore(n){ return n==null ? '—' : n.toFixed(1).replace('.',','); }
+
+function missLine(q){
+  const it=q.item;
+  if(it.kind==='verb') return {left:it.inf+' · '+it.past+' · '+it.pp, right:it.es};
+  return {left:it.en, right:it.es};
+}
+
+function endSession(){
+  const total=state.game.questions.length;
+  const correct=state.game.correct;
+  const score10 = total ? Math.round((correct/total)*100)/10 : 0;
+
+  let tier='', headline;
+  if(score10>=9) headline='¡Excelente! 🌟';
+  else if(score10>=7) headline='¡Muy bien! 👍';
+  else if(score10>=5){ tier='tier-mid'; headline='Bien, a seguir practicando 💪'; }
+  else { tier='tier-low'; headline='Toca repasar con calma 📖'; }
+
+  const badge=document.getElementById('score-badge');
+  badge.className='score-badge'+(tier?' '+tier:'');
+  badge.innerHTML=fmtScore(score10)+'<span>/10</span>';
+  document.getElementById('summary-child').textContent=CHILD_NAME[state.game.child];
+  document.getElementById('summary-headline').textContent=headline;
+  document.getElementById('summary-correct').textContent=correct;
+  document.getElementById('summary-total').textContent=total;
+
+  const missWrap=document.getElementById('summary-misses');
+  const retryBtn=document.getElementById('btn-retry-misses');
+  missWrap.innerHTML='';
+  if(state.game.misses.length){
+    const h=document.createElement('h3'); h.className='config-title'; h.textContent='Para repasar ('+state.game.misses.length+')';
+    const ul=document.createElement('ul'); ul.className='miss-list';
+    state.game.misses.forEach(q=>{
+      const m=missLine(q);
+      const li=document.createElement('li');
+      li.innerHTML='<b>'+esc(m.left)+'</b><span>'+esc(m.right)+'</span>';
+      ul.appendChild(li);
+    });
+    missWrap.appendChild(h); missWrap.appendChild(ul);
+    missWrap.hidden=false; retryBtn.hidden=false;
+  } else {
+    missWrap.hidden=true; retryBtn.hidden=true;
+  }
+
+  const cp=state.progreso[state.game.child];
+  BLOCKS.forEach(b=>{
+    const s=state.game.blockStats[b.id];
+    if(s && s.total){ cp.porBloque[b.id].correctas+=s.correctas; cp.porBloque[b.id].total+=s.total; }
+  });
+  cp.sesiones.push({ fecha:new Date().toISOString(), modo:state.game.modeLabel, correct, total, score10 });
+  if(cp.sesiones.length>50) cp.sesiones=cp.sesiones.slice(-50);
+  saveProgress();
+
+  showScreen('screen-summary');
+}
+
+document.getElementById('btn-again').addEventListener('click', ()=> startGame());
+document.getElementById('btn-retry-misses').addEventListener('click', ()=>{
+  const items=state.game.misses.map(q=>q.item);
+  if(items.length) startGame(items);
+});
+
+/* ============================================================
+   SALA DE CONSULTA
+   ============================================================ */
+function buildStudySelect(){
+  const sel=document.getElementById('study-block-select');
+  sel.innerHTML='';
+  const groups=[{label:'Irregular verbs', type:'verb'},{label:'Vocabulary', type:'word'}];
+  groups.forEach(g=>{
+    const og=document.createElement('optgroup'); og.label=g.label;
+    if(g.type==='verb'){
+      const all=document.createElement('option'); all.value='verbs-all'; all.textContent='🔤 Todos los verbos (1–82)';
+      og.appendChild(all);
+    }
+    BLOCKS.filter(b=>b.type===g.type).forEach(b=>{
+      const opt=document.createElement('option');
+      opt.value=b.id; opt.textContent=b.icon+' '+b.label+(b.unit?' · '+b.unit:'');
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+  sel.addEventListener('change', renderStudyTable);
+}
+
+function renderStudyTable(){
+  const sel=document.getElementById('study-block-select');
+  const val=sel.value || 'verbs-all';
+  const wrap=document.getElementById('study-table');
+  wrap.innerHTML='';
+  const isVerbs = val==='verbs-all' || (BLOCK_MAP[val] && BLOCK_MAP[val].type==='verb');
+  wrap.className='study-card '+(isVerbs ? 'study-verbs' : 'study-words');
+
+  const head=document.createElement('div'); head.className='study-head';
+  head.innerHTML = isVerbs
+    ? '<span>nº</span><span>Infinitive</span><span>Past simple</span><span>Past participle</span>'
+    : '<span>English</span><span style="text-align:right">Español</span>';
+  wrap.appendChild(head);
+
+  const items = val==='verbs-all' ? VERBS : ITEMS.filter(it=>it.blockId===val);
+  items.forEach(it=>{
+    const row=document.createElement('div');
+    row.className='study-row';
+    if(isVerbs){
+      row.innerHTML='<span class="study-num">'+it.num+'</span>'+
+        '<span class="study-en">'+esc(it.inf)+'</span><span class="study-en">'+esc(it.past)+'</span><span class="study-en">'+esc(it.pp)+'</span>'+
+        '<span class="study-es">'+esc(it.es)+'</span>';
+    } else {
+      row.innerHTML='<span class="study-en">'+esc(it.en)+'</span><span class="study-es">'+esc(it.es)+'</span>';
+    }
+    row.addEventListener('click', ()=> speakText(speechForItem(it)));
+    wrap.appendChild(row);
+  });
+}
+
+/* ============================================================
+   PROGRESO / PERSISTENCIA
+   ============================================================ */
+const STORAGE_KEY='verbs_words_6_progreso';
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    state.progreso = (parsed && parsed.nico && parsed.carlota) ? parsed : defaultProgreso();
+  }catch(e){
+    state.progreso = defaultProgreso();
+  }
+  ['nico','carlota'].forEach(c=>{
+    const p=state.progreso[c];
+    if(!p.porBloque) p.porBloque={};
+    BLOCKS.forEach(b=>{ if(!p.porBloque[b.id]) p.porBloque[b.id]={correctas:0,total:0}; });
+    if(!p.porItem || typeof p.porItem!=='object') p.porItem={};
+    if(!Array.isArray(p.sesiones)) p.sesiones=[];
+  });
+}
+function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progreso)); }
+  catch(e){ /* sin almacenamiento: la app sigue funcionando */ }
+}
+
+function lastScore(child){ const a=state.progreso[child].sesiones; return a.length ? a[a.length-1].score10 : null; }
+function avgScore(child){ const a=state.progreso[child].sesiones; return a.length ? a.reduce((s,x)=>s+x.score10,0)/a.length : null; }
+function bestScore(child){ const a=state.progreso[child].sesiones; return a.length ? Math.max(...a.map(s=>s.score10)) : null; }
+
+function renderHomeStats(){
+  if(!state.progreso) return;
+  document.getElementById('home-score-nico').textContent=fmtScore(lastScore('nico'));
+  document.getElementById('home-score-carlota').textContent=fmtScore(lastScore('carlota'));
+}
+
+function card(title){
+  const c=document.createElement('div'); c.className='study-card';
+  const h=document.createElement('h3'); h.className='config-title'; h.textContent=title; h.style.marginBottom='12px';
+  c.appendChild(h);
+  return c;
+}
+
+function renderProgressScreen(){
+  document.querySelectorAll('#progress-child-row .chip').forEach(chip=>{
+    chip.classList.toggle('selected', chip.getAttribute('data-child')===state.ui.progressChild);
+  });
+  const child=state.ui.progressChild;
+  const p=state.progreso[child];
+  const wrap=document.getElementById('progress-content');
+  wrap.innerHTML='';
+
+  const stats=document.createElement('div'); stats.className='stat-row';
+  stats.innerHTML =
+    '<div class="stat-chip"><span class="stat-num">'+p.sesiones.length+'</span><span class="stat-label">🎴 sesiones</span></div>'+
+    '<div class="stat-chip"><span class="stat-num">'+fmtScore(avgScore(child))+'</span><span class="stat-label">media /10</span></div>'+
+    '<div class="stat-chip"><span class="stat-num">'+fmtScore(bestScore(child))+'</span><span class="stat-label">mejor nota</span></div>';
+  wrap.appendChild(stats);
+
+  const bars=card('Precisión por bloque');
+  BLOCKS.forEach(b=>{
+    const d=p.porBloque[b.id];
+    const pct=d.total ? Math.round(d.correctas/d.total*100) : 0;
+    const row=document.createElement('div'); row.className='bar-row blk-'+b.id;
+    row.innerHTML='<div class="bar-label"><span>'+b.icon+' '+b.label+'</span><b>'+(d.total? pct+'%' : 'sin datos')+'</b></div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%"></div></div>';
+    bars.appendChild(row);
+  });
+  wrap.appendChild(bars);
+
+  const hard=card('Las que más le cuestan');
+  const ranked=Object.keys(p.porItem)
+    .map(k=>({k, s:p.porItem[k]}))
+    .filter(x=>ITEM_MAP[x.k] && x.s.t - x.s.c > 0)
+    .sort((a,b)=> ((b.s.t-b.s.c)/b.s.t - (a.s.t-a.s.c)/a.s.t) || ((b.s.t-b.s.c)-(a.s.t-a.s.c)))
+    .slice(0,10);
+  if(!ranked.length){
+    const e=document.createElement('p'); e.className='empty-note'; e.textContent='Todavía no ha fallado ninguna tarjeta.';
+    hard.appendChild(e);
+  } else {
+    const ul=document.createElement('ul'); ul.className='miss-list';
+    ranked.forEach(x=>{
+      const it=ITEM_MAP[x.k];
+      const li=document.createElement('li');
+      const left = it.kind==='verb' ? it.inf+' · '+it.past+' · '+it.pp : it.en;
+      li.innerHTML='<b>'+esc(left)+'</b><span>'+(x.s.t-x.s.c)+' de '+x.s.t+' falladas</span>';
+      ul.appendChild(li);
+    });
+    hard.appendChild(ul);
+  }
+  wrap.appendChild(hard);
+
+  const sess=card('Últimas sesiones');
+  const recent=p.sesiones.slice(-8).reverse();
+  if(!recent.length){
+    const e=document.createElement('p'); e.className='empty-note'; e.textContent='Todavía no hay sesiones registradas.';
+    sess.appendChild(e);
+  } else {
+    recent.forEach(s=>{
+      const d=new Date(s.fecha);
+      const dateStr=isNaN(d) ? '' : d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'});
+      const row=document.createElement('div'); row.className='session-row';
+      row.innerHTML='<div class="session-left"><span class="session-date">'+dateStr+'</span>'+
+        '<span class="session-mode">'+esc(s.modo||'')+' · '+s.correct+'/'+s.total+'</span></div>'+
+        '<span class="session-score">'+fmtScore(s.score10)+'/10</span>';
+      sess.appendChild(row);
+    });
+  }
+  wrap.appendChild(sess);
+}
+
+document.querySelectorAll('#progress-child-row .chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{ state.ui.progressChild=chip.getAttribute('data-child'); renderProgressScreen(); });
+});
+document.getElementById('btn-reset').addEventListener('click', ()=>{
+  const child=state.ui.progressChild;
+  if(confirm('¿Borrar todo el progreso de '+CHILD_NAME[child]+' en esta app?')){
+    state.progreso[child]=defaultChildProgreso();
+    saveProgress();
+    renderProgressScreen();
+  }
+});
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+bindMoodRow('child-select-row','data-child', v=>{ state.config.child=v; });
+bindMoodRow('vmode-row','data-vmode', v=>{ state.config.vmode=v; });
+bindMoodRow('wdir-row','data-wdir', v=>{ state.config.wdir=v; });
+buildBlockChips();
+buildCountRow();
+buildStudySelect();
+loadProgress();
+renderHomeStats();
+
+})();
+</script>
+</body>
+</html>
