@@ -65,6 +65,10 @@
   .blk-w2{ --era-color:var(--c5); --era-tint:var(--c5-tint); }
   .blk-w3{ --era-color:var(--c1); --era-tint:var(--c1-tint); }
   .blk-w4{ --era-color:var(--c4); --era-tint:var(--c4-tint); }
+  .blk-w5{ --era-color:var(--c2); --era-tint:var(--c2-tint); }
+  .blk-w6{ --era-color:var(--c6); --era-tint:var(--c6-tint); }
+  .blk-w7{ --era-color:var(--c3); --era-tint:var(--c3-tint); }
+  .blk-w8{ --era-color:var(--c5); --era-tint:var(--c5-tint); }
 
   /* ---------- home ---------- */
   .brand{ text-align:center; margin-top:4px; }
@@ -301,7 +305,7 @@
     <div class="brand">
       <p class="eyebrow">Inglés · 6º de Primaria</p>
       <h1 class="logo">Verbs <span>&amp; Words</span></h1>
-      <p class="tagline">82 verbos irregulares y vocabulario de las unidades 2 y 3</p>
+      <p class="tagline">82 verbos irregulares y vocabulario de las unidades 1, 2 y 3</p>
     </div>
 
     <div class="porthole">
@@ -522,6 +526,10 @@ const BLOCKS = [
   {id:'v2', type:'verb', label:'Verbos 21–41',  icon:'🔤'},
   {id:'v3', type:'verb', label:'Verbos 42–62',  icon:'🔤'},
   {id:'v4', type:'verb', label:'Verbos 63–82',  icon:'🔤'},
+  {id:'w5', type:'word', label:'Game verbs',        icon:'🎲', unit:'Unit 1'},
+  {id:'w6', type:'word', label:'Education',         icon:'🎓', unit:'Unit 1'},
+  {id:'w7', type:'word', label:'Online activities', icon:'💻', unit:'Unit 1'},
+  {id:'w8', type:'word', label:'Sequence words',    icon:'🔢', unit:'Unit 1'},
   {id:'w1', type:'word', label:'Fun places to go', icon:'🎳', unit:'Unit 2'},
   {id:'w2', type:'word', label:'TV programmes',    icon:'📺', unit:'Unit 2'},
   {id:'w3', type:'word', label:'Hobbies',          icon:'🎨', unit:'Unit 3.1'},
@@ -669,7 +677,49 @@ const WORDS_RAW = [
   ['Autographs','autógrafos','w4'],
   ['Comics','cómics','w4'],
   ['Stamps','sellos','w4'],
-  ['Stickers','pegatinas','w4']
+  ['Stickers','pegatinas','w4'],
+
+  // ---- Unit 1 (añadidas al final para no alterar el progreso guardado) ----
+  ['Complete','completar','w5'],
+  ['Give up','rendirse','w5'],
+  ['Cheat','hacer trampas','w5'],
+  ['Choose','elegir','w5'],
+  ['Lose','perder','w5'],
+  ['Win','ganar','w5'],
+  ['Share','compartir','w5'],
+  ['Roll the dice','tirar / lanzar el dado','w5'],
+  ['Skip / miss a turn','pasar turno','w5'],
+  ['Play fair','jugar limpio, sin trampas','w5'],
+
+  ['Certificate','certificado, diploma','w6'],
+  ['Test','prueba / examen','w6'],
+  ['Essay','redacción / ensayo','w6'],
+  ['Timetable','horario','w6'],
+  ['Dictionary','diccionario','w6'],
+  ['Textbook','libro de texto','w6'],
+  ['Course project','proyecto del curso','w6'],
+  ['Experiment','experimento','w6'],
+  ['Head teacher','director / directora','w6'],
+  ['Exam','examen','w6'],
+  ['Subjects','asignaturas','w6'],
+
+  ['Go online','entrar en Internet','w7'],
+  ['Visit a website','visitar una página web','w7'],
+  ['Download a document','descargar un documento','w7'],
+  ['Click on an icon','hacer clic en un icono','w7'],
+  ['Search the Internet','buscar en Internet','w7'],
+  ['Type in a password','escribir una contraseña','w7'],
+  ['Download','bajarse, descargar','w7'],
+  ['Upload','subir un archivo','w7'],
+  ['Sign in','registrarse','w7'],
+  ['Sign out / Log out','cerrar la sesión','w7'],
+  ['Save a document','guardar un documento','w7'],
+
+  ['First','primero','w8'],
+  ['Second','segundo','w8'],
+  ['Then','después','w8'],
+  ['Next','luego / a continuación','w8'],
+  ['Finally','finalmente','w8']
 ];
 const WORDS = WORDS_RAW.map((r,i)=>({ key:'w'+(i+1), kind:'word', en:r[0], es:r[1], blockId:r[2] }));
 
